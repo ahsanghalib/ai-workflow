@@ -242,7 +242,7 @@ Each skill's `description` field defines its precise trigger and non-use cases.
 
 ### Slash commands
 
-Commands live in `opencode/commands/` and are invoked in-session:
+Total 7 commands live in `opencode/commands/` and are invoked in-session:
 
 | Command | Agent | Purpose |
 | --- | --- | --- |
