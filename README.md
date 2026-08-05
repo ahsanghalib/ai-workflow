@@ -229,6 +229,7 @@ when the task matches their description. Skills are installed:
 | `test-driven-development` | Changing behavior with a red-green-refactor test loop |
 | `verification-before-completion` | Claiming completion with fresh, task-appropriate evidence |
 | `frontend-design` | Planning UI hierarchy, states, responsive behavior, accessibility |
+| `humanizer` | Removing AI-generated writing patterns from prose |
 | `webapp-testing` | Repository-native Playwright test planning/execution |
 | `agent-browser` | Approved exploratory browser QA on unauthenticated localhost |
 | `product-discovery` | Evaluating problems, ICP, MVP scope, and validation experiments |

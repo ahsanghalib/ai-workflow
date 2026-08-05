@@ -55,6 +55,16 @@
 - Report commands run, results, untested paths, assumptions and risks.
 - Do not claim success when validation failed or was not run.
 
+## Writing & Humanization
+
+- Use the `humanizer` skill for substantial user-facing prose, including documentation, reports, proposals, explanations, emails, social content and long-form answers.
+- Apply humanization only after the content is technically correct and complete. Preserve the original meaning, constraints, factual claims and level of certainty.
+- Write naturally and specifically. Prefer direct language, varied sentence structure and context-appropriate tone over canned phrasing, filler, hype or repetitive summaries.
+- Avoid robotic introductions, excessive headings, artificial enthusiasm, fake quotations, unnecessary rhetorical questions and generic AI-sounding transitions.
+- Do not humanize code, commands, configuration, logs, file paths, API names, identifiers, citations or text that must remain exact.
+- For code-only, command-only or very short factual responses, do not load the skill unless it provides a clear quality benefit.
+- Match the target format and audience. Humanized does not mean casual; keep technical and professional writing precise.
+
 ## User Profile & Preferences
 
 - **Role**: Senior Software Engineer (8+ years exp), Node.js ecosystem expert.
