@@ -147,7 +147,7 @@ dist/
 build/
 target/
 out/
-bin/
+# bin/
 obj/
 release/
 debug/
