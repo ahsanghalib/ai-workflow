@@ -219,7 +219,7 @@ deployments, publishing, destructive git commands, and secret handling.
 ### Skills
 
 Skills are reusable expertise documents under `opencode/skills/`, loaded only
-when the task matches their description. 14 skills are installed:
+when the task matches their description. Skills are installed:
 
 | Skill | When to use |
 | --- | --- |
@@ -242,7 +242,7 @@ Each skill's `description` field defines its precise trigger and non-use cases.
 
 ### Slash commands
 
-Total 7 commands live in `opencode/commands/` and are invoked in-session:
+Commands live in `opencode/commands/` and are invoked in-session:
 
 | Command | Agent | Purpose |
 | --- | --- | --- |
