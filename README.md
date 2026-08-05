@@ -234,7 +234,7 @@ when the task matches their description. Skills are installed:
 | `agent-browser` | Approved exploratory browser QA on unauthenticated localhost |
 | `product-discovery` | Evaluating problems, ICP, MVP scope, and validation experiments |
 | `founder-decision` | Comparing consequential business options and decisive tests |
-| `social-content` | Drafting truthful, channel-specific content drafts |
+| `social-content` | Drafting truthful, channel-specific social/editorial content and blog posts from source material |
 | `brand-guidelines` | Applying user-provided brand rules to artifacts |
 | `github-cli-workflow` | Inspecting/preparing PRs, issues, checks, and workflow logs with `git`/`gh` |
 | `skill-creator` | Creating/auditing OpenCode skills |
