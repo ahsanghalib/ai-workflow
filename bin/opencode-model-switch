@@ -1,0 +1,255 @@
+#!/usr/bin/env bash
+# Switch OpenCode's main and small model tiers across configured providers.
+#
+# Usage:
+#   opencode-model-switch list
+#   opencode-model-switch status
+#   opencode-model-switch switch <tier_number>
+#   opencode-model-switch delete-backups
+#
+# Set OPENCODE_CONFIG_ROOT to operate on a non-default configuration directory.
+# Set OPENCODE_MODELS_FILE to use a tier definition file elsewhere.
+# A timestamped .bak copy is written before each changed file.
+
+set -euo pipefail
+
+CONFIG_ROOT="${OPENCODE_CONFIG_ROOT:-${XDG_CONFIG_HOME:-$HOME/.config}/opencode}"
+OPENCODE_JSON="$CONFIG_ROOT/opencode.json"
+AGENTS_DIR="$CONFIG_ROOT/agents"
+MODELS_FILE="${OPENCODE_MODELS_FILE:-$CONFIG_ROOT/opencode-models.json}"
+
+MAIN_AGENTS=(engineer advisor review)
+SMALL_AGENTS=(explore research)
+
+usage() {
+	cat <<'EOF'
+Usage:
+  opencode-model-switch list
+  opencode-model-switch status
+  opencode-model-switch switch <tier_number>
+  opencode-model-switch delete-backups
+EOF
+}
+
+backup() {
+	local path="$1"
+	local stamp
+
+	[[ -e "$path" ]] || return 0
+	stamp="$(date +%Y%m%d-%H%M%S)"
+	cp -p -- "$path" "$path.$stamp.bak"
+}
+
+delete_backups() {
+	local backup count=0
+	local -a backups
+
+	require_config
+	shopt -s nullglob
+	backups=("$OPENCODE_JSON".*.bak "$AGENTS_DIR"/*.md.*.bak)
+	for backup in "${backups[@]}"; do
+		[[ -f "$backup" ]] || continue
+		rm -- "$backup"
+		printf '  removed %s\n' "$backup"
+		((count += 1))
+	done
+	printf 'Removed %d backup file(s).\n' "$count"
+}
+
+require_config() {
+	if [[ ! -f "$OPENCODE_JSON" ]]; then
+		printf 'Missing %s\n' "$OPENCODE_JSON" >&2
+		exit 1
+	fi
+	if [[ ! -f "$MODELS_FILE" ]]; then
+		printf 'Missing %s\n' "$MODELS_FILE" >&2
+		exit 1
+	fi
+	if ! jq empty "$MODELS_FILE"; then
+		printf 'Invalid JSON in %s\n' "$MODELS_FILE" >&2
+		exit 1
+	fi
+}
+
+update_opencode_json() {
+	local main_model="$1"
+	local small_model="$2"
+	local temporary
+
+	temporary="$(mktemp "${OPENCODE_JSON}.XXXXXX")"
+	jq --arg main_model "$main_model" --arg small_model "$small_model" \
+		'.model = $main_model | .small_model = $small_model' \
+		"$OPENCODE_JSON" >"$temporary"
+	backup "$OPENCODE_JSON"
+	mv -- "$temporary" "$OPENCODE_JSON"
+}
+
+set_frontmatter_field() {
+	local frontmatter="$1"
+	local key="$2"
+	local value="$3"
+	local line found=0
+
+	while IFS= read -r line || [[ -n "$line" ]]; do
+		if [[ "$line" == "$key:"* ]]; then
+			if [[ "$found" -eq 0 ]]; then
+				printf '%s: %s\n' "$key" "$value"
+				found=1
+			fi
+			continue
+		fi
+		printf '%s\n' "$line"
+		if [[ "$line" == model:* && "$found" -eq 0 ]]; then
+			printf '%s: %s\n' "$key" "$value"
+			found=1
+		fi
+	done <<<"$frontmatter"
+}
+
+yaml_field_value() {
+	local path="$1"
+	local key="$2"
+	local line
+
+	while IFS= read -r line || [[ -n "$line" ]]; do
+		if [[ "$line" == "$key:"* ]]; then
+			printf '%s\n' "${line#*:}"
+			return
+		fi
+	done <"$path"
+}
+
+update_agent_file() {
+	local agent="$1"
+	local model="$2"
+	local variant="$3"
+	local path="$AGENTS_DIR/$agent.md"
+	local text frontmatter body updated temporary
+
+	if [[ ! -f "$path" ]]; then
+		printf '  ! skipping %s.md — not found at %s\n' "$agent" "$path"
+		return
+	fi
+
+	text="$(<"$path")"
+	if [[ "$text" != $'---\n'* ]]; then
+		printf '  ! skipping %s.md — no frontmatter block found\n' "$agent"
+		return
+	fi
+
+	frontmatter="${text#---$'\n'}"
+	if [[ "$frontmatter" != *$'\n---\n'* ]]; then
+		printf '  ! skipping %s.md — no frontmatter block found\n' "$agent"
+		return
+	fi
+	frontmatter="${frontmatter%%$'\n---\n'*}"
+	body="${text#*---$'\n'}"
+	body="${body#*$'\n---\n'}"
+
+	updated="$(set_frontmatter_field "$frontmatter" model "$model")"
+	updated="$(set_frontmatter_field "$updated" variant "$variant")"
+	updated="$(set_frontmatter_field "$updated" reasoningEffort "$variant")"
+	temporary="$(mktemp "${path}.XXXXXX")"
+	printf -- '---\n%s\n---\n%s\n' "$updated" "$body" >"$temporary"
+	backup "$path"
+	mv -- "$temporary" "$path"
+	printf '  ok %s.md -> model=%s variant=%s\n' "$agent" "$model" "$variant"
+}
+
+list_tiers() {
+	require_config
+	jq -r '
+		to_entries
+		| sort_by(.key | tonumber)
+		| .[]
+		| "\(.key): \(.value.name)  main=\(.value.main.model) (\(.value.main.variant))  small=\(.value.small.model) (\(.value.small.variant))"
+	' "$MODELS_FILE"
+}
+
+show_status() {
+	local agent path model variant
+
+	require_config
+	printf 'model:       %s\n' "$(jq -r '.model // "null"' "$OPENCODE_JSON")"
+	printf 'small_model: %s\n\n' "$(jq -r '.small_model // "null"' "$OPENCODE_JSON")"
+	for agent in "${MAIN_AGENTS[@]}" "${SMALL_AGENTS[@]}"; do
+		path="$AGENTS_DIR/$agent.md"
+		if [[ ! -f "$path" ]]; then
+			printf '%-10s (file not found)\n' "$agent"
+			continue
+		fi
+		model="$(yaml_field_value "$path" model)"
+		model="${model#"${model%%[![:space:]]*}"}"
+		variant="$(yaml_field_value "$path" variant)"
+		variant="${variant#"${variant%%[![:space:]]*}"}"
+		printf '%-10s model=%-40s variant=%s\n' "$agent" "${model:-?}" "${variant:-(none)}"
+	done
+}
+
+switch_tier() {
+	local tier="$1"
+	local agent name main_model small_model main_variant small_variant
+
+	require_config
+	if ! jq -e --arg tier "$tier" '
+		.[$tier]
+		| (.name and .main.model and .main.variant and .small.model and .small.variant)
+	' "$MODELS_FILE" >/dev/null; then
+		printf "Unknown or incomplete tier %s. Use 'list' to see options.\n" "$tier" >&2
+		exit 1
+	fi
+	name="$(jq -r --arg tier "$tier" '.[$tier].name' "$MODELS_FILE")"
+	main_model="$(jq -r --arg tier "$tier" '.[$tier].main.model' "$MODELS_FILE")"
+	small_model="$(jq -r --arg tier "$tier" '.[$tier].small.model' "$MODELS_FILE")"
+	main_variant="$(jq -r --arg tier "$tier" '.[$tier].main.variant' "$MODELS_FILE")"
+	small_variant="$(jq -r --arg tier "$tier" '.[$tier].small.variant' "$MODELS_FILE")"
+
+	printf 'Switching to tier %s: %s\n' "$tier" "$name"
+	update_opencode_json "$main_model" "$small_model"
+	printf '  ok opencode.json -> model=%s small_model=%s\n' \
+		"$main_model" "$small_model"
+
+	for agent in "${MAIN_AGENTS[@]}"; do
+		update_agent_file "$agent" "$main_model" "$main_variant"
+	done
+	for agent in "${SMALL_AGENTS[@]}"; do
+		update_agent_file "$agent" "$small_model" "$small_variant"
+	done
+
+	printf '\nDone. Verify with: opencode debug agent engineer\n'
+}
+
+case "${1:-}" in
+list)
+	[[ $# -eq 1 ]] || {
+		usage >&2
+		exit 1
+	}
+	list_tiers
+	;;
+status)
+	[[ $# -eq 1 ]] || {
+		usage >&2
+		exit 1
+	}
+	show_status
+	;;
+switch)
+	[[ $# -eq 2 ]] || {
+		usage >&2
+		exit 1
+	}
+	switch_tier "$2"
+	;;
+delete-backups)
+	[[ $# -eq 1 ]] || {
+		usage >&2
+		exit 1
+	}
+	delete_backups
+	;;
+*)
+	usage >&2
+	exit 1
+	;;
+esac

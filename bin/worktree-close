@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+target_arg="${1:-}"
+merged_into="${2:-main}"
+
+if [[ -z "$target_arg" ]]; then
+  printf 'Usage: %s ABSOLUTE_WORKTREE_PATH [MERGED_INTO_REF]\n' "$0" >&2
+  exit 2
+fi
+
+target="$(realpath -e -- "$target_arg")"
+branch="$(git -C "$target" branch --show-current)"
+
+if [[ -z "$branch" ]]; then
+  printf 'Refusing to close a detached worktree: %s\n' "$target" >&2
+  exit 1
+fi
+
+main_checkout="$(
+  git -C "$target" worktree list --porcelain |
+    awk '/^worktree / { print substr($0, 10); exit }'
+)"
+
+if [[ "$target" == "$main_checkout" ]]; then
+  printf 'Refusing to remove the main checkout: %s\n' "$target" >&2
+  exit 1
+fi
+
+if [[ -n "$(git -C "$target" status --porcelain)" ]]; then
+  printf 'Worktree is not clean: %s\n' "$target" >&2
+  git -C "$target" status --short >&2
+  exit 1
+fi
+
+git -C "$main_checkout" rev-parse --verify "${merged_into}^{commit}" >/dev/null
+if ! git -C "$main_checkout" merge-base --is-ancestor "$branch" "$merged_into"; then
+  printf 'Branch %s is not merged into %s.\n' "$branch" "$merged_into" >&2
+  exit 1
+fi
+
+git -C "$main_checkout" worktree remove "$target"
+git -C "$main_checkout" branch -d "$branch"
+git -C "$main_checkout" worktree prune --dry-run
+
+printf 'Removed worktree %s and branch %s.\n' "$target" "$branch"
+

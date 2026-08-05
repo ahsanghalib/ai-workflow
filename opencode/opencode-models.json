@@ -1,0 +1,33 @@
+{
+  "1": {
+    "name": "openai",
+    "main": { "model": "openai/gpt-5.6-terra", "variant": "medium" },
+    "small": { "model": "openai/gpt-5.6-luna", "variant": "medium" }
+  },
+  "2": {
+    "name": "opencode-go",
+    "main": { "model": "opencode-go/deepseek-v4-pro", "variant": "medium" },
+    "small": { "model": "opencode-go/deepseek-v4-flash", "variant": "medium" }
+  },
+  "3": {
+    "name": "anthropic",
+    "main": { "model": "anthropic/claude-opus-4-8", "variant": "medium" },
+    "small": { "model": "anthropic/claude-sonnet-5", "variant": "medium" }
+  },
+  "4": {
+    "name": "openrouter",
+    "main": {
+      "model": "openrouter/deepseek/deepseek-v4-pro",
+      "variant": "medium"
+    },
+    "small": {
+      "model": "openrouter/deepseek/deepseek-v4-flash",
+      "variant": "medium"
+    }
+  },
+  "5": {
+    "name": "zen-free",
+    "main": { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+    "small": { "model": "opencode/north-mini-code-free", "variant": "medium" }
+  }
+}

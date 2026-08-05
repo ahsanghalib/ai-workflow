@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+task_slug="${1:-}"
+base_ref="${2:-origin/main}"
+
+if [[ ! "$task_slug" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+  printf 'Usage: %s SAFE_TASK_SLUG [BASE_REF]\n' "$0" >&2
+  printf 'The slug may contain only letters, numbers, dot, underscore and dash.\n' >&2
+  exit 2
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+repo_name="$(basename "$repo_root")"
+worktree_root="$(dirname "$repo_root")/${repo_name}.worktrees"
+target="${worktree_root}/${task_slug}"
+branch="agent/${task_slug}"
+
+git rev-parse --verify "${base_ref}^{commit}" >/dev/null
+
+if [[ -e "$target" || -L "$target" ]]; then
+  printf 'Target already exists: %s\n' "$target" >&2
+  exit 1
+fi
+
+if git show-ref --verify --quiet "refs/heads/${branch}"; then
+  printf 'Branch already exists: %s\n' "$branch" >&2
+  exit 1
+fi
+
+mkdir -p "$worktree_root"
+git worktree add -b "$branch" "$target" "$base_ref"
+git worktree list --porcelain
+
+printf '\nCreated %s on %s\n' "$target" "$branch"
+exec "$HOME/.local/bin/dev-session" "$target"
+
