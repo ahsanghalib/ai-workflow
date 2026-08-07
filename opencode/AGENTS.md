@@ -46,6 +46,23 @@
   unless the user invokes them or the command is explicitly required by the
   active workflow.
 
+## Worktree Workflow
+
+- For substantial implementation work that should be isolated from the main
+  checkout, use the installed `worktree-new` helper instead of constructing
+  `git worktree` commands manually.
+- Choose an appropriate full branch name for the task and pass it directly to
+  `worktree-new` or ask before creating one.
+- Create the worktree before implementation begins.
+- Do not create a worktree for read-only research, planning, review,
+  documentation-only changes, or trivial edits unless explicitly requested.
+- After the work has been merged and the worktree is clean, use
+  `worktree-close` for cleanup instead of manually removing the worktree or
+  deleting the branch.
+- Never force-remove a worktree.
+- If it is materially unclear whether a task warrants an isolated worktree,
+  ask before creating one.
+
 ## Tooling & Operational Efficiency
 
 - Search with `rg` and list files with `rg --files` or `fd`. Access known
