@@ -187,7 +187,10 @@ these are set and switched.
 The `engineer` agent carries a working style derived from the repository's
 `AGENTS.md`: inspect instructions before proposing changes, state a plan and
 validation criteria, make the smallest coherent change, and review the diff
-before handoff. It delegates convention lookups to `explore` and refuses
+before handoff. It proactively delegates convention lookups to `explore`,
+external documentation to `research`, and applies relevant skills like
+`test-driven-development`, `systematic-debugging`, or
+`verification-before-completion` without waiting to be prompted. It refuses
 deployments, publishing, destructive git commands, and secret handling.
 
 ### Permissions and safety model

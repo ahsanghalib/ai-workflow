@@ -14,6 +14,38 @@
 - At the start of substantive work, read the project-root `SESSION_STATE.md`
   when it exists.
 
+## Capability Routing
+
+- Before starting substantive work, inspect the available agents and Skills and
+  determine whether any are specifically designed for the task.
+- Select and use relevant specialized capabilities before beginning the work;
+  do not wait for the user to explicitly request an agent or Skill.
+- Prefer the most specific applicable Skill or agent over reproducing its
+  workflow manually.
+- Load only capabilities relevant to the current task. Do not invoke agents or
+  Skills merely because they are available.
+- Newly added agents and Skills should be considered automatically based on
+  their names, descriptions and declared purpose; this file should not require
+  updating every time a capability is added.
+- Multiple Skills may be used when the task genuinely spans their concerns, but
+  use the smallest sufficient set and apply them in a logical order.
+- Delegate to a specialized subagent when its expertise, independent context or
+  workflow materially improves the result.
+- When a task clearly matches a specialized subagent, delegate that part of the
+  work before attempting it generically.
+- Do not duplicate work already delegated to a subagent unless verification or
+  review is required.
+- For implementation or behavioral code changes, use the
+  `test-driven-development` Skill before writing production code.
+- For bugs or unexplained failures, use the `systematic-debugging` Skill before
+  proposing a fix.
+- Before using or implementing against an external library, framework, SDK or
+  API, delegate documentation verification to the Research agent before
+  implementation.
+- Treat Commands as explicit user-invoked workflows. Do not auto-run Commands
+  unless the user invokes them or the command is explicitly required by the
+  active workflow.
+
 ## Tooling & Operational Efficiency
 
 - Search with `rg` and list files with `rg --files` or `fd`. Access known
@@ -54,6 +86,8 @@
 - Inspect `git diff --check` and the final diff.
 - Report commands run, results, untested paths, assumptions and risks.
 - Do not claim success when validation failed or was not run.
+- Before claiming implementation work is complete, use the
+  `verification-before-completion` Skill when applicable.
 
 ## Writing & Humanization
 
@@ -74,5 +108,6 @@
 - **Coding Standards**:
   - Strictly adhere to Clean Code guidelines and SOLID principles.
   - Formatting: Always use tabs.
+  - Enforce test-driven development (TDD) for code changes: write or update the failing test first, implement the minimum code required to pass it, then refactor while keeping tests green. Do not skip the test-first step unless the change cannot reasonably be tested; state the reason when this exception applies.
   - Linting: Enforce industry-standard linter rules for the target language (e.g., ESLint/Prettier for JS/TS, Ruff for Python).
 - **Agent Behavior**: Treat me as a senior peer. Avoid over-explaining basic concepts. Focus on architecture, performance, and maintainability.
