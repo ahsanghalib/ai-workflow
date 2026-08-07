@@ -44,6 +44,8 @@ background services, no daemons, no MCP servers.
 - **[jq](https://jqlang.github.io/jq/)** — required only by `opencode-model-switch`. (`brew install jq`, `pacman -S jq`, etc.)
 - **Node.js** (optional) — only needed to type-check the notification plugin with `npx tsc --noEmit`.
 - **`notify-send`** (Linux, part of `libnotify`) — required for desktop notifications from the plugin. On macOS, see [Troubleshooting](#troubleshooting).
+- **`tmux`**, **`nvim`**, **`lazygit`** — required by the `dev-session` worktree launcher.
+- **`gh`** (GitHub CLI) — optional; enables squash/rebase merge detection in `worktree-close`.
 
 ---
 
@@ -72,6 +74,7 @@ Copy the scripts from this repository into `~/.local/bin` (or anywhere on your
 install -m 755 bin/opencode-model-switch ~/.local/bin/
 install -m 755 bin/worktree-new         ~/.local/bin/
 install -m 755 bin/worktree-close       ~/.local/bin/
+install -m 755 bin/dev-session          ~/.local/bin/
 ```
 
 Or link them so updates to this repo take effect automatically:
@@ -80,6 +83,7 @@ Or link them so updates to this repo take effect automatically:
 ln -s "$(pwd)/bin/opencode-model-switch" ~/.local/bin/
 ln -s "$(pwd)/bin/worktree-new"          ~/.local/bin/
 ln -s "$(pwd)/bin/worktree-close"        ~/.local/bin/
+ln -s "$(pwd)/bin/dev-session"           ~/.local/bin/
 ```
 
 Verify:
@@ -332,42 +336,67 @@ Adding your own tier: add an entry to `opencode-models.json` with `name`,
 worktrees for agent work, so a long-running AI session never touches your main
 checkout.
 
-### `worktree-new SLUG [BASE_REF]`
+`bin/dev-session` is a tmux session launcher invoked automatically by
+`worktree-new`. It sets up a 4-window layout: `edit` (nvim), `agent` (opencode
+--agent engineer), `test` (shell), and `git` (lazygit).
+
+### `worktree-new BRANCH [BASE_REF] [START_WINDOW]`
 
 ```bash
-worktree-new my-feature
-worktree-new my-feature origin/develop
+worktree-new feature/auth-login
+worktree-new my-experiment origin/develop
+worktree-new bugfix/hotfix origin/main test
 ```
 
 Creates:
 
-- a worktree at `<parent-of-repo>/<repo-name>.worktrees/my-feature/`
-- a branch `agent/my-feature` based on `BASE_REF` (default `origin/main`)
+- a worktree at `<parent-of-repo>/<repo-name>.worktrees/<branch>/` (branch
+  namespaces like `feature/auth-login` are mirrored as subdirectories)
+- a branch with the exact name given, based on `BASE_REF` (default `origin/main`)
 
-The slug may contain only letters, numbers, dots, underscores, and dashes. If
-the target path or branch already exists, it refuses to run. After creating
-the worktree it launches `$HOME/.local/bin/dev-session` inside it.
+Runs the main-checkout commands so the branch and worktree belong to the real
+repository, not a nested checkout. Uses `--no-track` so the created branch does
+not set upstream tracking. If the target path or branch already exists, it
+refuses to run.
 
-> Note: `dev-session` is the author's own launcher (a shell alias/session
-> wrapper), not part of this repository. If you don't have it, create it or
-> replace that line — for example, drop the `exec` and just `cd` into the
-> worktree.
+After creating the worktree, it execs `dev-session` with the worktree path and
+`START_WINDOW` (default `agent`; one of `edit`, `agent`, `test`, `git`).
 
 ### `worktree-close PATH [MERGED_INTO_REF]`
 
 ```bash
-worktree-close ~/repos/my-project.worktrees/my-feature
-worktree-close ~/repos/my-project.worktrees/my-feature main
+worktree-close ~/repos/my-project.worktrees/feature/auth-login
+worktree-close ~/repos/my-project.worktrees/bugfix/hotfix origin/main
 ```
 
 Removes the worktree and deletes its branch, but only when:
 
 - the worktree is not the main checkout,
 - the working tree is clean,
-- the branch is already merged into `MERGED_INTO_REF` (default `main`).
+- the branch is merged, verified by one of:
+  - **Git ancestry** — the branch is a fast-forward ancestor of `MERGED_INTO_REF`
+    (default `origin/main`), or
+  - **GitHub merged PR** — if `gh` is authenticated, it falls back to checking
+    for a merged PR with the branch as its head (handles squash/rebase merges).
+
+Before verifying, it fetches the remote to ensure the merge target is current.
+It refuses to run from inside the target worktree, and uses `git branch -D`
+deliberately — merge safety is already explicitly verified above.
 
 It refuses to run destructive removal (`worktree remove --force` is denied by
 the global permission policy anyway).
+
+### `dev-session PATH [START_WINDOW]`
+
+```bash
+dev-session ~/repos/my-project.worktrees/feature/auth-login edit
+```
+
+Creates (or attaches to) a named tmux session at the given path with four
+windows and selects the `START_WINDOW`. If already inside tmux, it switches
+client; if attached to a terminal, it attaches; otherwise it prints the session
+name. The session name is derived from the repo name and branch (special
+characters are sanitized for tmux).
 
 ---
 
@@ -405,8 +434,9 @@ copies at `~/.config/opencode/` (not this repository) for day-to-day tweaks:
 | `model: null` / agent shows `?` | `opencode auth login` and fix the model IDs in `opencode-models.json` to match your access |
 | Plugin type-check fails | Run `npm install` inside `~/.config/opencode` (the `@opencode-ai/plugin` types are a dev dependency) |
 | No desktop notifications on macOS | The plugin uses `notify-send` (Linux). Replace it with `osascript -e 'display notification ...'` in `attention-notify.ts`, or leave the plugin file empty of handlers |
-| `worktree-new` exits after creating the worktree | It execs `$HOME/.local/bin/dev-session`, which is the author's launcher — create your own or remove the `exec` line |
-| `worktree-close` refuses to run | The worktree is not clean or the branch is not merged into `main` — check with `git status` / `git log origin/main..agent/<slug>` |
+| `worktree-new` exits after creating the worktree | It execs `dev-session`. Make sure `dev-session` is installed to `~/.local/bin` and tmux/nvim/lazygit are available |
+| `worktree-close` refuses to run | The worktree is not clean, you're inside it (`cd` out first), or the branch is not merged — check with `git status` / `git log origin/main..<branch>` / `gh pr list --head <branch> --state merged` |
+| `dev-session` prints "required command not found" | Install the missing prerequisite: `tmux`, `nvim`, `opencode`, or `lazygit` |
 | I broke `opencode.json` or an agent | Restore a `.bak` file written by `opencode-model-switch`, or re-copy from this repo |
 | Changes to skills/commands don't appear | Restart OpenCode — global extensions load at startup |
 

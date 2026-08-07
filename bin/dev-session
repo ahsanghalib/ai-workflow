@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+die() {
+	printf 'dev-session: %s\n' "$*" >&2
+	exit 1
+}
+
+require_command() {
+	command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"
+}
+
+target_arg="${1:-$PWD}"
+start_window="${2:-edit}"
+
+case "$start_window" in
+	edit|agent|test|git) ;;
+	*) die "invalid start window '$start_window' (expected: edit, agent, test, or git)" ;;
+esac
+
+if ! target="$(realpath -e -- "$target_arg" 2>/dev/null)"; then
+	die "target does not exist: $target_arg"
+fi
+[[ -d "$target" ]] || die "target is not a directory: $target"
+
+require_command tmux
+require_command nvim
+require_command opencode
+require_command lazygit
+
+if git -C "$target" rev-parse --show-toplevel >/dev/null 2>&1; then
+	root="$(git -C "$target" rev-parse --show-toplevel)"
+	branch="$(git -C "$root" branch --show-current)"
+else
+	root="$target"
+	branch=""
+fi
+
+session="$(basename "$root")"
+if [[ -n "$branch" ]]; then
+	session="${session}-${branch}"
+fi
+session="$(printf '%s' "$session" | tr '/: .' '----' | tr -cd '[:alnum:]_-')"
+
+[[ -n "$session" ]] || die 'could not derive a safe tmux session name'
+
+if ! tmux has-session -t "=${session}" 2>/dev/null; then
+	tmux new-session -d -s "$session" -c "$root" -n edit "nvim"
+	tmux new-window -d -t "${session}:" -n agent -c "$root" \
+		"opencode --agent engineer"
+	tmux new-window -d -t "${session}:" -n test -c "$root"
+	tmux new-window -d -t "${session}:" -n git -c "$root" "lazygit"
+fi
+
+tmux select-window -t "${session}:${start_window}"
+
+if [[ -n "${TMUX:-}" ]]; then
+	exec tmux switch-client -t "=${session}"
+fi
+
+if [[ -t 0 && -t 1 ]]; then
+	exec tmux attach-session -t "=${session}"
+fi
+
+printf 'tmux session ready: %s\n' "$session"
+printf 'Attach with: tmux attach-session -t %q\n' "$session"

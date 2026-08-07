@@ -1,47 +1,105 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+die() {
+	printf 'worktree-close: %s\n' "$*" >&2
+	exit 1
+}
+
 target_arg="${1:-}"
-merged_into="${2:-main}"
+merged_into="${2:-origin/main}"
 
 if [[ -z "$target_arg" ]]; then
-  printf 'Usage: %s ABSOLUTE_WORKTREE_PATH [MERGED_INTO_REF]\n' "$0" >&2
-  exit 2
+	printf 'Usage: %s WORKTREE_PATH [MERGED_INTO_REF]\n' "$0" >&2
+	exit 2
 fi
 
-target="$(realpath -e -- "$target_arg")"
-branch="$(git -C "$target" branch --show-current)"
-
-if [[ -z "$branch" ]]; then
-  printf 'Refusing to close a detached worktree: %s\n' "$target" >&2
-  exit 1
+if ! input_path="$(realpath -e -- "$target_arg" 2>/dev/null)"; then
+	die "path does not exist: $target_arg"
 fi
+[[ -d "$input_path" ]] || die "path is not a directory: $input_path"
 
-main_checkout="$(
-  git -C "$target" worktree list --porcelain |
-    awk '/^worktree / { print substr($0, 10); exit }'
-)"
+if ! target="$(git -C "$input_path" rev-parse --show-toplevel 2>/dev/null)"; then
+	die "not inside a Git worktree: $input_path"
+fi
+target="$(realpath -e -- "$target")"
+
+main_checkout="$({
+	git -C "$target" worktree list --porcelain |
+		awk '/^worktree / { print substr($0, 10); exit }'
+} || true)"
+[[ -n "$main_checkout" ]] || die 'could not determine the main Git checkout'
+main_checkout="$(realpath -e -- "$main_checkout")"
 
 if [[ "$target" == "$main_checkout" ]]; then
-  printf 'Refusing to remove the main checkout: %s\n' "$target" >&2
-  exit 1
+	die "refusing to remove the main checkout: $target"
 fi
+
+cwd="$(pwd -P)"
+if [[ "$cwd" == "$target" || "$cwd" == "$target/"* ]]; then
+	die "refusing to remove the current working tree; run this command from outside $target"
+fi
+
+branch="$(git -C "$target" branch --show-current)"
+[[ -n "$branch" ]] || die "refusing to close a detached worktree: $target"
 
 if [[ -n "$(git -C "$target" status --porcelain)" ]]; then
-  printf 'Worktree is not clean: %s\n' "$target" >&2
-  git -C "$target" status --short >&2
-  exit 1
+	printf 'Worktree is not clean: %s\n' "$target" >&2
+	git -C "$target" status --short >&2
+	exit 1
 fi
 
-git -C "$main_checkout" rev-parse --verify "${merged_into}^{commit}" >/dev/null
+remote=""
+base_branch="$merged_into"
+if [[ "$merged_into" == */* ]]; then
+	candidate_remote="${merged_into%%/*}"
+	if git -C "$main_checkout" remote get-url "$candidate_remote" >/dev/null 2>&1; then
+		remote="$candidate_remote"
+		base_branch="${merged_into#*/}"
+	fi
+fi
+
+if [[ -n "$remote" ]]; then
+	printf 'Refreshing %s before merge verification...\n' "$remote"
+	git -C "$main_checkout" fetch --prune "$remote"
+fi
+
+if ! git -C "$main_checkout" rev-parse --verify "${merged_into}^{commit}" >/dev/null 2>&1; then
+	die "merge target does not exist: $merged_into"
+fi
+
+merge_proof='git ancestry'
+
 if ! git -C "$main_checkout" merge-base --is-ancestor "$branch" "$merged_into"; then
-  printf 'Branch %s is not merged into %s.\n' "$branch" "$merged_into" >&2
-  exit 1
+	pr_number=""
+	if command -v gh >/dev/null 2>&1; then
+		pr_number="$({
+			cd "$main_checkout"
+			gh pr list \
+				--head "$branch" \
+				--base "$base_branch" \
+				--state merged \
+				--limit 1 \
+				--json number \
+				--jq '.[0].number // empty' 2>/dev/null
+		} || true)"
+	fi
+
+	if [[ -n "$pr_number" ]]; then
+		merge_proof="merged GitHub PR #${pr_number}"
+	else
+		printf 'Branch %s is not an ancestor of %s.\n' "$branch" "$merged_into" >&2
+		printf 'If the PR was squash/rebase merged, authenticate GitHub CLI so the merged PR can be verified.\n' >&2
+		exit 1
+	fi
 fi
 
 git -C "$main_checkout" worktree remove "$target"
-git -C "$main_checkout" branch -d "$branch"
-git -C "$main_checkout" worktree prune --dry-run
 
-printf 'Removed worktree %s and branch %s.\n' "$target" "$branch"
+# Merge safety has already been verified above. Use -D deliberately so Git's
+# upstream/deletion heuristics cannot override the explicit verification result.
+git -C "$main_checkout" branch -D -- "$branch"
 
+printf 'Removed worktree: %s\n' "$target"
+printf 'Removed branch: %s\n' "$branch"
+printf 'Merge verified by: %s\n' "$merge_proof"

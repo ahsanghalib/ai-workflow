@@ -1,37 +1,71 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-task_slug="${1:-}"
-base_ref="${2:-origin/main}"
+die() {
+	printf 'worktree-new: %s\n' "$*" >&2
+	exit 1
+}
 
-if [[ ! "$task_slug" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
-  printf 'Usage: %s SAFE_TASK_SLUG [BASE_REF]\n' "$0" >&2
-  printf 'The slug may contain only letters, numbers, dot, underscore and dash.\n' >&2
-  exit 2
+branch="${1:-}"
+base_ref="${2:-origin/main}"
+start_window="${3:-agent}"
+
+if [[ -z "$branch" ]]; then
+	printf 'Usage: %s BRANCH_NAME [BASE_REF] [START_WINDOW]\n' "$0" >&2
+	exit 2
 fi
 
-repo_root="$(git rev-parse --show-toplevel)"
-repo_name="$(basename "$repo_root")"
-worktree_root="$(dirname "$repo_root")/${repo_name}.worktrees"
-target="${worktree_root}/${task_slug}"
-branch="agent/${task_slug}"
+if ! git check-ref-format --branch "$branch" >/dev/null 2>&1; then
+	die "invalid branch name: $branch"
+fi
 
-git rev-parse --verify "${base_ref}^{commit}" >/dev/null
+case "$start_window" in
+	edit|agent|test|git) ;;
+	*) die "invalid start window '$start_window' (expected: edit, agent, test, or git)" ;;
+esac
+
+if ! current_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+	die 'must be run from inside a Git worktree'
+fi
+
+main_checkout="$({
+	git -C "$current_root" worktree list --porcelain |
+		awk '/^worktree / { print substr($0, 10); exit }'
+} || true)"
+[[ -n "$main_checkout" ]] || die 'could not determine the main Git checkout'
+main_checkout="$(realpath -e -- "$main_checkout")"
+
+repo_name="$(basename "$main_checkout")"
+worktree_root="$(dirname "$main_checkout")/${repo_name}.worktrees"
+# Mirror branch namespaces in the worktree directory. For example:
+#   feature/auth-login -> <repo>.worktrees/feature/auth-login
+# This avoids inventing or rewriting the branch name.
+target="${worktree_root}/${branch}"
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+dev_session="${script_dir}/dev-session"
+if [[ ! -x "$dev_session" ]]; then
+	dev_session="$(command -v dev-session || true)"
+fi
+[[ -n "$dev_session" && -x "$dev_session" ]] || die 'dev-session is not installed or executable'
+
+if ! git -C "$main_checkout" rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1; then
+	die "base ref does not exist locally: $base_ref (fetch it first if needed)"
+fi
 
 if [[ -e "$target" || -L "$target" ]]; then
-  printf 'Target already exists: %s\n' "$target" >&2
-  exit 1
+	die "target already exists: $target"
 fi
 
-if git show-ref --verify --quiet "refs/heads/${branch}"; then
-  printf 'Branch already exists: %s\n' "$branch" >&2
-  exit 1
+if git -C "$main_checkout" show-ref --verify --quiet "refs/heads/${branch}"; then
+	die "branch already exists: $branch"
 fi
 
-mkdir -p "$worktree_root"
-git worktree add -b "$branch" "$target" "$base_ref"
-git worktree list --porcelain
+mkdir -p "$(dirname "$target")"
+git -C "$main_checkout" worktree add --no-track -b "$branch" "$target" "$base_ref"
 
-printf '\nCreated %s on %s\n' "$target" "$branch"
-exec "$HOME/.local/bin/dev-session" "$target"
+printf '\nCreated worktree: %s\n' "$target"
+printf 'Branch: %s\n' "$branch"
+printf 'Base: %s\n' "$base_ref"
 
+exec "$dev_session" "$target" "$start_window"
