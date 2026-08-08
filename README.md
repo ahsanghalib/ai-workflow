@@ -49,7 +49,7 @@ MCP profile when needed.
 - **`notify-send`** (Linux, part of `libnotify`) — required for desktop notifications from the plugin. On macOS, see [Troubleshooting](#troubleshooting).
 - **`tmux`**, **`nvim`**, **`lazygit`** — optional; required only for the
   `dev-session` worktree launcher.
-- **`gh`** (GitHub CLI) — optional; enables squash/rebase merge detection in `worktree-close`.
+- **`gh`** (GitHub CLI) — optional; enables squash/rebase merge detection in `worktree-close` and the approval-gated `/git-release` command.
 
 ---
 
@@ -324,11 +324,26 @@ Commands live in `opencode/commands/` and are invoked in-session:
 | `/content-pack $ARGS` | advisor | Draft truthful, channel-specific unpublished content from supplied material |
 | `/session-state` | engineer | Create/update the project's `SESSION_STATE.md` and ensure `AGENTS.md` has the `Session continuity` section |
 | `/use-playwright $ARGS` | engineer | Configure an approved project-local Playwright MCP profile and ignored screenshot directory; restart OpenCode before use |
+| `/git-release [version]` | engineer | Validate and preview one annotated tag and matching GitHub Release; writes an approved user-run release script |
 
 For substantial work, the planning commands follow: plan → manual `Approved`
 status → branch → implement one task → review. Light plans stop at an
 in-session implementation brief. Nothing is committed, pushed, or deployed
 without separate explicit approval.
+
+Release examples:
+
+```text
+/git-release
+/git-release patch
+/git-release minor
+/git-release major
+/git-release v1.3.0
+```
+
+After explicit preview approval, `/git-release` writes an executable release
+script inside Git metadata for the user to run manually. OpenCode never runs
+the script; the global policy continues to deny `git push`.
 
 ### Desktop notifications
 
