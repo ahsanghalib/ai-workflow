@@ -169,8 +169,10 @@ after the new preview is approved.
 
 The script must use `set -euo pipefail` and retain the approved release notes.
 Embed the approved absolute repository root, `origin` URL, GitHub host,
-`owner/repository`, expected SHA, and version as quoted variables. Before any
-mutation, it must:
+`owner/repository`, expected SHA, version, and absolute `NOTES_FILE` path as
+quoted variables. Resolve the notes-file path to an absolute path before
+embedding it; pass `--notes-file "$NOTES_FILE"` to `gh release create`. Before
+any mutation, it must:
 
 ```bash
 cd "$REPO_ROOT"
