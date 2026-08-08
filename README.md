@@ -13,7 +13,9 @@ This repository contains two folders:
 | [`opencode/`](#3-install-the-opencode-configuration-opencode) | The full OpenCode configuration, installed to `~/.config/opencode` on macOS/Linux |
 
 Everything is plain text: Bash, JSON, Markdown, and one TypeScript plugin. No
-background services, no daemons, no MCP servers.
+background services, daemons, or global MCP servers. The opt-in
+[`/use-playwright`](#slash-commands) command adds a project-local Playwright
+MCP profile when needed.
 
 ---
 
@@ -245,6 +247,8 @@ when the task matches their description. Skills are installed:
 | `brand-guidelines` | Applying user-provided brand rules to artifacts |
 | `github-cli-workflow` | Inspecting/preparing PRs, issues, checks, and workflow logs with `git`/`gh` |
 | `skill-creator` | Creating/auditing OpenCode skills |
+| `playwright-public-web` | Read-only inspection of explicitly approved unauthenticated public websites through Playwright MCP |
+| `playwright-manual-auth` | Read-only inspection of approved login-required sites after the user authenticates in a headed isolated Playwright browser |
 
 Each skill's `description` field defines its precise trigger and non-use cases.
 
@@ -261,6 +265,7 @@ Commands live in `opencode/commands/` and are invoked in-session:
 | `/decision $ARGS` | advisor | Compare consequential options and return a concise decision memo |
 | `/content-pack $ARGS` | advisor | Draft truthful, channel-specific unpublished content from supplied material |
 | `/session-state` | engineer | Create/update the project's `SESSION_STATE.md` and ensure `AGENTS.md` has the `Session continuity` section |
+| `/use-playwright $ARGS` | engineer | Configure an approved project-local Playwright MCP profile and ignored screenshot directory; restart OpenCode before use |
 
 The planning commands follow the pattern: plan → manual `Approved` status →
 branch → implement one task → review. Nothing is committed, pushed, or
