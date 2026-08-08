@@ -30,6 +30,7 @@ MCP profile when needed.
   - [Slash commands](#slash-commands)
   - [Desktop notifications](#desktop-notifications)
   - [TUI settings](#tui-settings)
+  - [Agent behavior and conventions](#agent-behavior-and-conventions)
 - [`opencode-model-switch`: switching model tiers](#opencode-model-switch-switching-model-tiers)
 - [Git worktree helpers](#git-worktree-helpers)
 - [Customizing](#customizing)
@@ -225,6 +226,12 @@ deployments, publishing, destructive git commands, and secret handling.
 - `compaction` auto-prunes with a 12k-token reserve; the watcher ignores
   `.git`, `node_modules`, build/dist output, and virtualenvs.
 
+The agent also applies safety rules that sit above the permission policy. It
+works only inside the active repository or worktree, regenerates generated
+files instead of editing them directly, leaves lock files unchanged unless a
+dependency change requires them, preserves repository-mandated sections, and
+reviews every edit diff before handoff.
+
 ### Skills
 
 Skills are reusable expertise documents under `opencode/skills/`, loaded only
@@ -283,6 +290,45 @@ a question. It uses `notify-send` on Linux. The TUI attention config is in
 `opencode/tui.json` enables attention notifications with sound. You can drop
 your own theme files into `opencode/themes/` and custom tool/plugin files into
 `opencode/tools/` and `opencode/plugins/`.
+
+### Agent behavior and conventions
+
+The `engineer` agent follows the installed `AGENTS.md` in addition to any
+project-level instructions. The configuration assumes you are a senior
+engineer, so it leads with results and tradeoffs rather than explaining basic
+concepts.
+
+- **Capabilities and delegation.** Before substantive work, the agent selects
+  the smallest relevant combination of skills and subagents. It uses
+  `test-driven-development` for behavioral code changes,
+  `systematic-debugging` for unexplained failures, and
+  `verification-before-completion` before a completion claim. It delegates
+  repository conventions to `explore` and external SDK or API documentation to
+  `research`. Slash commands run only when you invoke them.
+- **Session continuity.** At the start of substantive work, the agent reads a
+  project-root `SESSION_STATE.md` when one exists.
+- **Worktrees.** For substantial implementation work that needs isolation, the
+  agent uses `worktree-new` before implementation and `worktree-close` after a
+  merged, clean worktree. It does not create a worktree for research, planning,
+  review, documentation-only, or trivial work unless you request one. When the
+  choice is unclear, it asks first. See [Git worktree helpers](#git-worktree-helpers)
+  for the helper contracts.
+- **Validation and handoff.** For a bug, the agent establishes a baseline
+  before a fix. It starts with the narrowest relevant check, then runs lint,
+  type checks, and broader tests when practical. Before handoff it reviews the
+  complete diff, runs `git diff --check`, and reports commands run, untested
+  paths, assumptions, and residual risks.
+- **Tooling.** Repository-local tools and dependencies take precedence. The
+  agent uses `rg` or `fd` for discovery, does not install global npm packages,
+  and does not start or configure Ollama. It delegates only when a specialized
+  agent or skill materially improves the result.
+- **Code and writing standards.** This configuration favors Clean Code and
+  SOLID, tabs for indentation, TDD with a red-green-refactor loop for testable
+  behavioral changes, and the relevant language linter. TypeScript,
+  JavaScript, and Python are the primary languages; Go, Elixir, and C# are
+  secondary. For substantial prose, it applies `humanizer` after the content is
+  technically correct, without changing exact code, commands, configuration,
+  paths, identifiers, citations, or stated certainty.
 
 ---
 
@@ -422,7 +468,9 @@ copies at `~/.config/opencode/` (not this repository) for day-to-day tweaks:
   command files under `commands/`. OpenCode discovers them at startup.
 - **Global instructions** — `opencode/AGENTS.md` (installed to
   `~/.config/opencode/AGENTS.md`) is the global instructions file that shapes
-  every session. Per-project `AGENTS.md` files layer on top of it.
+  every session. Per-project `AGENTS.md` files layer on top of it. See
+  [Agent behavior and conventions](#agent-behavior-and-conventions) for the
+  included workflow rules.
 - **Plugin** — edit `plugins/attention-notify.ts`; type-check with
   `npx tsc --noEmit` inside `~/.config/opencode`. Restart OpenCode after
   plugin/skill changes — global extensions load at startup.
