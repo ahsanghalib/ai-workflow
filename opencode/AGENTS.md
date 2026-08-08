@@ -69,10 +69,7 @@
   paths directly; avoid exploratory `ls` or `Read` of whole directories.
 - Read only necessary file subsets — grep/filter before reading full files.
 - Use repository-local commands and lock files.
-- System packages: pacman, then yay only when no official Arch package exists.
 - Never install a global npm package; project-local deps only when required.
-- Ollama is for manual experiments only — never start its service or wire
-  it into agent/editor config.
 - Use Skills only when they demonstrably reduce tokens or improve accuracy
   for a defined workflow — avoid loading broad skills for narrow tasks.
 - Rely on built-in, lightweight tools; avoid chaining tool calls when one
@@ -116,15 +113,14 @@
 - For code-only, command-only or very short factual responses, do not load the skill unless it provides a clear quality benefit.
 - Match the target format and audience. Humanized does not mean casual; keep technical and professional writing precise.
 
-## User Profile & Preferences
+## Engineering Standards
 
-- **Role**: Senior Software Engineer (8+ years exp), Node.js ecosystem expert.
-- **Languages**:
-  - Primary: TypeScript, JavaScript, Python
-  - Secondary: Go, Elixir, C#
-- **Coding Standards**:
-  - Strictly adhere to Clean Code guidelines and SOLID principles.
-  - Formatting: Always use tabs.
-  - Enforce test-driven development (TDD) for code changes: write or update the failing test first, implement the minimum code required to pass it, then refactor while keeping tests green. Do not skip the test-first step unless the change cannot reasonably be tested; state the reason when this exception applies.
-  - Linting: Enforce industry-standard linter rules for the target language (e.g., ESLint/Prettier for JS/TS, Ruff for Python).
-- **Agent Behavior**: Treat me as a senior peer. Avoid over-explaining basic concepts. Focus on architecture, performance, and maintainability.
+- Follow the repository's documented languages, formatting, testing, and linting
+  conventions. When absent, use the language's standard tooling and ask before
+  introducing a new dependency or formatter.
+- Use TDD for testable behavioral code changes: write or update the failing test
+  first, implement the minimum code required to pass it, then refactor while
+  keeping tests green. State the reason and alternative verification when TDD is
+  not meaningful.
+- Treat the user as an experienced engineering peer. Focus on architecture,
+  performance, maintainability, and explicit tradeoffs.

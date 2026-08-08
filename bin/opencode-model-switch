@@ -18,9 +18,6 @@ OPENCODE_JSON="$CONFIG_ROOT/opencode.json"
 AGENTS_DIR="$CONFIG_ROOT/agents"
 MODELS_FILE="${OPENCODE_MODELS_FILE:-$CONFIG_ROOT/opencode-models.json}"
 
-MAIN_AGENTS=(engineer advisor review)
-SMALL_AGENTS=(explore research)
-
 usage() {
 	cat <<'EOF'
 Usage:
@@ -69,6 +66,23 @@ require_config() {
 		printf 'Invalid JSON in %s\n' "$MODELS_FILE" >&2
 		exit 1
 	fi
+	if ! jq empty "$OPENCODE_JSON"; then
+		printf 'Invalid JSON in %s\n' "$OPENCODE_JSON" >&2
+		exit 1
+	fi
+}
+
+tier_agents() {
+	local tier="$1"
+	local group="$2"
+
+	jq -er --arg tier "$tier" --arg group "$group" '
+		.[$tier].agents[$group]
+		| if type == "array" and length > 0 and all(.[]; type == "string" and length > 0)
+			then .[]
+			else error("invalid agent group")
+		  end
+	' "$MODELS_FILE"
 }
 
 update_opencode_json() {
@@ -167,12 +181,21 @@ list_tiers() {
 }
 
 show_status() {
-	local agent path model variant
+	local agent path model variant agent_output
+	local -a agents
 
 	require_config
+	agent_output="$(jq -er '
+		[.[] | .agents.main[], .agents.small[]]
+		| if all(.[]; type == "string" and length > 0) then unique[] else error("invalid agent mapping") end
+	' "$MODELS_FILE")" || {
+		printf 'Invalid agent mappings in %s\n' "$MODELS_FILE" >&2
+		exit 1
+	}
+	mapfile -t agents <<<"$agent_output"
 	printf 'model:       %s\n' "$(jq -r '.model // "null"' "$OPENCODE_JSON")"
 	printf 'small_model: %s\n\n' "$(jq -r '.small_model // "null"' "$OPENCODE_JSON")"
-	for agent in "${MAIN_AGENTS[@]}" "${SMALL_AGENTS[@]}"; do
+	for agent in "${agents[@]}"; do
 		path="$AGENTS_DIR/$agent.md"
 		if [[ ! -f "$path" ]]; then
 			printf '%-10s (file not found)\n' "$agent"
@@ -188,12 +211,15 @@ show_status() {
 
 switch_tier() {
 	local tier="$1"
-	local agent name main_model small_model main_variant small_variant
+	local agent name main_model small_model main_variant small_variant main_agents_output small_agents_output
+	local -a main_agents small_agents
 
 	require_config
 	if ! jq -e --arg tier "$tier" '
 		.[$tier]
-		| (.name and .main.model and .main.variant and .small.model and .small.variant)
+		| (.name and .main.model and .main.variant and .small.model and .small.variant
+			and (.agents.main | type == "array" and length > 0)
+			and (.agents.small | type == "array" and length > 0))
 	' "$MODELS_FILE" >/dev/null; then
 		printf "Unknown or incomplete tier %s. Use 'list' to see options.\n" "$tier" >&2
 		exit 1
@@ -203,16 +229,26 @@ switch_tier() {
 	small_model="$(jq -r --arg tier "$tier" '.[$tier].small.model' "$MODELS_FILE")"
 	main_variant="$(jq -r --arg tier "$tier" '.[$tier].main.variant' "$MODELS_FILE")"
 	small_variant="$(jq -r --arg tier "$tier" '.[$tier].small.variant' "$MODELS_FILE")"
+	main_agents_output="$(tier_agents "$tier" main)" || {
+		printf 'Invalid main agent mapping for tier %s\n' "$tier" >&2
+		exit 1
+	}
+	mapfile -t main_agents <<<"$main_agents_output"
+	small_agents_output="$(tier_agents "$tier" small)" || {
+		printf 'Invalid small agent mapping for tier %s\n' "$tier" >&2
+		exit 1
+	}
+	mapfile -t small_agents <<<"$small_agents_output"
 
 	printf 'Switching to tier %s: %s\n' "$tier" "$name"
 	update_opencode_json "$main_model" "$small_model"
 	printf '  ok opencode.json -> model=%s small_model=%s\n' \
 		"$main_model" "$small_model"
 
-	for agent in "${MAIN_AGENTS[@]}"; do
+	for agent in "${main_agents[@]}"; do
 		update_agent_file "$agent" "$main_model" "$main_variant"
 	done
-	for agent in "${SMALL_AGENTS[@]}"; do
+	for agent in "${small_agents[@]}"; do
 		update_agent_file "$agent" "$small_model" "$small_variant"
 	done
 

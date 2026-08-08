@@ -1,21 +1,37 @@
 {
   "1": {
     "name": "openai",
+    "agents": {
+      "main": ["engineer", "advisor", "review"],
+      "small": ["explore", "research"]
+    },
     "main": { "model": "openai/gpt-5.6-terra", "variant": "medium" },
     "small": { "model": "openai/gpt-5.6-luna", "variant": "medium" }
   },
   "2": {
     "name": "opencode-go",
+    "agents": {
+      "main": ["engineer", "advisor", "review"],
+      "small": ["explore", "research"]
+    },
     "main": { "model": "opencode-go/deepseek-v4-pro", "variant": "medium" },
     "small": { "model": "opencode-go/deepseek-v4-flash", "variant": "medium" }
   },
   "3": {
     "name": "anthropic",
+    "agents": {
+      "main": ["engineer", "advisor", "review"],
+      "small": ["explore", "research"]
+    },
     "main": { "model": "anthropic/claude-opus-4-8", "variant": "medium" },
     "small": { "model": "anthropic/claude-sonnet-5", "variant": "medium" }
   },
   "4": {
     "name": "openrouter",
+    "agents": {
+      "main": ["engineer", "advisor", "review"],
+      "small": ["explore", "research"]
+    },
     "main": {
       "model": "openrouter/deepseek/deepseek-v4-pro",
       "variant": "medium"
@@ -27,6 +43,10 @@
   },
   "5": {
     "name": "zen-free",
+    "agents": {
+      "main": ["engineer", "advisor", "review"],
+      "small": ["explore", "research"]
+    },
     "main": { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
     "small": { "model": "opencode/north-mini-code-free", "variant": "medium" }
   }

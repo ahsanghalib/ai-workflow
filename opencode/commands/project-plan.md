@@ -50,6 +50,27 @@ Inspect the current directory without mutating it:
    - Prepare a branch for approved work, then stop before implementation.
 4. If intent remains ambiguous, ask which mode to run.
 
+### Select a planning level
+
+Choose the lightest level that preserves the decisions and approval record the
+work needs. State the selected level before writing anything; the user may
+override it.
+
+- **Light** — for isolated, low-risk work with a clear scope. Return an
+  in-session brief containing goal, boundaries, acceptance criteria, validation,
+  and open questions. Do not create or modify planning artifacts.
+- **Standard** — for work with multiple dependent tasks or an approval record.
+  Create or revise `PLANS.md` and `plans/PLAN-NNNN.md` with acceptance criteria,
+  dependencies, tasks, risks, and validation. Do not create or revise project
+  architecture, global instructions, or session state unless separately asked.
+- **Strict** — for bootstraps, cross-cutting architecture, high-risk changes, or
+  when explicitly requested. Apply the complete workflow below, including
+  architecture and session-continuity artifacts.
+
+Bootstrap is always strict. Branch and GitHub preparation require a standard or
+strict persisted plan with user-set `Approved` status. Never create a plan file
+for light planning merely to satisfy process.
+
 ### Conditional skill handoffs
 
 Select only the skills that materially improve the plan. Do not load every
@@ -83,7 +104,7 @@ configuration-only, documentation-only, generated, exploratory-spike, or
 no-meaningful-test-seam work, record the TDD exception and alternative
 verification rather than forcing a failing-test-first loop.
 
-## 2. Bootstrap an empty project
+## 2. Bootstrap an empty project (strict only)
 
 Use this mode instead of `/init`. Do not run Git commands or write files until
 the relevant gate is approved.
@@ -141,7 +162,7 @@ not execute them. After the user confirms the development branch exists on a
 GitHub remote, separately ask permission before using `gh` to change the remote
 default branch. Do not create a GitHub repository unless separately requested.
 
-## 3. Maintain project architecture
+## 3. Maintain project architecture (strict only)
 
 Use this project root structure, adapting existing headings instead of duplicating them:
 
@@ -211,7 +232,7 @@ stack and package manager, build and validation commands, branch policy,
 generated-file rules, security boundaries, and deployment restrictions. Do not
 duplicate the full architecture.
 
-## 4. Maintain the plan index
+## 4. Maintain the plan index (standard and strict)
 
 Keep project root `PLANS.md` concise:
 
@@ -237,7 +258,7 @@ Allowed types are `Feature`, `Bug`, and `Improvement`. Allowed statuses are
 `Proposed`, `Approved`, `In Progress`, `Blocked`, `Completed`, and `Cancelled`.
 New plans always start as `Proposed`.
 
-## 5. Create or revise a detailed plan
+## 5. Create or revise a detailed plan (standard and strict)
 
 Before planning substantial existing code, inspect applicable instructions and
 trace the relevant entry points, behavior, tests, and constraints. Establish a
@@ -364,7 +385,7 @@ milestones, projects, or sub-issues unless separately approved. Record issue
 numbers and URLs in the detailed plan, relevant tasks, and index. Local plan
 status remains authoritative when GitHub differs.
 
-## 8. Update session continuity
+## 8. Update session continuity (strict only)
 
 Create or merge project root `SESSION_STATE.md` after meaningful changes. Record:
 

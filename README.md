@@ -1,9 +1,8 @@
 # AI Workflow — OpenCode Configuration
 
-A drop-in setup for the [OpenCode](https://opencode.ai) CLI: a global agent
-system with layered agents, reusable skills, slash commands, strict safety
-permissions, desktop notifications, model-tier switching, and git worktree
-helpers.
+A safety-first [OpenCode](https://opencode.ai) workflow for software
+engineers: bounded agents, approval-gated changes, TDD and verification skills,
+model tiers, and isolated Git worktrees.
 
 This repository contains two folders:
 
@@ -42,13 +41,31 @@ MCP profile when needed.
 
 ## Prerequisites
 
-- **bash**, **git**, and standard coreutils — present on macOS and Linux by default.
+- **bash**, **git**, **rsync**, and standard coreutils — present on most macOS
+  and Linux installations.
 - **[OpenCode CLI](https://opencode.ai/docs/)**: `curl -fsSL https://opencode.ai/install | bash`, or install via your package manager.
 - **[jq](https://jqlang.github.io/jq/)** — required only by `opencode-model-switch`. (`brew install jq`, `pacman -S jq`, etc.)
 - **Node.js** (optional) — only needed to type-check the notification plugin with `npx tsc --noEmit`.
 - **`notify-send`** (Linux, part of `libnotify`) — required for desktop notifications from the plugin. On macOS, see [Troubleshooting](#troubleshooting).
-- **`tmux`**, **`nvim`**, **`lazygit`** — required by the `dev-session` worktree launcher.
+- **`tmux`**, **`nvim`**, **`lazygit`** — optional; required only for the
+  `dev-session` worktree launcher.
 - **`gh`** (GitHub CLI) — optional; enables squash/rebase merge detection in `worktree-close`.
+
+---
+
+## Compatibility and validation
+
+This configuration is tested against OpenCode `1.18.x` and declares the current
+OpenCode JSON schema URL. CI validates JSON, agent/command/skill frontmatter,
+model-tier mappings, shell scripts, TypeScript, and the helper-script integration
+tests. When upgrading OpenCode, run `opencode debug config` and
+`opencode debug agent engineer` locally before widening the supported range.
+
+Repository checks run with:
+
+```bash
+make check
+```
 
 ---
 
@@ -112,17 +129,11 @@ if [ -d ~/.config/opencode ]; then
 fi
 
 mkdir -p ~/.config/opencode
-cp -R opencode/. ~/.config/opencode/
+rsync -a --exclude node_modules opencode/. ~/.config/opencode/
 ```
 
-Do **not** copy `opencode/node_modules/` — it is git-ignored and not shipped with
-this repo, so a fresh clone has none. If your local checkout happens to have
-one, the `cp -R` above would carry it over; remove it after copying and
-install dependencies fresh instead (optional, see next step):
-
-```bash
-rm -rf ~/.config/opencode/node_modules
-```
+This intentionally excludes `node_modules/`; install plugin type dependencies
+fresh only when you need them (optional, see next step).
 
 ### 4. Install plugin type dependencies (optional)
 
@@ -203,9 +214,9 @@ deployments, publishing, destructive git commands, and secret handling.
 ### Agent behavior and conventions
 
 The `engineer` agent follows the installed `AGENTS.md` in addition to any
-project-level instructions. The configuration assumes you are a senior
-engineer, so it leads with results and tradeoffs rather than explaining basic
-concepts.
+project-level instructions. It leads with results and tradeoffs, avoids broad
+unrelated changes, and asks when a product or architecture choice materially
+affects the result.
 
 - **Capabilities and delegation.** Before substantive work, the agent selects
   the smallest relevant combination of skills and subagents. It uses
@@ -228,16 +239,15 @@ concepts.
   complete diff, runs `git diff --check`, and reports commands run, untested
   paths, assumptions, and residual risks.
 - **Tooling.** Repository-local tools and dependencies take precedence. The
-  agent uses `rg` or `fd` for discovery, does not install global npm packages,
-  and does not start or configure Ollama. It delegates only when a specialized
-  agent or skill materially improves the result.
+  agent uses `rg` or `fd` for discovery and does not install global npm
+  packages. It delegates only when a specialized agent or skill materially
+  improves the result.
 - **Code and writing standards.** This configuration favors Clean Code and
   SOLID, tabs for indentation, TDD with a red-green-refactor loop for testable
-  behavioral changes, and the relevant language linter. TypeScript,
-  JavaScript, and Python are the primary languages; Go, Elixir, and C# are
-  secondary. For substantial prose, it applies `humanizer` after the content is
-  technically correct, without changing exact code, commands, configuration,
-  paths, identifiers, citations, or stated certainty.
+  behavioral changes, and the relevant language linter. For substantial prose,
+  it applies `humanizer` after the content is technically correct, without
+  changing exact code, commands, configuration, paths, identifiers, citations,
+  or stated certainty.
 
 ### Permissions and safety model
 
@@ -249,7 +259,9 @@ concepts.
   `*.pem`, `*.key`, `.ssh/`, `.aws/`, `.kube/`, `auth.json`,
   `credentials.json`/`credentials.yml`, `secrets.json`, `*.tfvars`,
   `id_rsa`/`id_ed25519`, `.git-credentials`, and more.
-- **Shell commands** default to ask; a long denylist blocks `sudo`/`doas`,
+- **Shell commands** default to ask; `git status`, `git diff`, `git log`,
+  `git show`, and `git branch --show-current` are pre-approved. A long denylist
+  blocks `sudo`/`doas`,
   `rm -rf`, `shred`, `find -delete`, `git reset --hard`, `git clean`,
   `git push`, destructive branch/worktree operations, `terraform apply`,
   `aws`, `kubectl`, `docker`, `npm publish`, system package installs
@@ -304,7 +316,7 @@ Commands live in `opencode/commands/` and are invoked in-session:
 
 | Command | Agent | Purpose |
 | --- | --- | --- |
-| `/project-plan $ARGS` | engineer | Bootstrap empty projects; create/revise feature, bug, improvement plans; prepare branches and GitHub issues — without implementing |
+| `/project-plan $ARGS` | engineer | Choose light, standard, or strict planning; bootstrap empty projects; create/revise plans; prepare branches and GitHub issues — without implementing |
 | `/implement-next $ARGS` | engineer | Implement, validate, and review only the next unchecked task of one explicitly approved plan; stops after one task |
 | `/review-diff $ARGS` | review | Review the working-tree diff or a Git range; actionable evidence-backed findings only |
 | `/research-brief $ARGS` | research | Web-only research returning a dated, source-linked evidence brief |
@@ -313,9 +325,10 @@ Commands live in `opencode/commands/` and are invoked in-session:
 | `/session-state` | engineer | Create/update the project's `SESSION_STATE.md` and ensure `AGENTS.md` has the `Session continuity` section |
 | `/use-playwright $ARGS` | engineer | Configure an approved project-local Playwright MCP profile and ignored screenshot directory; restart OpenCode before use |
 
-The planning commands follow the pattern: plan → manual `Approved` status →
-branch → implement one task → review. Nothing is committed, pushed, or
-deployed without separate explicit approval.
+For substantial work, the planning commands follow: plan → manual `Approved`
+status → branch → implement one task → review. Light plans stop at an
+in-session implementation brief. Nothing is committed, pushed, or deployed
+without separate explicit approval.
 
 ### Desktop notifications
 
@@ -335,7 +348,9 @@ your own theme files into `opencode/themes/` and custom tool/plugin files into
 ## `opencode-model-switch`: switching model tiers
 
 `bin/opencode-model-switch` swaps the main/small model tiers across providers
-by rewriting `opencode.json` and the agents' frontmatter.
+by rewriting `opencode.json` and the mapped agents' frontmatter. Each tier's
+`agents.main` and `agents.small` lists in `opencode-models.json` are the single
+source of truth for that mapping.
 
 Tiers are defined in `opencode/opencode-models.json` (installed to
 `~/.config/opencode/opencode-models.json`). The included tiers are:
@@ -376,8 +391,8 @@ Environment overrides:
 - `OPENCODE_MODELS_FILE` — use a tier definition file elsewhere.
 
 Adding your own tier: add an entry to `opencode-models.json` with `name`,
-`main.model`, `main.variant`, `small.model`, and `small.variant`, then run
-`opencode-model-switch list`.
+`agents.main`, `agents.small`, `main.model`, `main.variant`, `small.model`, and
+`small.variant`, then run `opencode-model-switch list`.
 
 ---
 
@@ -387,9 +402,9 @@ Adding your own tier: add an entry to `opencode-models.json` with `name`,
 worktrees for agent work, so a long-running AI session never touches your main
 checkout.
 
-`bin/dev-session` is a tmux session launcher invoked automatically by
-`worktree-new`. It sets up a 4-window layout: `edit` (nvim), `agent` (opencode
---agent engineer), `test` (shell), and `git` (lazygit).
+`bin/dev-session` is an optional tmux session launcher. When available,
+`worktree-new` invokes it to set up a 4-window layout: `edit` (nvim), `agent`
+(`opencode --agent engineer), `test` (shell), and `git` (lazygit).
 
 ### `worktree-new BRANCH [BASE_REF] [START_WINDOW]`
 
@@ -410,8 +425,11 @@ repository, not a nested checkout. Uses `--no-track` so the created branch does
 not set upstream tracking. If the target path or branch already exists, it
 refuses to run.
 
-After creating the worktree, it execs `dev-session` with the worktree path and
-`START_WINDOW` (default `agent`; one of `edit`, `agent`, `test`, `git`).
+After creating the worktree, it runs `dev-session` with the worktree path and
+`START_WINDOW` (default `agent`; one of `edit`, `agent`, `test`, `git`) when
+the helper is installed. Otherwise it prints `dev-session is unavailable` and
+the worktree path, then exits successfully. Direct `dev-session` invocation
+defaults to `edit`.
 
 ### `worktree-close PATH [MERGED_INTO_REF]`
 
@@ -453,8 +471,8 @@ characters are sanitized for tmux).
 
 ## Customizing
 
-This is a personal configuration distributed as a template. Edit the installed
-copies at `~/.config/opencode/` (not this repository) for day-to-day tweaks:
+This is an opinionated public template. Edit the installed copies at
+`~/.config/opencode/` (not this repository) for day-to-day tweaks:
 
 - **Models** — edit `opencode-models.json` (and your provider auth), or just
   set `model`/`small_model` in `opencode.json` directly.

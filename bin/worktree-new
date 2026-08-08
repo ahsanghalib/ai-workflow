@@ -47,7 +47,6 @@ dev_session="${script_dir}/dev-session"
 if [[ ! -x "$dev_session" ]]; then
 	dev_session="$(command -v dev-session || true)"
 fi
-[[ -n "$dev_session" && -x "$dev_session" ]] || die 'dev-session is not installed or executable'
 
 if ! git -C "$main_checkout" rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1; then
 	die "base ref does not exist locally: $base_ref (fetch it first if needed)"
@@ -68,4 +67,8 @@ printf '\nCreated worktree: %s\n' "$target"
 printf 'Branch: %s\n' "$branch"
 printf 'Base: %s\n' "$base_ref"
 
-exec "$dev_session" "$target" "$start_window"
+if [[ -n "$dev_session" && -x "$dev_session" ]]; then
+	exec "$dev_session" "$target" "$start_window"
+fi
+
+printf 'dev-session is unavailable; start work in: %s\n' "$target"

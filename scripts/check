@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+
+shellcheck "$repository_root"/bin/* "$repository_root"/tests/*.sh "$repository_root"/scripts/check
+jq empty "$repository_root/opencode/opencode.json" "$repository_root/opencode/opencode-models.json"
+node "$repository_root/scripts/validate-config.mjs"
+npm --prefix "$repository_root/opencode" exec -- tsc --project "$repository_root/opencode/tsconfig.json" --noEmit
+bash "$repository_root/tests/worktree-helpers.test.sh"
+bash "$repository_root/tests/model-switch.test.sh"
