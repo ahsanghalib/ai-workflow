@@ -37,7 +37,7 @@ inspection and a branch-only, no-tag `git fetch origin` for refreshing the
 approved remote-tracking reference are permitted. Determine and report:
 
 1. Current branch and `origin` URLs. Inspect both `git remote get-url --all
-   origin` and `git remote get-url --push --all origin`. Require exactly one
+origin` and `git remote get-url --push --all origin`. Require exactly one
    regular `origin` URL and exactly one effective push destination; multiple
    push URLs are forbidden because `git push origin` pushes to every one. Derive
    `GITHUB_HOST` and `GITHUB_REPO` (`owner/repository`) from each URL using only
@@ -53,17 +53,17 @@ approved remote-tracking reference are permitted. Determine and report:
    repository-scoped `gh` invocation so repository targeting remains explicit
    and works consistently across GitHub CLI command groups. Query
    `GH_REPO="$GITHUB_HOST/$GITHUB_REPO" gh repo view --json
-   nameWithOwner,url,sshUrl,defaultBranchRef` and require its canonical host and
+nameWithOwner,url,sshUrl,defaultBranchRef` and require its canonical host and
    `nameWithOwner` to match the normalized `origin` identity. Stop on any
    mismatch or ambiguity.
 2. Full working-tree state with `git status --short` and `git status --branch
-   --short`, including staged, unstaged, and untracked files. Stop if any exist.
+--short`, including staged, unstaged, and untracked files. Stop if any exist.
 3. Whether `gh` is on `PATH` and whether `gh auth status --hostname
-   "$GITHUB_HOST"` succeeds. Stop if either fails; never print authentication
+"$GITHUB_HOST"` succeeds. Stop if either fails; never print authentication
    tokens or credential data.
 4. Whether this is a linked worktree: compare the absolute paths returned by
    `git rev-parse --path-format=absolute --git-dir` and `git rev-parse
-   --path-format=absolute --git-common-dir`. If they differ, stop before preview
+--path-format=absolute --git-common-dir`. If they differ, stop before preview
    and require a regular checkout; do not write release artifacts outside the
    active worktree. Otherwise, determine the primary branch from GitHub's
    authoritative `defaultBranchRef.name`. When `refs/remotes/origin/HEAD` is
@@ -77,12 +77,12 @@ approved remote-tracking reference are permitted. Determine and report:
    `EXPECTED_UPSTREAM_BRANCH`. Fetch only that branch with `--no-tags` and the
    explicit refspec `refs/heads/$EXPECTED_UPSTREAM_BRANCH:refs/remotes/origin/$EXPECTED_UPSTREAM_BRANCH`,
    then use `git rev-list --left-right --count
-   refs/remotes/origin/$EXPECTED_UPSTREAM_BRANCH...HEAD` to identify ahead,
+refs/remotes/origin/$EXPECTED_UPSTREAM_BRANCH...HEAD` to identify ahead,
    behind, or diverged state. Stop unless `HEAD` is exactly the refreshed
    upstream tip; do not treat an unpushed local commit as releasable. Capture
    `EXPECTED_BRANCH` and the full `EXPECTED_SHA` for the approved handoff.
 6. The latest reachable annotated or lightweight tag, using `git describe
-   --tags --abbrev=0 HEAD` when one exists, and existing GitHub releases using
+--tags --abbrev=0 HEAD` when one exists, and existing GitHub releases using
    `GH_REPO="$GITHUB_HOST/$GITHUB_REPO" gh release list`. Clearly distinguish no tag
    from command failure.
 
@@ -112,7 +112,7 @@ Do not leave a local tag merely because the remote steps are prohibited.
   (`git ls-remote --tags origin refs/tags/<version>` and
   `refs/tags/<version>^{}`). Check the matching GitHub Release through
   `gh api --hostname "$GITHUB_HOST" --include --silent
-  "repos/$GITHUB_REPO/releases/tags/$VERSION"`, not `gh release view`. An HTTP
+"repos/$GITHUB_REPO/releases/tags/$VERSION"`, not `gh release view`. An HTTP
   200 means it exists, HTTP 404 means it is absent, and every other response or
   failure stops preparation. If a tag or release exists, stop and report it.
   Never overwrite, force-update, recreate, or delete it.
@@ -181,7 +181,7 @@ Before creating a tag, present this complete preview:
 - exact user-run mutations: `git tag -a`,
   `git push origin "refs/tags/<version>:refs/tags/<version>"`, and
   `GH_REPO="$GITHUB_HOST/$GITHUB_REPO" gh release create --verify-tag --title
-  --notes-file`, including whether the
+--notes-file`, including whether the
   release is stable or explicitly requested as a prerelease/draft; and
 - the version-specific `ai-workflow/releases/<version>/release.sh` and
   `ai-workflow/releases/<version>/notes.md` paths, resolved through Git metadata.
@@ -429,8 +429,8 @@ HTTPS fetch or push URLs with userinfo; highest-reachable-SemVer selection when
 tag dates and commit proximity disagree; and paths containing spaces and an
 apostrophe. Each rejection must happen before local tag creation.
 
-Search for stale implementation patterns: `gh -R`, `opencode/releases`,
-`.git/opencode/releases`, `git push --tags`, and
+Search for stale implementation patterns: `gh -R`, `ai-workflow/releases`,
+`.git/ai-workflow/releases`, `git push --tags`, and
 `confirmed_release_not_found`. Remove them unless they occur only in prose that
 describes a forbidden pattern. Run the repository's authoritative validation,
 `git diff --check`, and review the complete diff.
