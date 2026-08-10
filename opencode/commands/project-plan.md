@@ -33,6 +33,33 @@ GitHub setup actions. Never implement plan tasks in this command.
   user when publishing branches is requested, then wait for confirmation.
 - Never read or write secrets, credential files, browser sessions, or `.env`
   files. Record required environment-variable names only.
+- Treat technology, framework, database, storage, hosting, deployment, CI, and
+  provider choices as proposed decisions until explicitly approved. Never infer
+  Cloudflare, AWS, Vercel, Docker, D1, R2, Lambda, Workers, or any specific
+  framework, database, or provider from research notes alone.
+- When a provider choice is unresolved, document requirements, constraints,
+  alternatives, recommendation, trade-offs, and an explicit approval gate.
+- Keep local development fully local: it must not require deployed QA, staging,
+  or production resources and must not target a remote environment by default.
+  After a provider is selected, prefer compatible local emulation. Use Docker
+  only locally and only when native or other local emulation cannot reproduce a
+  concrete required behavior. Explain any unreproducible capability and ask for
+  approval before requiring a remote development resource.
+- Keep the architecture low-complexity. Do not propose services, queues,
+  databases, Docker, remote dependencies, or abstractions without a demonstrated
+  need.
+- Treat branch creation, pushes, remote setup, provider setup, deployment, and
+  deployment integration as separate approval gates. QA, staging, and production
+  may use the same provider or resource types, but must isolate persistent data,
+  storage, secrets, credentials, and session-signing material. Once separately
+  approved deployment integration exists, a pushed `develop` branch is the QA
+  branch.
+- Plan forward-only migrations only: never edit an applied migration or manually
+  alter a deployed schema. Require promotion in this order: local migration apply
+  and local compatibility validation; QA migration apply and verification after
+  `develop`; staging migration apply and verification; then separately approved
+  production migration apply and deployment. Choose exact commands and provider
+  mechanisms only after the provider and stack decision is approved.
 
 ## 1. Detect the mode
 
@@ -115,17 +142,23 @@ Ask for unresolved project decisions in small related groups:
 
 - Project name, purpose, target users, primary problem, and expected outcomes.
 - MVP scope, non-goals, constraints, and definition of done.
-- Application type, languages, frameworks, runtime versions, and package manager.
+- Application type, languages, frameworks, runtime versions, package manager,
+  and the evidence or explicit approval for each technology decision.
 - Repository layout, components, boundaries, data flow, and external services.
 - Persistence, authentication, authorization, security, and privacy requirements.
 - Browser/platform support, accessibility, performance, and availability goals.
 - Testing, linting, formatting, type checking, CI, deployment, and observability.
-- Environments, documentation, license, and known architecture decisions.
+- Environments, local-emulation requirements and gaps, documentation, license,
+  known architecture decisions, and the separation required for remote
+  persistent data, storage, secrets, credentials, and session-signing material.
 - Branch aliases. Offer `develop`, `staging`, and `production`, while accepting
   alternatives such as `dev`, `stag`, and `prod`.
 
-Record resolved answers in `PROJECT_ARCHITECTURE.md`; retain unresolved decisions
-under `Open Questions` rather than inventing answers.
+Record confirmed requirements separately from research suggestions, assumptions,
+recommended decisions, and unresolved questions in `PROJECT_ARCHITECTURE.md`.
+For an unresolved provider decision, record requirements, constraints,
+alternatives, recommendation, trade-offs, and the approval gate rather than
+inventing a stack. Retain unresolved decisions under `Open Questions`.
 
 ### Optional bootstrap files
 
@@ -177,11 +210,25 @@ Use this project root structure, adapting existing headings instead of duplicati
 
 ## Non-Goals
 
+## Decision Status and Evidence
+
+### Confirmed Requirements
+
+### Research Suggestions
+
+### Assumptions
+
+### Recommended Decisions
+
+### Unresolved Questions and Approval Gates
+
 ## Functional Requirements
 
 ## Quality Attributes
 
 ## Technology Stack
+
+## Provider and Stack Decision
 
 ## Repository Structure
 
@@ -197,7 +244,11 @@ Use this project root structure, adapting existing headings instead of duplicati
 
 ## Environments
 
+## Local Development and Emulation
+
 ## Branch and Promotion Model
+
+## Migration and Release Flow
 
 ## Build and Tooling
 
@@ -224,12 +275,24 @@ Use this project root structure, adapting existing headings instead of duplicati
 
 Store current resolved architecture here, not task-level implementation details.
 When answers conflict with existing decisions, surface the conflict and ask
-before changing the document.
+before changing the document. In `Provider and Stack Decision`, keep unresolved
+choices provider-neutral and document requirements, constraints, alternatives,
+recommendation, trade-offs, and an approval gate. In `Local Development and
+Emulation`, prohibit remote environments by default and document each approved
+emulator, Docker exception, or explicitly approved remote-only gap. In
+`Environments`, state isolation for data, storage, secrets, credentials, and
+session-signing material. In `Branch and Promotion Model`, state that pushed
+`develop` becomes QA only after separately approved deployment integration. In
+`Migration and Release Flow`, require forward-only migrations and the prescribed
+local → QA after `develop` → staging → separately approved production sequence.
 
 Ensure project root `AGENTS.md` links to `PROJECT_ARCHITECTURE.md`, `PLANS.md`, and
 `SESSION_STATE.md`. Keep `AGENTS.md` operational: source-of-truth directories,
 stack and package manager, build and validation commands, branch policy,
-generated-file rules, security boundaries, and deployment restrictions. Do not
+generated-file rules, security boundaries, and deployment restrictions. It must
+also record the provider-neutral decision policy, fully local development rule,
+local-emulation and Docker exception policy, environment isolation, approval
+gates, forward-only migration rule, and low-complexity constraint. Do not
 duplicate the full architecture.
 
 ## 4. Maintain the plan index (standard and strict)
@@ -281,11 +344,27 @@ Use this structure in `plans/PLAN-NNNN.md`:
 
 ## Context
 
+## Decision Status and Evidence
+
+### Confirmed Requirements
+
+### Research Suggestions
+
+### Assumptions
+
+### Recommended Decisions
+
+### Unresolved Questions and Approval Gates
+
 ## Scope
 
 ## Non-Goals
 
 ## Architecture Impact
+
+## Environments and Local Development
+
+## Migration and Release Flow
 
 ## Decisions
 
@@ -322,6 +401,13 @@ Use one task for one coherent implementation and validation slice.
 When revising, address every user annotation, preserve accepted decisions and
 stable IDs, update `Updated` only when content changes, synchronize the index,
 and stop without implementing. Never change `Approved` on the user's behalf.
+Keep confirmed requirements, research suggestions, assumptions, recommended
+decisions, and unresolved questions distinct. For unresolved provider choices,
+record requirements, constraints, alternatives, recommendation, trade-offs, and
+the approval gate. Require local-only development by default, including any
+emulator or narrowly justified local-only Docker use. For migrations, record the
+forward-only promotion sequence and defer exact provider commands until the
+provider and stack are approved.
 
 After writing a new or revised plan, report its path and unresolved decisions,
 ask the user to review it, and explain that approval requires manually changing:
@@ -395,6 +481,11 @@ Create or merge project root `SESSION_STATE.md` after meaningful changes. Record
 - GitHub issue links created.
 - Validation performed and its results.
 - Open questions, blockers, untested paths, and the exact next action.
+- Confirmed requirements; research suggestions; assumptions; recommended
+  decisions; unresolved questions and approval gates.
+- Provider/stack decision status, local-development or emulation gaps, environment
+  isolation, migration/release stage, and any approval required before remote
+  resources, branch/push/remote/provider setup, or deployment.
 
 Ensure `AGENTS.md` instructs future sessions to read `SESSION_STATE.md`. Do not
 commit session state unless the user approved it as part of the current change.
