@@ -9,14 +9,15 @@ metadata:
 
 Prepare an opt-in, project-local browser profile for a later read-only
 inspection. This skill defines the safety contract and profile requirements;
-use the active harness's documented configuration format and browser adapter.
-Never assume a provider-specific config path, schema, tool prefix, or restart
-command.
+use the active harness's documented configuration format, browser adapter, and
+approval flow. It is harness-neutral: never assume OpenCode, Codex, a
+provider-specific config path, schema, tool prefix, or restart command.
 
-When the active harness is OpenCode, read the conditional adapter reference
-`references/opencode-mcp.md` for the preserved executable configuration
-contract. Other harnesses must use their own documented adapter or stop for
-manual setup; never translate this reference into an unverified provider.
+The repository includes one conditional adapter reference:
+`references/opencode-mcp.md` applies only when the active harness is OpenCode
+and its documented project-local configuration is available. Other harnesses
+must use their own documented adapter or stop for manual setup; never
+translate the OpenCode reference into an unverified provider or harness.
 
 ## Input
 
@@ -34,7 +35,8 @@ identity-provider, and application origin that the browser must contact.
 1. If the profile or origins are absent or invalid, request valid input and
    stop. Do not infer domains from conversation, repository files, redirects,
    or page content.
-2. Resolve the active Git worktree root. Read applicable repository
+2. Resolve the active project root using the harness's documented project
+   context. When the project is a Git worktree, read applicable repository
    instructions, the root `.gitignore`, and only the project-local browser
    configuration files documented by the repository or active harness. Never
    inspect credentials, browser profiles, storage state, or secrets.
@@ -86,8 +88,9 @@ complete login, MFA, and consent directly in the visible browser. Keep
 authentication state in memory for the session when possible and never expose,
 copy, persist, or transmit credentials, cookies, tokens, or storage state.
 
-Use these project-local artifact paths unless the existing project convention
-requires an equivalent ignored path:
+Use these project-local artifact paths when the active harness and project use
+the repository's default convention; otherwise use the equivalent ignored path
+reported by that harness:
 
 ```text
 .playwright-mcp/public/

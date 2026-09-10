@@ -17,10 +17,12 @@ version-matched installed skills are authoritative for commands and
 capabilities. Prefer the CLI when the harness provides shell access. If the
 harness exposes agent-browser through MCP or another typed integration, use
 that interface while preserving the same session, snapshot, authorization,
-and evidence rules; do not assume that CLI commands are available through a
-different interface. If neither agent-browser nor a compatible browser is
-available, report the missing capability and stop; do not install or repair it
-implicitly.
+and evidence rules; do not assume that CLI commands, shell state, a particular
+tool namespace, or a specific approval/session API are available through a
+different interface. This skill is usable from any harness that exposes
+agent-browser or an equivalent compatible browser capability. If neither
+agent-browser nor a compatible browser is available, report the missing
+capability and stop; do not install or repair it implicitly.
 
 ## Before the first browser action
 

@@ -1,13 +1,17 @@
 ---
 name: webapp-testing
 description: Use when planning or executing repository-native Playwright tests for a local web application, including browser behavior, console or network evidence, visual states, and accessibility checks. Do not use for installing browser tooling, testing non-local URLs, accessing browser profiles or storage, or code review.
+metadata:
+  compatibility: Requires an existing repository-owned Playwright workflow and a browser capability exposed by the active harness
 ---
 
 # Web Application Testing
 
 Test local web applications through their existing, repository-owned Playwright
 workflow. Establish observable browser evidence instead of inferring runtime
-behavior from source code.
+behavior from source code. Use the active harness's browser or Playwright
+adapter; do not assume a particular CLI, shell, tool namespace, approval API,
+session model, or operating system.
 
 ## Boundaries
 
@@ -15,9 +19,9 @@ behavior from source code.
   browsers, fixtures, locators, and CI conventions. Do not add
   Playwright, browser binaries, test runners, packages, or a parallel global
   setup.
-- Before any execution, request explicit approval to start a server, run a
-  browser test, create or update snapshots, capture traces/screenshots, or
-  access local test data.
+- Before any execution, request explicit approval through the active harness
+  for starting a server, running a browser test, creating or updating
+  snapshots, capturing traces/screenshots, or accessing local test data.
 - Test only explicitly approved localhost URLs. Do not test non-local URLs,
   attach to a running browser, access a browser profile, or read cookies,
   localStorage, sessionStorage, credential material, or saved sessions.
@@ -68,7 +72,8 @@ not the full browser suite.
 ### 4. Execute and collect evidence
 
 After approval, use the repository's commands and configuration without
-modification. Record:
+modification through the active harness's supported browser/test interface.
+Record:
 
 - Test name and command run.
 - Browser, viewport, fixture, and localhost origin.
