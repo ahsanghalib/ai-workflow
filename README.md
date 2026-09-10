@@ -1,36 +1,45 @@
-# AI Workflow — OpenCode Configuration
+# AI Workflow — Shared Codex and OpenCode Configuration
 
-A safety-first [OpenCode](https://opencode.ai) workflow for software
+A safety-first [OpenCode](https://opencode.ai) and [Codex](https://openai.com/codex/) workflow for software
 engineers: bounded agents, approval-gated changes, TDD and verification skills,
 model tiers, and isolated Git worktrees.
 
-This repository contains two folders:
+This public repository contains reusable, machine-independent workflow pieces:
 
-| Folder | Purpose |
-| --- | --- |
-| [`bin/`](#2-install-the-helper-scripts-bin) | Shell scripts you can symlink or copy into `~/.local/bin` |
-| [`opencode/`](#3-install-the-opencode-configuration-opencode) | The full OpenCode configuration, installed to `~/.config/opencode` on macOS/Linux |
+| Path                                       | Purpose                                              |
+| ------------------------------------------ | ---------------------------------------------------- |
+| [`agents/codex/`](agents/codex)            | Codex agent profiles in TOML                         |
+| [`agents/opencode/`](agents/opencode)      | OpenCode agent profiles in Markdown                  |
+| [`bin/`](bin)                              | Git worktree helper scripts                          |
+| [`codex/`](codex)                          | Codex configuration                                  |
+| [`opencode/`](opencode)                    | OpenCode configuration, plugin, quota, and TUI files |
+| [`skills/`](skills)                        | Shared Agent Skills and supporting references        |
+| [`validate-skills.sh`](validate-skills.sh) | Skill reference validator                            |
+| [`GLOBAL_AGENTS.md`](GLOBAL_AGENTS.md)     | General global agent instructions                    |
+| [`AGENTS.md`](AGENTS.md)                   | Contributor guidance for this repository             |
 
-Everything is plain text: Bash, JSON, Markdown, and one TypeScript plugin. No
-background services, daemons, or global MCP servers. The opt-in
-[`/use-playwright`](#slash-commands) command adds a project-local Playwright
-MCP profile when needed.
+Everything is plain text: Bash, JSON, Markdown, TOML, and one TypeScript
+plugin. No background services or daemons are included; optional local MCP
+integrations are declared in the runtime configuration. The opt-in
+[`use-playwright`](skills/use-playwright/SKILL.md) skill adds a project-local
+Playwright MCP profile when needed.
 
 ---
 
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
+- [Repository layout](#repository-layout)
 - [Installation](#installation)
 - [What you get](#what-you-get)
   - [Agents](#agents)
+  - [Codex configuration](#codex-configuration)
   - [Agent behavior and conventions](#agent-behavior-and-conventions)
   - [Permissions and safety model](#permissions-and-safety-model)
   - [Skills](#skills)
-  - [Slash commands](#slash-commands)
   - [Desktop notifications](#desktop-notifications)
   - [TUI settings](#tui-settings)
-- [`opencode-model-switch`: switching model tiers](#opencode-model-switch-switching-model-tiers)
+- [Model configuration](#model-configuration)
 - [Git worktree helpers](#git-worktree-helpers)
 - [Customizing](#customizing)
 - [Troubleshooting](#troubleshooting)
@@ -44,28 +53,50 @@ MCP profile when needed.
 - **bash**, **git**, **rsync**, and standard coreutils — present on most macOS
   and Linux installations.
 - **[OpenCode CLI](https://opencode.ai/docs/)**: `curl -fsSL https://opencode.ai/install | bash`, or install via your package manager.
-- **[jq](https://jqlang.github.io/jq/)** — required only by `opencode-model-switch`. (`brew install jq`, `pacman -S jq`, etc.)
+- **Codex CLI or app** (optional) — required only when using the Codex
+  configuration and agent profiles.
 - **Node.js** (optional) — only needed to type-check the notification plugin with `npx tsc --noEmit`.
 - **`notify-send`** (Linux, part of `libnotify`) — required for desktop notifications from the plugin. On macOS, see [Troubleshooting](#troubleshooting).
 - **`tmux`**, **`nvim`**, **`lazygit`** — optional; required only for the
-  `dev-session` worktree launcher.
-- **`gh`** (GitHub CLI) — optional; enables squash/rebase merge detection in `worktree-close` and the approval-gated `/git-release` command.
+  optional local worktree session launcher.
+- **`gh`** (GitHub CLI) — optional; enables squash/rebase merge detection in `worktree-close` and the approval-gated `git-release` workflow.
+
+---
+
+## Repository layout
+
+Agent profiles are kept separate by runtime: Codex reads the TOML profiles in
+`agents/codex/`, while OpenCode uses the Markdown profiles in
+`agents/opencode/`. Codex, OpenCode, and other compatible harnesses can share
+the reusable Agent Skills in `skills/`; the active harness supplies discovery,
+loading, and capability-specific adapters.
+
+Runtime-specific files stay under `codex/` and `opencode/`. The latter contains
+the OpenCode JSON configuration, model metadata, plugin source, package
+manifest, quota configuration, TUI settings, and empty `modes/`, `themes/`, and
+`tools/` extension directories. `bin/` contains only the checked-in worktree
+helpers, while `validate-skills.sh` checks skill entrypoints and references.
+`GLOBAL_AGENTS.md` is the generic global policy file; the root `AGENTS.md`
+documents contribution rules for this repository.
 
 ---
 
 ## Compatibility and validation
 
 This configuration is tested against OpenCode `1.18.x` and declares the current
-OpenCode JSON schema URL. CI validates JSON, agent/command/skill frontmatter,
-model-tier mappings, shell scripts, TypeScript, and the helper-script integration
-tests. When upgrading OpenCode, run `opencode debug config` and
-`opencode debug agent engineer` locally before widening the supported range.
-
-Repository checks run with:
+OpenCode JSON schema URL. The Codex configuration is TOML-based and keeps a
+parallel set of agent profiles under `agents/codex/`. Validate the affected
+files locally:
 
 ```bash
-make check
+bash validate-skills.sh
+bash -n bin/*
+(cd opencode && npm install && npx tsc --noEmit)
+git diff --check
 ```
+
+When upgrading OpenCode, run `opencode debug config` and
+`opencode debug agent engineer` locally before widening the supported range.
 
 ---
 
@@ -91,36 +122,24 @@ Copy the scripts from this repository into `~/.local/bin` (or anywhere on your
 `PATH`). They are already executable.
 
 ```bash
-install -m 755 bin/opencode-model-switch ~/.local/bin/
 install -m 755 bin/worktree-new         ~/.local/bin/
 install -m 755 bin/worktree-close       ~/.local/bin/
-install -m 755 bin/dev-session          ~/.local/bin/
 ```
 
 Or link them so updates to this repo take effect automatically:
 
 ```bash
-ln -s "$(pwd)/bin/opencode-model-switch" ~/.local/bin/
 ln -s "$(pwd)/bin/worktree-new"          ~/.local/bin/
 ln -s "$(pwd)/bin/worktree-close"        ~/.local/bin/
-ln -s "$(pwd)/bin/dev-session"           ~/.local/bin/
 ```
 
-Verify:
-
-```bash
-opencode-model-switch list
-```
-
-### 3. Install the OpenCode configuration (`opencode/`)
+### 3. Install the OpenCode configuration
 
 OpenCode reads its global configuration from `~/.config/opencode/` (it also
-honors `$XDG_CONFIG_HOME/opencode`). Replace that directory with the contents
-of `opencode/`:
+honors `$XDG_CONFIG_HOME/opencode`). Install the runtime files, agent profiles,
+skills, and global instructions:
 
-> **Warning:** `opencode/opencode.json` and `opencode/agents/*.md` are
-> overwritten by `opencode-model-switch`. Back them up before replacing if you
-> already customized them.
+> **Warning:** Back up an existing configuration before replacing it.
 
 ```bash
 # Preserve your existing setup if any
@@ -130,12 +149,37 @@ fi
 
 mkdir -p ~/.config/opencode
 rsync -a --exclude node_modules opencode/. ~/.config/opencode/
+mkdir -p ~/.config/opencode/agents ~/.config/opencode/skills
+rsync -a agents/opencode/. ~/.config/opencode/agents/
+rsync -a skills/. ~/.config/opencode/skills/
+cp GLOBAL_AGENTS.md ~/.config/opencode/AGENTS.md
 ```
 
 This intentionally excludes `node_modules/`; install plugin type dependencies
 fresh only when you need them (optional, see next step).
 
-### 4. Install plugin type dependencies (optional)
+### 4. Configure Codex (optional)
+
+Review `codex/config.toml` for local paths and provider choices before copying
+it to `~/.codex/config.toml`. Install the matching agent profiles under
+`~/.codex/agents/`:
+
+```bash
+mkdir -p ~/.codex/agents
+mkdir -p ~/.codex/skills
+cp codex/config.toml ~/.codex/config.toml
+cp agents/codex/*.toml ~/.codex/agents/
+rsync -a skills/. ~/.codex/skills/
+```
+
+The Codex configuration includes runtime, provider, memory, plugin, and MCP
+settings. Replace marketplace, plugin, and executable paths that do not exist
+on your machine before loading it. The `agents.*.config_file` entries are
+relative to the Codex configuration directory and should resolve to the copied
+profiles. The shared skills are copied separately because agent profiles do not
+register skills themselves.
+
+### 5. Install plugin type dependencies (optional)
 
 The notification plugin (`opencode/plugins/attention-notify.ts`) imports the
 `@opencode-ai/plugin` package for its types. This is a development-time
@@ -149,10 +193,10 @@ npm install
 If you skip this, the plugin still runs; you just cannot type-check it with
 `npx tsc --noEmit`.
 
-### 5. Authenticate your providers
+### 6. Authenticate your providers
 
 The configuration references models from several providers (see
-[Model tiers](#opencode-model-switch-switching-model-tiers)). Log in to the
+[Model configuration](#model-configuration)). Log in to the
 ones you want to use:
 
 ```bash
@@ -166,16 +210,16 @@ opencode debug agent engineer
 opencode debug agent explore
 ```
 
-### 6. Verify the installation
+### 7. Verify the installation
 
 From any project directory:
 
 ```bash
 opencode debug config          # show resolved configuration (includes active model)
-opencode-model-switch status   # shows models/variants per agent
+opencode debug agent engineer  # verify the primary agent resolves correctly
 ```
 
-If the models in `opencode-models.json` do not match your provider access, see
+If the models in `opencode/opencode-models.json` do not match your provider access, see
 [Customizing](#customizing) before running your first session.
 
 ---
@@ -184,26 +228,37 @@ If the models in `opencode-models.json` do not match your provider access, see
 
 ### Agents
 
-Five agents are defined in `opencode/agents/`. The `engineer` agent is the
-primary agent; the rest are one-level-deep subagents that the engineer can
-delegate to. Delegation is capped at depth 1 via `subagent_depth` in
-`opencode.json`.
+Seven agents are defined in both `agents/opencode/` and `agents/codex/`. The
+`engineer` agent is the primary execution owner; the other profiles provide
+focused delegation for discovery, research, review, advice, hard blockers, and
+high-risk read-only escalation. OpenCode delegation is capped at depth 1 via
+`subagent_depth` in `opencode/opencode.json`.
 
-| Agent | Mode | Model tier | Steps | Purpose |
-| --- | --- | --- | --- | --- |
-| `engineer` | primary | main | 40 | Implements and debugs in the repository with approval gates |
-| `advisor` | subagent | main | 5 | Read-only advisory work: decisions, drafts, memos |
-| `review` | subagent | main | 6 | Read-only code review with exact file/line evidence |
-| `explore` | subagent | small | 6 | Read-only repository exploration and convention lookups |
-| `research` | subagent | small | 8 | Web-only research from primary/official sources |
+| Agent      | Role     | Purpose                                                      |
+| ---------- | -------- | ------------------------------------------------------------ |
+| `engineer` | primary  | Implements and debugs repository changes with approval gates |
+| `advisor`  | subagent | Read-only advisory work: decisions, drafts, and memos        |
+| `review`   | subagent | Read-only code review with exact file/line evidence          |
+| `explore`  | subagent | Repository exploration and convention lookup                 |
+| `research` | subagent | Web-only research from primary or official sources           |
+| `fixer`    | subagent | Focused help with difficult implementation blockers          |
+| `oracle`   | subagent | Independent, read-only escalation for high-risk uncertainty  |
 
-The main tier is used by `engineer`, `advisor`, and `review`; the small tier by
-`explore` and `research` — see
-[`opencode-model-switch`](#opencode-model-switch-switching-model-tiers) for how
-these are set and switched.
+The exact model and reasoning settings are defined in each runtime's agent
+profiles and top-level configuration.
 
-The `engineer` agent carries a working style derived from the repository's
-`AGENTS.md`: inspect instructions before proposing changes, state a plan and
+### Codex configuration
+
+Codex loads its defaults and feature settings from `codex/config.toml`. The
+`[agents.*]` entries select the matching TOML profiles in `agents/codex/`,
+including `engineer`, `advisor`, `explore`, `fixer`, `oracle`, `research`, and
+`review`. The configuration also enables on-request approvals, workspace
+writing, live web search, memories, multi-agent support, and optional local
+MCP/plugin integrations. Keep those integrations portable and review their
+paths before sharing or installing the file.
+
+The `engineer` agent carries a working style derived from
+`GLOBAL_AGENTS.md`: inspect instructions before proposing changes, state a plan and
 validation criteria, make the smallest coherent change, and review the diff
 before handoff. It proactively delegates convention lookups to `explore`,
 external documentation to `research`, and applies relevant skills like
@@ -213,8 +268,8 @@ deployments, publishing, destructive git commands, and secret handling.
 
 ### Agent behavior and conventions
 
-The `engineer` agent follows the installed `AGENTS.md` in addition to any
-project-level instructions. It leads with results and tradeoffs, avoids broad
+The `engineer` agent follows the installed global instructions in addition to
+any project-level instructions. It leads with results and tradeoffs, avoids broad
 unrelated changes, and asks when a product or architecture choice materially
 affects the result.
 
@@ -224,7 +279,7 @@ affects the result.
   `systematic-debugging` for unexplained failures, and
   `verification-before-completion` before a completion claim. It delegates
   repository conventions to `explore` and external SDK or API documentation to
-  `research`. Slash commands run only when you invoke them.
+  `research`. Explicit workflows run only when you invoke them.
 - **Session continuity.** At the start of substantive work, the agent reads a
   project-root `SESSION_STATE.md` when one exists.
 - **Worktrees.** For substantial implementation work that needs isolation, the
@@ -251,7 +306,7 @@ affects the result.
 
 ### Permissions and safety model
 
-`opencode.json` installs a strict, denial-by-default permission policy:
+`opencode/opencode.json` installs a strict, denial-by-default permission policy:
 
 - **Everything asks first** (`"*": "ask"`), except `todowrite`, which is
   allowed.
@@ -268,12 +323,12 @@ affects the result.
   (`pacman`/`yay`), and `systemctl`.
 - **`task` (subagent delegation) is denied for the user** and allowed only
   from inside the `engineer` agent, and only to `explore`, `research`,
-  `review`, and `advisor`.
+  `review`, `advisor`, `fixer`, and `oracle`.
 - `external_directory` access is denied; `websearch` is allowed, `webfetch`
   asks.
 - `snapshot` is on, `share` is disabled, `autoupdate` is off, and the default
-  `plan`/`build` agents are disabled — the `engineer` agent and the slash
-  commands below replace them.
+  `plan`/`build` agents are disabled — the checked-in agent profiles provide
+  the intended workflow.
 - `compaction` auto-prunes with a 12k-token reserve; the watcher ignores
   `.git`, `node_modules`, build/dist output, and virtualenvs.
 
@@ -285,65 +340,47 @@ reviews every edit diff before handoff.
 
 ### Skills
 
-Skills are reusable expertise documents under `opencode/skills/`, loaded only
-when the task matches their description. Skills are installed:
+Skills are reusable Agent Skills under `skills/`, loaded only when the active
+harness matches a skill's description and exposes the required capabilities.
+They are not OpenCode-only: Codex and other compatible harnesses may load the
+same files through their documented skill-discovery mechanism. Keep core
+workflow guidance harness-neutral; keep runtime-specific mechanics conditional
+and adapter-specific inside the relevant skill references.
 
-| Skill | When to use |
-| --- | --- |
-| `repository-research` | Tracing local code, seams, and conventions before a change |
-| `technical-design` | Proposing/comparing architecture, APIs, and migrations |
-| `systematic-debugging` | Diagnosing bugs, flakes, regressions, and recovery paths |
-| `test-driven-development` | Changing behavior with a red-green-refactor test loop |
-| `verification-before-completion` | Claiming completion with fresh, task-appropriate evidence |
-| `frontend-design` | Planning UI hierarchy, states, responsive behavior, accessibility |
-| `humanizer` | Removing AI-generated writing patterns from prose |
-| `webapp-testing` | Repository-native Playwright test planning/execution |
-| `agent-browser` | Approved exploratory browser QA on unauthenticated localhost |
-| `product-discovery` | Evaluating problems, ICP, MVP scope, and validation experiments |
-| `founder-decision` | Comparing consequential business options and decisive tests |
-| `social-content` | Drafting truthful, channel-specific social/editorial content and blog posts from source material |
-| `brand-guidelines` | Applying user-provided brand rules to artifacts |
-| `github-cli-workflow` | Inspecting/preparing PRs, issues, checks, and workflow logs with `git`/`gh` |
-| `skill-creator` | Creating/auditing OpenCode skills |
-| `playwright-public-web` | Read-only inspection of explicitly approved unauthenticated public websites through Playwright MCP |
-| `playwright-manual-auth` | Read-only inspection of approved login-required sites after the user authenticates in a headed isolated Playwright browser |
+The repository includes:
+
+| Skill                            | When to use                                                                                                                |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `repository-research`            | Tracing local code, seams, and conventions before a change                                                                 |
+| `technical-design`               | Proposing/comparing architecture, APIs, and migrations                                                                     |
+| `systematic-debugging`           | Diagnosing bugs, flakes, regressions, and recovery paths                                                                   |
+| `test-driven-development`        | Changing behavior with a red-green-refactor test loop                                                                      |
+| `verification-before-completion` | Claiming completion with fresh, task-appropriate evidence                                                                  |
+| `git-release`                    | Preparing approval-gated release validation and handoff                                                                    |
+| `implement-next`                 | Implementing and validating one approved plan task                                                                         |
+| `project-plan`                   | Planning scoped work and maintaining project planning artifacts                                                            |
+| `research-brief`                 | Producing dated, source-linked research briefs                                                                             |
+| `review-diff`                    | Reviewing a diff for actionable correctness and regression findings                                                        |
+| `session-state`                  | Recording concise session continuity state                                                                                 |
+| `use-playwright`                 | Configuring an approved project-local Playwright MCP profile                                                               |
+| `frontend-design`                | Planning UI hierarchy, states, responsive behavior, accessibility                                                          |
+| `humanizer`                      | Removing AI-generated writing patterns from prose                                                                          |
+| `webapp-testing`                 | Repository-native Playwright test planning/execution                                                                       |
+| `agent-browser`                  | Approved exploratory browser QA on unauthenticated localhost                                                               |
+| `product-discovery`              | Evaluating problems, ICP, MVP scope, and validation experiments                                                            |
+| `founder-decision`               | Comparing consequential business options and decisive tests                                                                |
+| `social-content`                 | Drafting truthful, channel-specific social/editorial content and blog posts from source material                           |
+| `brand-guidelines`               | Applying user-provided brand rules to artifacts                                                                            |
+| `github-cli-workflow`            | Inspecting/preparing PRs, issues, checks, and workflow logs with `git`/`gh`                                                |
+| `skill-creator`                  | Creating/auditing OpenCode skills                                                                                          |
+| `playwright-public-web`          | Read-only inspection of explicitly approved unauthenticated public websites through Playwright MCP                         |
+| `playwright-manual-auth`         | Read-only inspection of approved login-required sites after the user authenticates in a headed isolated Playwright browser |
 
 Each skill's `description` field defines its precise trigger and non-use cases.
 
-### Slash commands
-
-Commands live in `opencode/commands/` and are invoked in-session:
-
-| Command | Agent | Purpose |
-| --- | --- | --- |
-| `/project-plan $ARGS` | engineer | Choose light, standard, or strict planning; bootstrap empty projects; create/revise plans; prepare branches and GitHub issues — without implementing |
-| `/implement-next $ARGS` | engineer | Implement, validate, and review only the next unchecked task of one explicitly approved plan; stops after one task |
-| `/review-diff $ARGS` | review | Review the working-tree diff or a Git range; actionable evidence-backed findings only |
-| `/research-brief $ARGS` | research | Web-only research returning a dated, source-linked evidence brief |
-| `/decision $ARGS` | advisor | Compare consequential options and return a concise decision memo |
-| `/content-pack $ARGS` | advisor | Draft truthful, channel-specific unpublished content from supplied material |
-| `/session-state` | engineer | Create/update the project's `SESSION_STATE.md` and ensure `AGENTS.md` has the `Session continuity` section |
-| `/use-playwright $ARGS` | engineer | Configure an approved project-local Playwright MCP profile and ignored screenshot directory; restart OpenCode before use |
-| `/git-release [version]` | engineer | Validate and preview one annotated tag and matching GitHub Release; writes an approved user-run release script |
-
-For substantial work, the planning commands follow: plan → manual `Approved`
-status → branch → implement one task → review. Light plans stop at an
-in-session implementation brief. Nothing is committed, pushed, or deployed
-without separate explicit approval.
-
-Release examples:
-
-```text
-/git-release
-/git-release patch
-/git-release minor
-/git-release major
-/git-release v1.3.0
-```
-
-After explicit preview approval, `/git-release` writes an executable release
-script inside Git metadata for the user to run manually. OpenCode never runs
-the script; the global policy continues to deny `git push`.
+The public repository does not include a separate command catalog. Use the
+active harness's agent profiles and load skills from `skills/` according to the
+task.
 
 ### Desktop notifications
 
@@ -360,54 +397,15 @@ your own theme files into `opencode/themes/` and custom tool/plugin files into
 
 ---
 
-## `opencode-model-switch`: switching model tiers
+## Model configuration
 
-`bin/opencode-model-switch` swaps the main/small model tiers across providers
-by rewriting `opencode.json` and the mapped agents' frontmatter. Each tier's
-`agents.main` and `agents.small` lists in `opencode-models.json` are the single
-source of truth for that mapping.
-
-Tiers are defined in `opencode/opencode-models.json` (installed to
-`~/.config/opencode/opencode-models.json`). The included tiers are:
-
-| # | Name | Main model | Small model |
-| --- | --- | --- | --- |
-| 1 | openai | `openai/gpt-5.6-terra` | `openai/gpt-5.6-luna` |
-| 2 | opencode-go | `opencode-go/deepseek-v4-pro` | `opencode-go/deepseek-v4-flash` |
-| 3 | anthropic | `anthropic/claude-opus-4-8` | `anthropic/claude-sonnet-5` |
-| 4 | openrouter | `openrouter/deepseek/deepseek-v4-pro` | `openrouter/deepseek/deepseek-v4-flash` |
-| 5 | zen-free | `opencode/deepseek-v4-flash-free` | `opencode/north-mini-code-free` |
-
-> These are the author's provider/model references — edit the file to match
-> what *you* have authenticated with `opencode auth login`.
-
-Usage:
-
-```bash
-opencode-model-switch list             # show all tiers
-opencode-model-switch status           # show current models per agent
-opencode-model-switch switch 2         # apply tier 2 (opencode-go)
-opencode-model-switch delete-backups   # remove .bak files it created
-```
-
-What a switch does:
-
-1. Sets `model` and `small_model` in `opencode.json`.
-2. Rewrites `model`, `variant`, and `reasoningEffort` frontmatter in
-   `engineer.md`, `advisor.md`, `review.md` (main tier) and `explore.md`,
-   `research.md` (small tier) under `~/.config/opencode/agents/`.
-3. Writes a timestamped `.bak` copy of every file before changing it, so you
-   can roll back: `cp opencode.json.20260805-213000.bak opencode.json`.
-
-Environment overrides:
-
-- `OPENCODE_CONFIG_ROOT` — operate on a non-default config directory
-  (default: `$XDG_CONFIG_HOME/opencode` or `~/.config/opencode`).
-- `OPENCODE_MODELS_FILE` — use a tier definition file elsewhere.
-
-Adding your own tier: add an entry to `opencode-models.json` with `name`,
-`agents.main`, `agents.small`, `main.model`, `main.variant`, `small.model`, and
-`small.variant`, then run `opencode-model-switch list`.
+OpenCode defaults and provider declarations live in
+`opencode/opencode.json`; model metadata is in
+`opencode/opencode-models.json`. Review the model IDs and provider access before
+using the configuration. Codex model, reasoning, approval, memory, and runtime
+defaults are in `codex/config.toml`; its agent selection is defined by the
+`[agents.*]` entries. These files contain configuration only—authenticate
+providers through the relevant runtime and never commit credentials.
 
 ---
 
@@ -417,9 +415,8 @@ Adding your own tier: add an entry to `opencode-models.json` with `name`,
 worktrees for agent work, so a long-running AI session never touches your main
 checkout.
 
-`bin/dev-session` is an optional tmux session launcher. When available,
-`worktree-new` invokes it to set up a 4-window layout: `edit` (nvim), `agent`
-(`opencode --agent engineer), `test` (shell), and `git` (lazygit).
+If an executable `dev-session` is available on `PATH`, `worktree-new` invokes it
+after creating the worktree. Otherwise it prints the new worktree path.
 
 ### `worktree-new BRANCH [BASE_REF] [START_WINDOW]`
 
@@ -440,11 +437,8 @@ repository, not a nested checkout. Uses `--no-track` so the created branch does
 not set upstream tracking. If the target path or branch already exists, it
 refuses to run.
 
-After creating the worktree, it runs `dev-session` with the worktree path and
-`START_WINDOW` (default `agent`; one of `edit`, `agent`, `test`, `git`) when
-the helper is installed. Otherwise it prints `dev-session is unavailable` and
-the worktree path, then exits successfully. Direct `dev-session` invocation
-defaults to `edit`.
+After creating the worktree, it passes the worktree path and `START_WINDOW`
+(`edit`, `agent`, `test`, or `git`) to that optional helper.
 
 ### `worktree-close PATH [MERGED_INTO_REF]`
 
@@ -470,41 +464,34 @@ deliberately — merge safety is already explicitly verified above.
 It refuses to run destructive removal (`worktree remove --force` is denied by
 the global permission policy anyway).
 
-### `dev-session PATH [START_WINDOW]`
-
-```bash
-dev-session ~/repos/my-project.worktrees/feature/auth-login edit
-```
-
-Creates (or attaches to) a named tmux session at the given path with four
-windows and selects the `START_WINDOW`. If already inside tmux, it switches
-client; if attached to a terminal, it attaches; otherwise it prints the session
-name. The session name is derived from the repo name and branch (special
-characters are sanitized for tmux).
-
 ---
 
 ## Customizing
 
-This is an opinionated public template. Edit the installed copies at
-`~/.config/opencode/` (not this repository) for day-to-day tweaks:
+This is an opinionated public template. For day-to-day tweaks, edit installed
+copies rather than this repository:
 
-- **Models** — edit `opencode-models.json` (and your provider auth), or just
-  set `model`/`small_model` in `opencode.json` directly.
-- **Agents** — edit `agents/*.md` frontmatter (`model`, `steps`, `permission`)
-  and body (system prompt). Agent bodies only replace the default prompt when
-  the file has valid `---` frontmatter.
-- **Permissions** — `opencode.json` → `permission`. Prefer tightening over
+- **Models** — edit `opencode/opencode-models.json` and
+  `opencode/opencode.json`, or update the model settings in `codex/config.toml`
+  for Codex.
+- **Agents** — edit the matching profile in `agents/opencode/` or
+  `agents/codex/`. OpenCode profiles use Markdown frontmatter; Codex profiles
+  use TOML.
+- **Codex runtime** — update `codex/config.toml` for approvals, sandboxing,
+  memories, feature flags, plugins, and MCP servers. Replace local paths before
+  copying it to `~/.codex/`.
+- **Permissions** — `opencode/opencode.json` → `permission`. Prefer tightening over
   loosening; the deny rules exist to keep AI sessions from touching secrets or
   doing irreversible things.
-- **Skills / commands** — add `SKILL.md` folders under `skills/` and `.md`
-  command files under `commands/`. OpenCode discovers them at startup.
-- **Global instructions** — `opencode/AGENTS.md` (installed to
-  `~/.config/opencode/AGENTS.md`) is the global instructions file that shapes
-  every session. Per-project `AGENTS.md` files layer on top of it. See
+- **Skills** — add harness-neutral `SKILL.md` folders under `skills/` and route
+  supporting material through each skill's `references/` directory. Put
+  harness-specific setup behind explicit compatibility or adapter guidance.
+- **Global instructions** — `GLOBAL_AGENTS.md` is installed as
+  `~/.config/opencode/AGENTS.md` and shapes every OpenCode session. Per-project
+  `AGENTS.md` files layer on top of it. See
   [Agent behavior and conventions](#agent-behavior-and-conventions) for the
   included workflow rules.
-- **Plugin** — edit `plugins/attention-notify.ts`; type-check with
+- **Plugin** — edit `opencode/plugins/attention-notify.ts`; type-check with
   `npx tsc --noEmit` inside `~/.config/opencode`. Restart OpenCode after
   plugin/skill changes — global extensions load at startup.
 
@@ -512,33 +499,30 @@ This is an opinionated public template. Edit the installed copies at
 
 ## Troubleshooting
 
-| Symptom | Fix |
-| --- | --- |
-| `opencode: command not found` | Install the CLI: `curl -fsSL https://opencode.ai/install | bash` |
-| `opencode-model-switch: jq: command not found` | Install jq (`brew install jq`, `pacman -S jq`, `apt install jq`) |
-| `Unknown or incomplete tier` | Run `opencode-model-switch list`; add/repair the tier in `opencode-models.json` |
-| `model: null` / agent shows `?` | `opencode auth login` and fix the model IDs in `opencode-models.json` to match your access |
-| Plugin type-check fails | Run `npm install` inside `~/.config/opencode` (the `@opencode-ai/plugin` types are a dev dependency) |
-| No desktop notifications on macOS | The plugin uses `notify-send` (Linux). Replace it with `osascript -e 'display notification ...'` in `attention-notify.ts`, or leave the plugin file empty of handlers |
-| `worktree-new` exits after creating the worktree | It execs `dev-session`. Make sure `dev-session` is installed to `~/.local/bin` and tmux/nvim/lazygit are available |
-| `worktree-close` refuses to run | The worktree is not clean, you're inside it (`cd` out first), or the branch is not merged — check with `git status` / `git log origin/main..<branch>` / `gh pr list --head <branch> --state merged` |
-| `dev-session` prints "required command not found" | Install the missing prerequisite: `tmux`, `nvim`, `opencode`, or `lazygit` |
-| I broke `opencode.json` or an agent | Restore a `.bak` file written by `opencode-model-switch`, or re-copy from this repo |
-| Changes to skills/commands don't appear | Restart OpenCode — global extensions load at startup |
+| Symptom                                          | Fix                                                                                                                          |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `opencode: command not found`                    | Install the CLI with `curl -fsSL https://opencode.ai/install \| bash`.                                                       |
+| `model: null` / agent shows `?`                  | Run `opencode auth login` and fix the model IDs in `opencode/opencode.json` or `opencode/opencode-models.json`.              |
+| Codex cannot load a profile                      | Confirm `~/.codex/config.toml` points to `~/.codex/agents/<name>.toml` and replace invalid local plugin or executable paths. |
+| Codex uses the wrong model or approval mode      | Check `codex/config.toml` and the selected `[agents.<name>]` profile.                                                        |
+| Plugin type-check fails                          | Run `npm install` inside `~/.config/opencode`; the `@opencode-ai/plugin` types are required.                                 |
+| No desktop notifications on macOS                | The plugin uses Linux `notify-send`; replace it with an equivalent macOS notification command in `attention-notify.ts`.      |
+| `worktree-new` exits after creating the worktree | It may have handed off to optional `dev-session`; otherwise use the printed worktree path.                                   |
+| `worktree-close` refuses to run                  | Ensure the worktree is clean, run the command outside it, and verify that the branch is merged.                              |
+| I broke `opencode/opencode.json` or an agent     | Re-copy the affected file from `opencode/` or `agents/opencode/`.                                                            |
+| Changes to skills do not appear                  | Restart OpenCode; global extensions load at startup.                                                                         |
 
 ---
 
 ## Notes and sources
 
 - The skills and workflow patterns are adapted/audited from public sources
-  (Addy Osmani's agent-skills, Superpowers, Anthropic's skills, Matt Pocock's
-  skills, and Boris Tane's workflow) with licenses reviewed per skill. See
-  `opencode/PLAN.md` (installed as `~/.config/opencode/PLAN.md`) for the
-  canonical roadmap, per-item provenance, and licensing notes.
+  with licenses reviewed per skill. Check each skill's own metadata and
+  `LICENSE.txt` files for provenance and licensing notes.
 - This configuration deliberately does **not** include: autonomous
   commit/push/ship flows, GitHub MCP with write access, social posting,
   deployment/cloud/billing integrations, or global browser automation
-  stacks — see the `Deferred` section of `PLAN.md`.
+  stacks.
 - The model IDs shown are examples from the author's environment. Substitute
   your own provider/model IDs.
 
