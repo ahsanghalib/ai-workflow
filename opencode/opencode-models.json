@@ -5,8 +5,14 @@
       "main": ["engineer", "advisor", "review"],
       "small": ["explore", "research"]
     },
-    "main": { "model": "openai/gpt-5.6-terra", "variant": "medium" },
-    "small": { "model": "openai/gpt-5.6-luna", "variant": "medium" }
+    "main": {
+      "model": "openai/gpt-5.6-terra",
+      "variant": "medium"
+    },
+    "small": {
+      "model": "openai/gpt-5.6-luna",
+      "variant": "medium"
+    }
   },
   "2": {
     "name": "opencode-go",
@@ -14,8 +20,14 @@
       "main": ["engineer", "advisor", "review"],
       "small": ["explore", "research"]
     },
-    "main": { "model": "opencode-go/deepseek-v4-pro", "variant": "medium" },
-    "small": { "model": "opencode-go/deepseek-v4-flash", "variant": "medium" }
+    "main": {
+      "model": "opencode-go/deepseek-v4-pro",
+      "variant": "max"
+    },
+    "small": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "max"
+    }
   },
   "3": {
     "name": "anthropic",
@@ -23,8 +35,14 @@
       "main": ["engineer", "advisor", "review"],
       "small": ["explore", "research"]
     },
-    "main": { "model": "anthropic/claude-opus-4-8", "variant": "medium" },
-    "small": { "model": "anthropic/claude-sonnet-5", "variant": "medium" }
+    "main": {
+      "model": "anthropic/claude-opus-4-8",
+      "variant": "medium"
+    },
+    "small": {
+      "model": "anthropic/claude-sonnet-5",
+      "variant": "medium"
+    }
   },
   "4": {
     "name": "openrouter",
@@ -47,7 +65,260 @@
       "main": ["engineer", "advisor", "review"],
       "small": ["explore", "research"]
     },
-    "main": { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
-    "small": { "model": "opencode/north-mini-code-free", "variant": "medium" }
+    "main": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "high"
+    },
+    "small": {
+      "model": "opencode/north-mini-code-free",
+      "variant": "high"
+    }
+  },
+  "6": {
+    "name": "opencode-go-luna",
+    "agents": {
+      "main": ["engineer", "advisor", "review"],
+      "small": ["explore", "research"]
+    },
+    "main": {
+      "model": "opencode-go/gpt-5.6-luna",
+      "variant": "max"
+    },
+    "small": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "max"
+    }
+  },
+  "7": {
+    "name": "openai/opencode-go",
+    "agents": {
+      "main": ["engineer", "advisor", "review"],
+      "small": ["explore", "research"]
+    },
+    "main": {
+      "model": "openai/gpt-5.6-terra",
+      "variant": "high"
+    },
+    "small": {
+      "model": "opencode-go/deepseek-v4-pro",
+      "variant": "max"
+    }
+  },
+  "8": {
+    "name": "openai/opencode-go",
+    "agents": {
+      "main": ["engineer"],
+      "small": ["explore", "research", "advisor", "review"]
+    },
+    "small": {
+      "model": "openai/gpt-5.6-terra",
+      "variant": "high"
+    },
+    "main": {
+      "model": "opencode-go/deepseek-v4-pro",
+      "variant": "max"
+    }
+  },
+  "9": {
+    "name": "openai/test",
+    "agents": {
+      "main": ["engineer"],
+      "small": ["explore", "research", "advisor", "review"]
+    },
+    "main": {
+      "model": "openai/gpt-5.6-sol",
+      "variant": "low"
+    },
+    "small": {
+      "model": "openai/gpt-5.6-luna",
+      "variant": "high"
+    }
+  },
+  "10": {
+    "name": "ultimate-hybrid-efficiency",
+    "agents": {
+      "main": ["engineer"],
+      "review": ["review"],
+      "small": ["explore", "research", "advisor"]
+    },
+    "main": {
+      "model": "openai/gpt-5.6-sol",
+      "variant": "low"
+    },
+    "review": {
+      "model": "opencode-go/deepseek-v4-pro",
+      "variant": "max"
+    },
+    "small": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "max"
+    }
+  },
+  "11": {
+    "name": "anthropic-claude-5-efficiency",
+    "agents": {
+      "main": ["engineer"],
+      "review": ["review"],
+      "small": ["explore", "research", "advisor"]
+    },
+    "main": {
+      "model": "anthropic/claude-sonnet-5",
+      "variant": "medium"
+    },
+    "review": {
+      "model": "anthropic/claude-opus-5",
+      "variant": "high"
+    },
+    "small": {
+      "model": "anthropic/claude-haiku-4-5",
+      "variant": "max"
+    }
+  },
+  "12": {
+    "name": "go-auto-escalation-budget",
+    "agents": {
+      "engineer": {
+        "model": "opencode-go/deepseek-v4-flash",
+        "variant": "high",
+        "steps": 30
+      },
+      "fixer": {
+        "model": "opencode-go/deepseek-v4-pro",
+        "variant": "max",
+        "steps": 18
+      },
+      "advisor": {
+        "model": "opencode-go/deepseek-v4-pro",
+        "variant": "high",
+        "steps": 12
+      },
+      "review": {
+        "model": "opencode-go/deepseek-v4-pro",
+        "variant": "high",
+        "steps": 18
+      },
+      "explore": {
+        "model": "opencode-go/deepseek-v4-flash",
+        "variant": "low",
+        "steps": 10
+      },
+      "research": {
+        "model": "opencode-go/deepseek-v4-flash",
+        "variant": "high",
+        "steps": 12
+      },
+      "oracle": {
+        "model": "openai/gpt-5.6-sol",
+        "variant": "low",
+        "steps": 15
+      }
+    },
+    "main": {
+      "model": "opencode-go/deepseek-v4-flash"
+    },
+    "small": {
+      "model": "opencode-go/deepseek-v4-flash"
+    }
+  },
+  "13": {
+    "name": "openai-fallback-budget",
+    "agents": {
+      "engineer": {
+        "model": "openai/gpt-5.6-luna",
+        "variant": "high",
+        "steps": 25
+      },
+      "fixer": {
+        "model": "openai/gpt-5.6-terra",
+        "variant": "high",
+        "steps": 15
+      },
+      "advisor": {
+        "model": "openai/gpt-5.6-terra",
+        "variant": "high",
+        "steps": 10
+      },
+      "review": {
+        "model": "openai/gpt-5.6-terra",
+        "variant": "high",
+        "steps": 15
+      },
+      "explore": {
+        "model": "openai/gpt-5.6-luna",
+        "variant": "medium",
+        "steps": 8
+      },
+      "research": {
+        "model": "openai/gpt-5.6-luna",
+        "variant": "medium",
+        "steps": 10
+      },
+      "oracle": {
+        "model": "openai/gpt-5.6-sol",
+        "variant": "low",
+        "steps": 12
+      }
+    },
+    "main": {
+      "model": "openai/gpt-5.6-luna"
+    },
+    "small": {
+      "model": "openai/gpt-5.6-luna"
+    }
+  },
+  "14": {
+    "name": "free-deepseek-gemini",
+
+    "agents": {
+      "engineer": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "high",
+        "steps": 25
+      },
+
+      "fixer": {
+        "model": "google/gemini-3.7-flash",
+        "variant": "high",
+        "steps": 15
+      },
+
+      "advisor": {
+        "model": "google/gemini-3.7-flash",
+        "variant": "high",
+        "steps": 12
+      },
+
+      "review": {
+        "model": "google/gemini-3.7-flash",
+        "variant": "high",
+        "steps": 15
+      },
+
+      "explore": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "high",
+        "steps": 8
+      },
+
+      "research": {
+        "model": "google/gemini-3.7-flash",
+        "variant": "medium",
+        "steps": 10
+      },
+
+      "oracle": {
+        "model": "google/gemini-3.7-flash",
+        "variant": "high",
+        "steps": 12
+      }
+    },
+
+    "main": {
+      "model": "opencode/deepseek-v4-flash-free"
+    },
+
+    "small": {
+      "model": "opencode/deepseek-v4-flash-free"
+    }
   }
 }

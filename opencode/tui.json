@@ -1,8 +1,10 @@
 {
   "$schema": "https://opencode.ai/tui.json",
+  "theme": "system",
   "attention": {
     "enabled": true,
     "notifications": true,
     "sound": true
-  }
+  },
+  "plugin": ["@slkiser/opencode-quota@latest"]
 }

@@ -1,0 +1,158 @@
+# Global agent instructions
+
+## Working style
+
+- Lead with the result, failure or blocking fact.
+- Assume a senior engineer. Be concise and make tradeoffs explicit.
+- Inspect repository instructions and nearby code before proposing changes.
+- For a non-trivial change, state a short plan and validation criteria first.
+- Make the smallest coherent change; do not mix unrelated cleanup.
+- Prefer existing patterns and dependencies over new abstractions.
+
+## Session continuity
+
+- At the start of substantive work, read the project-root `SESSION_STATE.md`
+  when it exists.
+
+## Capability Routing
+
+- At the start of implementation work, use the `engineer` agent as the
+  execution owner when available. If the current session is already running as
+  `engineer`, proceed directly. If unavailable, use the harness's equivalent
+  execution role.
+- Before starting substantive work, inspect the capabilities exposed by the
+  current harness and determine whether any are specifically designed for the
+  task.
+- Select and use relevant specialized capabilities before beginning the work
+  when they are available; otherwise follow the equivalent workflow directly.
+- Prefer the most specific applicable capability over reproducing its workflow
+  manually.
+- Load only capabilities relevant to the current task. Do not invoke agents or
+  Skills merely because they are available.
+- Newly added capabilities should be considered automatically based on their
+  names, descriptions and declared purpose; this file should not require
+  updating every time a capability is added.
+- Multiple capabilities may be used when the task genuinely spans their
+  concerns, but use the smallest sufficient set and apply them in a logical
+  order.
+- Delegate to a specialized subagent when its expertise, independent context
+  or workflow materially improves the result.
+- When a task clearly matches a specialized subagent, delegate that part of the
+  work before attempting it generically.
+- Do not duplicate work already delegated to a subagent unless verification or
+  review is required.
+- For implementation or behavioral code changes, use a test-first development
+  capability when available. If it is unavailable, establish equivalent
+  failing-first or narrow verification where practical.
+- For bugs or unexplained failures, use a systematic-debugging capability when
+  available. Otherwise reproduce, isolate, hypothesize and test before
+  proposing a fix.
+- Before using or implementing against an external library, framework, SDK or
+  API, consult authoritative documentation directly or use a research
+  capability when available.
+- Do not let unavailable capabilities block routine work. Treat destructive,
+  high-impact or external mutations as explicitly user-authorized actions;
+  availability of a capability alone is not authorization.
+
+## Worktree Workflow
+
+- For substantial implementation work in a Git repository that should be
+  isolated from the main checkout, use the installed `worktree-new` helper
+  instead of constructing `git worktree` commands manually.
+- Choose an appropriate full branch name for the task and pass it directly to
+  `worktree-new`, or ask when the branch choice materially affects the task.
+- Create the worktree before implementation begins.
+- Do not create a worktree for read-only research, planning, review,
+  documentation-only changes, or trivial edits unless explicitly requested.
+- After the work has been merged and the worktree is clean, use
+  `worktree-close` for cleanup instead of manually removing the worktree or
+  deleting the branch.
+- Never force-remove a worktree.
+- If it is materially unclear whether a task warrants an isolated worktree,
+  ask before creating one.
+
+## Tooling & Operational Efficiency
+
+- When shell access is available, search with `rg` and list files with
+  `rg --files` or `fd`. Access known paths directly; avoid exploratory
+  directory reads.
+- Read only necessary file subsets — grep/filter before reading full files.
+- Use repository-local commands and lock files.
+- Never install global packages; use project-local dependencies only when
+  required.
+- Use specialized capabilities only when they demonstrably reduce effort or
+  improve accuracy for a defined workflow; avoid loading broad capabilities
+  for narrow tasks.
+- Rely on built-in, lightweight tools; avoid chaining tool calls when one
+  command suffices.
+- Do not add plugins or MCP integrations without explicit approval.
+- Delegate only when the independent context or expertise clearly improves the
+  result over doing the work inline.
+
+## Safety
+
+- Never read or print secrets, `.env` files, provider credentials, SSH keys or
+  AWS credential files.
+- Never use sudo/doas, force pushes, hard reset, Git clean, recursive force
+  deletion, production cloud commands, deploys, publishes or infrastructure
+  applies.
+- Do not change files outside the current repository/worktree.
+- Do not modify generated files directly; run the documented generator.
+- Do not change a lock file unless dependencies intentionally changed.
+- Never replace large blocks of existing content with incomplete or truncated
+  versions. Use the harness's surgical edit or patch mechanism and preserve
+  unmentioned content.
+- Always verify the diff after an edit. If an accidental deletion occurs, rollback or immediately restore the missing information.
+- Maintain all repository-mandated sections, including `Session continuity`,
+  precisely as documented.
+
+## Validation and handoff
+
+- Reproduce or establish a baseline before fixing a bug.
+- Run the narrowest relevant test first.
+- Run lint, typecheck and broader tests before handoff when practical.
+- When Git is available, inspect `git diff --check` and the final diff.
+- Report commands run, results, untested paths, assumptions and risks.
+- Do not claim success when validation failed or was not run.
+- Before claiming implementation work is complete, perform a final verification
+  pass and use a verification capability when available.
+
+## Writing & Humanization
+
+- Use a humanization capability for substantial user-facing prose when
+  available, including documentation, reports, proposals, explanations, emails,
+  social content and long-form answers.
+- Apply humanization only after the content is technically correct and complete. Preserve the original meaning, constraints, factual claims and level of certainty.
+- Write naturally and specifically. Prefer direct language, varied sentence structure and context-appropriate tone over canned phrasing, filler, hype or repetitive summaries.
+- Avoid robotic introductions, excessive headings, artificial enthusiasm, fake quotations, unnecessary rhetorical questions and generic AI-sounding transitions.
+- Do not humanize code, commands, configuration, logs, file paths, API names, identifiers, citations or text that must remain exact.
+- For code-only, command-only or very short factual responses, do not load the skill unless it provides a clear quality benefit.
+- Match the target format and audience. Humanized does not mean casual; keep technical and professional writing precise.
+
+## Engineering Standards
+
+- Follow the repository's documented languages, formatting, testing and linting
+  conventions. When absent, use the language's standard tooling and ask before
+  introducing a new dependency or formatter.
+- Use test-driven development for testable behavioral code changes when
+  practical: write or update the failing test first, implement the minimum code
+  required to pass it, then refactor while keeping tests green. State the reason
+  and alternative verification when TDD is not meaningful.
+- Treat the user as an experienced engineering peer. Focus on architecture,
+  performance, maintainability, and explicit tradeoffs.
+
+
+## CodeGraph
+
+In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the
+repo root), use it before grep/find or reading files when you need to understand
+or locate code, provided a compatible integration is available:
+
+- **MCP integration** (when available): use the CodeGraph exploration tool to
+  retrieve relevant source and call paths.
+- **Shell integration** (when available):
+  `codegraph explore "<symbol names or question>"` provides the same context.
+
+If there is no `.codegraph/` directory or no compatible integration, skip
+CodeGraph and use the normal repository tools. Do not initialize indexing
+unless the user requests it.
