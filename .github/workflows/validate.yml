@@ -1,0 +1,26 @@
+name: Validate repository
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate skills
+        run: bash validate-skills.sh
+
+      - name: Check shell syntax
+        run: bash -n script.sh bin/*
+
+      - name: Parse Codex configuration
+        run: python3 -c 'import pathlib, tomllib; tomllib.loads(pathlib.Path("codex/config.toml").read_text())'
