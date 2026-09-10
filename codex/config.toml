@@ -1,0 +1,133 @@
+model = "gpt-5.6-luna"
+model_reasoning_effort = "high"
+web_search = "live"
+
+approval_policy = "on-request"
+
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+writable_roots = []
+network_access = false
+
+[shell_environment_policy]
+inherit = "core"
+ignore_default_excludes = false
+
+[desktop]
+followUpQueueMode = "steer"
+usePointerCursors = false
+browser-download-prompt-enabled = true
+git-branch-prefix = ""
+conversationDetailMode = "STEPS_PROSE"
+enabled-reasoning-efforts = [
+  "low",
+  "medium",
+  "high",
+  "xhigh",
+  "ultra",
+  "persistent",
+  "max",
+]
+show-context-window-usage = true
+git-pull-request-merge-method = "squash"
+
+[desktop.open-in-target-preferences]
+global = "zed"
+
+[marketplaces.openai-bundled]
+source_type = "local"
+source = "/home/me/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+source_type = "local"
+source = "/home/me/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[mcp_servers.node_repl]
+args = []
+command = "/usr/lib/chatgpt/resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/usr/lib/chatgpt/resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/home/me/.codex:/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
+CODEX_HOME = "/home/me/.codex"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "1"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.901.51231"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/me/.codex/plugins/cache/openai-bundled/browser/26.901.51231/scripts/browser-service.mjs"}'
+CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
+
+[mcp_servers.codegraph]
+command = "codegraph"
+args = ["serve", "--mcp"]
+enabled = true
+default_tools_approval_mode = "prompt"
+startup_timeout_sec = 30
+
+[features]
+memories = true
+multi_agent = true
+
+[agents.engineer]
+config_file = "agents/engineer.toml"
+
+[agents.advisor]
+config_file = "agents/advisor.toml"
+
+[agents.explore]
+config_file = "agents/explore.toml"
+
+[agents.fixer]
+config_file = "agents/fixer.toml"
+
+[agents.oracle]
+config_file = "agents/oracle.toml"
+
+[agents.research]
+config_file = "agents/research.toml"
+
+[agents.review]
+config_file = "agents/review.toml"
+
+[memories]
+generate_memories = true
+use_memories = true
+
+[tui.model_availability_nux]
+gpt-6-astra = 4
