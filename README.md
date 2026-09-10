@@ -11,6 +11,7 @@ This public repository contains reusable, machine-independent workflow pieces:
 | [`agents/codex/`](agents/codex)            | Codex agent profiles in TOML                         |
 | [`agents/opencode/`](agents/opencode)      | OpenCode agent profiles in Markdown                  |
 | [`bin/`](bin)                              | Git worktree helper scripts                          |
+| [`script.sh`](script.sh)                   | Symlink installer for agents, skills, and instructions |
 | [`codex/`](codex)                          | Codex configuration                                  |
 | [`opencode/`](opencode)                    | OpenCode configuration, plugin, quota, and TUI files |
 | [`skills/`](skills)                        | Shared Agent Skills and supporting references        |
@@ -133,7 +134,21 @@ ln -s "$(pwd)/bin/worktree-new"          ~/.local/bin/
 ln -s "$(pwd)/bin/worktree-close"        ~/.local/bin/
 ```
 
-### 3. Install the OpenCode configuration
+### 3. Link shared agents and skills (optional)
+
+Use the repository installer to link the shared agents, skills, and global
+instructions into both runtimes:
+
+```bash
+./script.sh
+```
+
+Pass a repository path when running the script from elsewhere, or set
+`AI_WORKFLOW_REPO`. It honors `CODEX_HOME` and `XDG_CONFIG_HOME`, and refuses
+to replace existing non-symlink targets. The installer does not copy runtime
+configuration files; review and install those separately below.
+
+### 4. Install the OpenCode configuration
 
 OpenCode reads its global configuration from `~/.config/opencode/` (it also
 honors `$XDG_CONFIG_HOME/opencode`). Install the runtime files, agent profiles,
@@ -158,7 +173,7 @@ cp GLOBAL_AGENTS.md ~/.config/opencode/AGENTS.md
 This intentionally excludes `node_modules/`; install plugin type dependencies
 fresh only when you need them (optional, see next step).
 
-### 4. Configure Codex (optional)
+### 5. Configure Codex (optional)
 
 Review `codex/config.toml` for local paths and provider choices before copying
 it to `~/.codex/config.toml`. Install the matching agent profiles under
@@ -179,7 +194,7 @@ relative to the Codex configuration directory and should resolve to the copied
 profiles. The shared skills are copied separately because agent profiles do not
 register skills themselves.
 
-### 5. Install plugin type dependencies (optional)
+### 6. Install plugin type dependencies (optional)
 
 The notification plugin (`opencode/plugins/attention-notify.ts`) imports the
 `@opencode-ai/plugin` package for its types. This is a development-time
