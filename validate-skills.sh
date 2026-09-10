@@ -38,7 +38,7 @@ while IFS= read -r skill_file; do
       }
       ;;
     esac
-  done < <(rg -o '\]\(references/[^)]+' "$skill_file" || true)
+  done < <(grep -oE '\]\(references/[^)]+' "$skill_file" || true)
 done < <(find "$skills_root" -mindepth 2 -maxdepth 2 -name SKILL.md -print | sort)
 
 while IFS= read -r reference_file; do
@@ -49,7 +49,7 @@ while IFS= read -r reference_file; do
     failures=$((failures + 1))
     continue
   }
-  rg -Fq "references/$base_name" "$skill_dir/SKILL.md" || {
+  grep -Fq "references/$base_name" "$skill_dir/SKILL.md" || {
     printf 'orphan reference not routed by entrypoint: %s\n' "$reference_file" >&2
     failures=$((failures + 1))
   }
