@@ -54,19 +54,19 @@ long-form block metadata and fidelity sidecars, load
 
 ## 0. First-time setup — style guide gate
 
-**Before generating your first diagram in a new project, verify the style guide has been customized.**
+**Before generating your first diagram in a new project, verify the effective style guide and onboarding destination.**
 
 Don't silently ship default-skinned diagrams into a branded project.
 
 First check the project root for a `.diagram-design` marker and resolve it per [`references/profiles.md`](references/profiles.md). A valid marker whose profile exists selects that file directly and skips this gate; `profile: default` also skips it. A malformed or missing-profile marker follows the visible failure handling in that reference. Never copy a marker-selected profile over the installed working copy.
 
-Open [`references/style-guide.md`](references/style-guide.md) and check the default tokens. If they're still the shipped defaults (paper `#f5f5f5`, ink `#2d3142`, accent `#eb6c36` atomic-tangerine), **pause and ask the user**:
+If no marker selects a customized profile and the installed working copy still has the shipped defaults (paper `#f5f5f5`, ink `#2d3142`, accent `#eb6c36` atomic-tangerine), **pause and ask the user**:
 
 > _"This is your first diagram in this project. The style guide is still at the default (neutral white-smoke + atomic-tangerine). Do you want to customize it to match your brand first? Options: (a) pull from your website URL, (b) extract from an installed skill, (c) extract from a local folder / design-system directory, (d) paste tokens manually, (e) proceed with the default for now, (f) load a saved client profile."_
 
-Then branch per the matching section of [`references/onboarding.md`](references/onboarding.md); for **(f)** follow [`references/profiles.md`](references/profiles.md).
+Then branch per the matching section of [`references/onboarding.md`](references/onboarding.md); custom methods **(a)–(d)** must first select a valid named profile destination as described there. For **(f)** follow [`references/profiles.md`](references/profiles.md).
 
-**Once the style guide has been customized** (or the user explicitly opted for default), skip this gate on subsequent runs. A leading profile header names the copied-in active profile. Without a header, any semantic-role value or typography family differing from shipped defaults means **custom-unsaved**: skip the gate and offer to save it as a profile. All-default tokens with no marker/header trigger the gate. At the end of every onboarding method, offer to save the result as a named client profile per `references/profiles.md`.
+**Once the style guide has been customized** (or the user explicitly opted for default), skip this gate on subsequent runs. A leading profile header names the copied-in active profile. Without a header, any semantic-role value or typography family differing from shipped defaults means **custom-unsaved**: skip the gate and offer to save it as a profile. All-default tokens with no marker/header trigger the gate. Custom onboarding writes only the selected profile; it never edits the installed `references/style-guide.md`. To use the result as the markerless working copy, the user must explicitly invoke `load`/`switch` per `references/profiles.md`. At the end of every onboarding method, offer to save the result as a named client profile per `references/profiles.md`.
 
 ---
 
@@ -91,7 +91,7 @@ Use for any of the 40 visual types (§3) when a reader will learn more from a vi
 
 **Don't use for:**
 
-- Quick unicode diagrams → use **wiretext**.
+- Quick Unicode diagrams → use **wiretext** when the active harness exposes a compatible capability; otherwise write a plain-text/Unicode fallback directly in the response.
 - Lists of things → table or bullets.
 - Simple before/after → table.
 - One-shape "diagrams" → just write the sentence.
@@ -201,9 +201,9 @@ Type-specific anti-patterns live in each type reference linked in the guide.
 
 ## 5. Design System
 
-**The design system is skinnable.** All colors, typography, and tokens live in a single source of truth — [`references/style-guide.md`](references/style-guide.md). This file describes semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). The default skin is a cool editorial palette (white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted, silver hairlines); to apply your own brand, either edit `style-guide.md` directly or run the URL-based flow described in [`references/onboarding.md`](references/onboarding.md).
+**The design system is skinnable.** All colors, typography, and tokens live in a single source of truth — the effective profile resolved by [`references/profiles.md`](references/profiles.md), or the installed [`references/style-guide.md`](references/style-guide.md) working copy when no profile is selected. This file describes semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). The default skin is a cool editorial palette (white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted, silver hairlines); to apply your own brand, use the profile-first flow in [`references/onboarding.md`](references/onboarding.md). Never edit the installed working copy during onboarding; `load`/`switch` is the explicit activation flow.
 
-> When specs below or in type references mention "ink", "accent", "muted", etc., look up the current hex value in `style-guide.md`.
+> When specs below or in type references mention "ink", "accent", "muted", etc., look up the current value in the effective style guide resolved by `profiles.md`.
 
 ### Semantic roles (at a glance)
 
@@ -607,7 +607,24 @@ The size preset sets the `viewBox` **and** the type ramp; `faithful` is the only
 
 ## 12. Output
 
-Always produce a single self-contained `.html` file:
+The format dial controls the user-facing primary artifact. HTML is always the
+authoritative source built first; it is an intermediate when the requested
+primary output is SVG or PNG, and it is retained only when the format includes
+`html`:
+
+| Format | Primary output | HTML source handling |
+|---|---|---|
+| `html` | one self-contained `.html` file | retain and deliver it; do not export automatically |
+| `svg` | one `.svg` file containing the diagram `<svg>` | build HTML as the source, export SVG, and deliver SVG; retain HTML only if requested |
+| `png` | one `.png` file of the diagram `<svg>` bounds | build HTML as the source, export PNG, and deliver PNG; retain HTML only if requested |
+| `html+png` | the `.html` source and its `.png` export | retain and deliver both |
+
+For `svg`, `png`, and `html+png`, load [`references/export.md`](references/export.md)
+and run the export only because that format was explicitly requested. If the
+approved renderer is unavailable, stop at the HTML source, report the requested
+export as unfulfilled, and do not claim the primary non-HTML artifact exists.
+
+Every retained HTML source is self-contained:
 
 - Embedded CSS (remote Google Fonts are optional enhancement only; system
   fallbacks must remain usable offline)
@@ -629,6 +646,6 @@ Every diagram is an accessible figure by default:
 
 ### Exporting to PNG / SVG
 
-When the user asks to export, save, rasterize, or convert a generated diagram to `.png` or `.svg`, load [`references/export.md`](references/export.md) and follow the procedure there. Both formats deliver the diagram only (the `<svg>` node) — editorial wrappers like cards and headers are dropped by design. Export is **manual** — never produce export files unprompted.
+When the user asks to export, save, rasterize, or convert a generated diagram to `.png` or `.svg`, load [`references/export.md`](references/export.md) and follow the procedure there. Both formats deliver the diagram only (the `<svg>` node) — editorial wrappers like cards and headers are dropped by design. Export is **manual** — never produce export files unless the format or request explicitly asks for them.
 
 For an imported diagram, pixel dimensions come from the `viewBox` × scale factor, so its size decision belongs to §11, not to export. For any diagram that needs an exact frame (an OG card or a slide image), see [`export.md` § Sizing the export](references/export.md).

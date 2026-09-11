@@ -90,5 +90,5 @@ documented behavior and the repository behavior. Report:
 ## Upstream basis
 
 Adapted for this harness-agnostic repository from
-[addyosmani/agent-skills source-driven-development](https://github.com/addyosmani/agent-skills/tree/main/skills/source-driven-development),
+[addyosmani/agent-skills source-driven-development](https://github.com/addyosmani/agent-skills/tree/6ca0cd7db39b41b1c37e26d335c507ee92382c6d/skills/source-driven-development),
 licensed under MIT.

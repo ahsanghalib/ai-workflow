@@ -30,7 +30,7 @@ browser context only when the task needs it and that scope is authorized.
 Close the session when finished unless persistence is intentional:
 
 ```bash
-agent-browser close
+agent-browser close --session "$AGENT_BROWSER_SESSION"
 ```
 
 ## Core interaction loop

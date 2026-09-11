@@ -16,8 +16,10 @@ names a requirement for every harness.
 For the compact authoring-quality and security audit, read
 [`references/effective-skill-audit.md`](references/effective-skill-audit.md)
 before creating, modifying, or reviewing a skill. It is the local adaptation
-of the selected guidance from `davidondrej/skills`; it does not add provider,
-machine-setup, or external-account workflows.
+of the selected guidance from
+[`davidondrej/skills`](https://github.com/davidondrej/skills/tree/76c0537d46ce9ef040158f4f3895fc3b32512a97/skills/skill-authoring/effective-agent-skills),
+licensed under MIT; it does not add provider, machine-setup, or
+external-account workflows.
 
 ## Workflow
 

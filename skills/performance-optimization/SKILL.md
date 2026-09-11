@@ -112,5 +112,5 @@ do not claim a performance improvement.
 ## Upstream basis
 
 Adapted for this harness-agnostic repository from
-[addyosmani/agent-skills performance-optimization](https://github.com/addyosmani/agent-skills/tree/main/skills/performance-optimization),
+[addyosmani/agent-skills performance-optimization](https://github.com/addyosmani/agent-skills/tree/6ca0cd7db39b41b1c37e26d335c507ee92382c6d/skills/performance-optimization),
 licensed under MIT.

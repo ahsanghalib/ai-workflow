@@ -13,7 +13,9 @@ for invocation modes and the draft, audit, and final-rewrite process.
 ## Rules
 
 - Preserve every supported claim, name, number, date, quote, citation, and
-  deliberate opinion. Never invent detail to make prose sound human.
+  deliberate opinion. Never invent detail to make prose sound human. Creative
+  expansion, including invented fiction detail, is disabled unless the user
+  explicitly requests the separate creative-expansion mode below.
 - Match the supplied voice and register. A writing sample outranks the default
   style rules, including punctuation preferences.
 - Apply personality only to essays, blogs, opinion, and personal writing. Keep
@@ -37,6 +39,10 @@ for invocation modes and the draft, audit, and final-rewrite process.
   rewrite.
 - **File:** rewrite only the prose in place and report a short change summary.
 - **Embedded:** return only the final text for the calling workflow.
+- **Creative expansion (explicit):** use only when the user separately and
+  explicitly authorizes invented detail. Keep the expansion bounded by the
+  requested story, voice, and constraints, and distinguish additions from
+  source-supported facts when reporting the result.
 
 ## Final checks
 

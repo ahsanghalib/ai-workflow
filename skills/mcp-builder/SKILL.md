@@ -130,7 +130,7 @@ Report:
 ## Upstream basis
 
 Adapted for this harness-agnostic repository from
-[anthropics/skills mcp-builder](https://github.com/anthropics/skills/tree/main/skills/mcp-builder).
+[anthropics/skills mcp-builder](https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/mcp-builder).
 The upstream skill is Apache-2.0; this entrypoint is a modified local version
 dated 2026-09-11 with provider-specific commands and external reference-file
 dependencies removed.

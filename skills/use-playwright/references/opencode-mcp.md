@@ -68,34 +68,66 @@ to another harness or infer that another provider accepts the same schema.
        "playwright-manual-auth_*": false
      },
      "agent": {
-       "engineer": {
-         "tools": {
-           "playwright-public_*": true,
-           "playwright-manual-auth_*": false,
-           "playwright-public_browser_run_code_unsafe": false,
-           "playwright-public_browser_evaluate": false,
-           "playwright-public_browser_file_upload": false,
-           "playwright-public_browser_drop": false
-         },
-         "permission": {
-           "playwright-public_*": "ask",
-           "playwright-manual-auth_*": "deny",
-           "playwright-public_browser_run_code_unsafe": "deny",
-           "playwright-public_browser_evaluate": "deny",
-           "playwright-public_browser_file_upload": "deny",
-           "playwright-public_browser_drop": "deny"
-         }
+      "engineer": {
+        "tools": {
+          "playwright-public_browser_close": true,
+          "playwright-public_browser_console_messages": true,
+          "playwright-public_browser_navigate": true,
+          "playwright-public_browser_navigate_back": true,
+          "playwright-public_browser_network_requests": true,
+          "playwright-public_browser_snapshot": true,
+          "playwright-public_browser_take_screenshot": true,
+          "playwright-public_browser_tabs": true,
+          "playwright-public_browser_wait_for": true,
+          "playwright-manual-auth_*": false,
+          "playwright-public_browser_click": false,
+          "playwright-public_browser_drag": false,
+          "playwright-public_browser_evaluate": false,
+          "playwright-public_browser_file_upload": false,
+          "playwright-public_browser_fill_form": false,
+          "playwright-public_browser_handle_dialog": false,
+          "playwright-public_browser_press_key": false,
+          "playwright-public_browser_run_code_unsafe": false,
+          "playwright-public_browser_select_option": false,
+          "playwright-public_browser_type": false,
+          "playwright-public_browser_drop": false
+        },
+        "permission": {
+          "playwright-public_browser_close": "ask",
+          "playwright-public_browser_console_messages": "ask",
+          "playwright-public_browser_navigate": "ask",
+          "playwright-public_browser_navigate_back": "ask",
+          "playwright-public_browser_network_requests": "ask",
+          "playwright-public_browser_snapshot": "ask",
+          "playwright-public_browser_take_screenshot": "ask",
+          "playwright-public_browser_tabs": "ask",
+          "playwright-public_browser_wait_for": "ask",
+          "playwright-manual-auth_*": "deny",
+          "playwright-public_browser_click": "deny",
+          "playwright-public_browser_drag": "deny",
+          "playwright-public_browser_evaluate": "deny",
+          "playwright-public_browser_file_upload": "deny",
+          "playwright-public_browser_fill_form": "deny",
+          "playwright-public_browser_handle_dialog": "deny",
+          "playwright-public_browser_press_key": "deny",
+          "playwright-public_browser_run_code_unsafe": "deny",
+          "playwright-public_browser_select_option": "deny",
+          "playwright-public_browser_type": "deny",
+          "playwright-public_browser_drop": "deny"
+        }
        }
      }
    }
    ```
 
    For `manual-auth`, configure the same object under
-   `playwright-manual-auth`, omit `--headless`, set `--output-dir` to
-   `.playwright-mcp/manual-auth`, and reverse the `tools` and `permission`
-   values so only `playwright-manual-auth_*` is available with `ask` approval.
-   Replace the four `playwright-public_browser_*` denied-tool entries with their
-   `playwright-manual-auth_browser_*` equivalents.
+   `playwright-manual-auth`, omit `--headless`, and set `--output-dir` to
+   `.playwright-mcp/manual-auth`. Keep the exact same read-only allowlist,
+   replacing the `playwright-public_` prefix with
+   `playwright-manual-auth_`, and give only those exact entries `ask`
+   permission. Keep the exact mutation-deny list with the same prefix; do not
+   replace either list with a wildcard grant. The user completes login, MFA,
+   and consent in the visible browser; the agent remains read-only afterward.
 7. Use the exact user-approved semicolon-separated origins as the value of
    `--allowed-origins`; do not broaden them. This is a best-effort MCP guardrail,
    not network isolation: redirects can still contact an unapproved origin.

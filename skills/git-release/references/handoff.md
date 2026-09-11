@@ -28,8 +28,9 @@ artifacts in the working tree.
 
 Generate a Bash script with `set -euo pipefail` and safely serialize every
 preview-pinned value with `printf '%q'`, including repository, exact remote
-URLs, normalized GitHub target, branch/upstream, SHA, version, notes path,
-notes hash, validation result, and approved release flags. Serialize a
+URLs, normalized GitHub target, branch/upstream, SHA, version, approved
+release title, notes path, notes hash, validation result, and approved release
+flags. Serialize a
 `RELEASE_FLAGS` Bash array the same way, containing only explicitly approved
 `--prerelease` and `--draft` flags, and keep it valid for paths containing
 spaces or apostrophes.
@@ -194,7 +195,7 @@ fi
 verify_remote_tag
 require_release_absent
 if ! GH_REPO="$GITHUB_HOST/$GITHUB_REPO" gh release create "$VERSION" \
-  --verify-tag --title "Release $VERSION" --notes-file "$NOTES_FILE" \
+  --verify-tag --title "$RELEASE_TITLE" --notes-file "$NOTES_FILE" \
   "${RELEASE_FLAGS[@]}"; then
   printf 'release: remote tag %s exists; GitHub Release creation failed.\n' "$VERSION" >&2
   if release_state; then

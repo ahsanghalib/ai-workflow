@@ -66,7 +66,10 @@ variable on a parent when direct updates are possible.
 ```css
 @media (prefers-reduced-motion: reduce) {
   .element {
-    animation: fade 200ms ease;
+    animation: none;
+    transition-duration: 0.01ms;
+    transition-iteration-count: 1;
+    transform: none;
   }
 }
 

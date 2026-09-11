@@ -109,9 +109,9 @@ Fresh layout on the 4px grid, per the type reference and SKILL.md §6–§7. Exp
 
 ## Step 6 — Deliver
 
-1. Write the `.html`.
+1. Build the authoritative self-contained HTML source. Retain it as a user-facing artifact only when the format is `html` or `html+png`; for `svg` or `png`, it may be an approved temporary/intermediate source.
 2. Run the SKILL.md §9 taste gate **and** the [`output-spec.md` §6](output-spec.md) checklist.
-3. Produce `svg` / `png` if the format dial asked for them — via [`export.md`](export.md), from the HTML.
+3. Produce the requested `svg` / `png` primary artifact if the format dial asked for it — via [`export.md`](export.md), from the HTML. Deliver only the requested primary artifact(s) defined by [`output-spec.md`](output-spec.md).
 4. Report the fidelity ledger ([`output-spec.md` §5](output-spec.md)). Every import gets one; the user knows the source and will notice what's gone.
 
 ---

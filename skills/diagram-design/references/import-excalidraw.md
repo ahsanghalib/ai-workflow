@@ -76,9 +76,9 @@ Work from the digest, not from sketch coordinates. In order:
 
 ## Step 6 — Deliver
 
-1. Write the self-contained HTML.
+1. Build the authoritative self-contained HTML source. Retain it as a user-facing artifact only when the format is `html` or `html+png`; for `svg` or `png`, it may be an approved temporary/intermediate source.
 2. Run the SKILL.md §9 taste gate and [`output-spec.md` §6](output-spec.md) checklist.
-3. Export SVG/PNG only when requested, following [`export.md`](export.md).
+3. Export the requested SVG/PNG primary artifact only when the format asks for it, following [`export.md`](export.md), and deliver the primary artifact(s) defined by [`output-spec.md`](output-spec.md).
 4. Report the fidelity ledger: source count, drawn count, and every merge, collapse, or drop — the extractor's `discarded:` line (freedraw strokes, image payloads, links, embeds, unknown elements) is the starting inventory.
 
 ---

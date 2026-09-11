@@ -92,5 +92,5 @@ reviewable automation plan; do not hand-edit a broad refactor casually.
 ## Upstream basis
 
 Adapted for this harness-agnostic repository from
-[addyosmani/agent-skills code-simplification](https://github.com/addyosmani/agent-skills/tree/main/skills/code-simplification),
+[addyosmani/agent-skills code-simplification](https://github.com/addyosmani/agent-skills/tree/6ca0cd7db39b41b1c37e26d335c507ee92382c6d/skills/code-simplification),
 licensed under MIT.

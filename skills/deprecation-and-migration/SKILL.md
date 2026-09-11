@@ -104,5 +104,5 @@ backfill, rollout, or deletion as part of planning or local verification.
 ## Upstream basis
 
 Adapted for this harness-agnostic repository from
-[addyosmani/agent-skills deprecation-and-migration](https://github.com/addyosmani/agent-skills/tree/main/skills/deprecation-and-migration),
+[addyosmani/agent-skills deprecation-and-migration](https://github.com/addyosmani/agent-skills/tree/6ca0cd7db39b41b1c37e26d335c507ee92382c6d/skills/deprecation-and-migration),
 licensed under MIT.

@@ -15,14 +15,14 @@ Infer choices that are clear from the request (for example, "for my deck" implie
 
 ## 1. Format
 
-| Format | Deliverable | Keeps | Drops |
+| Format | Primary deliverable | Keeps | Drops |
 |---|---|---|---|
 | `html` | self-contained `.html` (default) | header, diagram, summary cards, footer, live fonts | nothing |
-| `svg` | `.svg` next to the source | the `<svg>` node, vector text | editorial wrapper; fonts substitute in offline tools |
-| `png` | `.png` at `device_scale_factor` | pixels exactly as the browser renders them | vector editability |
-| `html+png` | both | — | — |
+| `svg` | `.svg` containing the diagram `<svg>` | vector text | editorial wrapper; fonts substitute in offline tools |
+| `png` | `.png` of the diagram `<svg>` bounds at `device_scale_factor` | pixels exactly as the browser renders them | vector editability and editorial wrapper |
+| `html+png` | the self-contained `.html` and its `.png` export | HTML editorial wrapper plus browser-rendered pixels | vector editability in the PNG |
 
-Always generate the HTML first — `svg` and `png` are produced *from* it via [`export.md`](export.md). Never hand-author an SVG file directly; the HTML is the source of truth and the only artifact the taste gate (SKILL.md §9) is written against.
+Always build the HTML first as the authoritative source — `svg` and `png` are produced *from* it via [`export.md`](export.md). For `html`, retain and deliver that source; for `svg` or `png`, deliver only the requested primary export unless the user also asks for the source; for `html+png`, deliver both. Never hand-author an SVG file directly. If the requested export capability is unavailable, report the primary export as unfulfilled rather than silently changing the format.
 
 Pick by destination:
 

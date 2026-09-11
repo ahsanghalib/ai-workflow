@@ -47,6 +47,10 @@ destroy the human voice.
   complete rewrite.
 - **Embedded:** run the loop internally and return only the final text for the
   calling workflow.
+- **Creative expansion (explicit):** enable this mode only after the user
+  explicitly authorizes invented detail, including for fiction. Keep the
+  default factual-preservation checks for everything outside the authorized
+  creative additions, and report that the mode was used.
 
 ## Draft, audit, and final loop
 
@@ -55,9 +59,11 @@ destroy the human voice.
    simple constructions such as `is`, `are`, `has`, and keeps the register.
 3. Preserve information rather than the original shape: paragraphs may be
    compressed, merged, or split when that improves the voice without losing
-   meaning. For fiction, invented detail is allowed when it serves the story;
-   for non-fiction, do not invent facts, names, dates, numbers, or citations.
-   Audit with two questions: “What still makes this sound obviously AI
+   meaning. Do not invent facts, names, dates, numbers, citations, or fiction
+   detail in the default modes. Only the separately explicit
+   **creative-expansion** mode authorizes invented detail, and it must remain
+   within the user's stated story, voice, and constraints. Audit with two
+   questions: “What still makes this sound obviously AI
    generated?” and “Does the rewrite state any fact, name, number, date, or
    citation that was not in the source?” A fabrication is a defect even when
    it sounds more human. A vague source sentence may be simplified or cut,
