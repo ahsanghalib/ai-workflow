@@ -147,6 +147,17 @@
 
 ## Writing & Humanization
 
+- Lead with the result, failure, blocker, or decision before background. Number
+  genuine multi-step sequences, but do not force numbering onto independent
+  findings or prose.
+- Keep responses scoped to the user's decision or next action. Suppress
+  tangents, speculative alternatives, and examples that do not improve the
+  decision or execution.
+- End with one concrete next action when there is a single clear follow-up. If
+  several independent actions or user decisions remain, list them explicitly
+  instead of hiding them behind an artificial single-step ending.
+- Preserve uncertainty, validation results, risks, caveats, and required user
+  decisions even when they make the response longer.
 - Use a humanization capability for substantial user-facing prose when
   available, including documentation, reports, proposals, explanations, emails,
   social content and long-form answers.

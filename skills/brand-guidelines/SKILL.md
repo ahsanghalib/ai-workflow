@@ -57,9 +57,10 @@ Describe how the approved system applies to the artifact:
   and motion as relevant.
 - Channel-specific constraints and a list of decisions requiring approval.
 
-For visual or content work, hand the brief to `frontend-design` or
-`social-content` as appropriate. Those skills must not override the supplied
-brand system.
+For visual or content work, hand the brief to `frontend-design`,
+`ui-design-system`, or `social-content` as appropriate. `frontend-design` owns
+page-specific UI planning and `ui-design-system` owns reusable system rules;
+neither may override the supplied brand system.
 
 ### 4. Request approval before persistence or production
 

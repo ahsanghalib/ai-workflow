@@ -12,6 +12,10 @@ and `validate-skills.sh` is the root skill validator. Keep personal paths,
 credentials, provider accounts, and machine-local overrides out of the
 repository.
 
+`GLOBAL_AGENTS.md` is for agents global instructions, its name is only to distinquish it from `AGENTS.md` file.
+It links to `~/.codex/AGENTS.md` or `~/.config/opencode/AGENTS.md`. Dont' reference it in SKILL as `GLOBAL_AGENTS.md`
+but use standard `AGENTS.md`
+
 ## Runtime Configuration
 
 OpenCode uses `opencode/opencode.json`, `opencode/opencode-models.json`, and

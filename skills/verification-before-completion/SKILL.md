@@ -56,6 +56,13 @@ If a needed check is unavailable, blocked, too expensive, or requires approval,
 record it as such and state the safest next action. Do not silently substitute a
 weaker check.
 
+For plan-managed work, a `plan-convergence` report can provide supplementary
+plan-to-code evidence, but it never replaces task acceptance, targeted
+validation, or this final evidence pass.
+
+When the requested acceptance proof is complete, stop. Do not add polish,
+cleanup, or unrelated tests after the criteria pass.
+
 ## 3. Gather fresh evidence
 
 Run or inspect the selected evidence after the last relevant edit. Read failures

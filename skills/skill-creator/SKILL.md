@@ -13,6 +13,12 @@ harness-specific mechanics conditional. Use the active harness's available
 validator and discovery checks; do not make one provider's metadata or tool
 names a requirement for every harness.
 
+For the compact authoring-quality and security audit, read
+[`references/effective-skill-audit.md`](references/effective-skill-audit.md)
+before creating, modifying, or reviewing a skill. It is the local adaptation
+of the selected guidance from `davidondrej/skills`; it does not add provider,
+machine-setup, or external-account workflows.
+
 ## Workflow
 
 ### 1. Establish context
@@ -59,6 +65,9 @@ skill-name/
 - Keep the main workflow in `SKILL.md`.
 - Move branch-specific or lengthy reference material behind explicit pointers.
 - Keep references one level deep and state when each one should be read.
+- Keep runtime references relative to the skill root and bundle them in the
+  skill; a remote URL may document provenance but must not be an execution
+  dependency.
 - Add a script only for deterministic repeated work that instructions cannot do
   reliably. Audit its inputs, outputs, dependencies, failure modes, and license.
 - Do not add dependencies or executable files without user approval.

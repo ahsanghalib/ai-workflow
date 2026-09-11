@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Use when planning a frontend page, component, layout, responsive behavior, UI state, accessibility contract, or visual QA. Do not use for brand identity creation, dependency selection, browser automation, implementation, or code review.
+description: Use when planning a specific frontend page, component, layout, responsive behavior, UI state, accessibility contract, or visual QA. Do not use for product-wide design-system generation, supplied brand governance, dependency selection, browser automation, implementation, or code review.
 ---
 
 # Frontend Design
@@ -8,6 +8,22 @@ description: Use when planning a frontend page, component, layout, responsive be
 Produce a project-grounded UI design brief before implementation. Prioritize
 clear hierarchy, accessible interaction, responsive behavior, and existing
 design-system conventions over novelty.
+
+## Craft and perceived quality
+
+Small details compound. Users may not name a spacing inconsistency, unclear
+label, delayed response, or missing state, but the accumulation changes whether
+the product feels trustworthy and easy to use. Treat polish as functional
+quality, not decoration.
+
+- Study existing product patterns and explain why they work before introducing
+  a new treatment.
+- Make the important states feel immediate, predictable, and complete.
+- Defend unusual spacing, type, color, motion, or hierarchy with a user or
+  product reason; remove effects that only signal novelty.
+- Use the brief and later QA to test assumptions. A design that looks correct
+  in a static view may still fail in interaction, at another viewport, or with
+  larger text.
 
 ## Precedence and boundaries
 
@@ -21,6 +37,9 @@ Apply guidance in this order:
 
 - Do not invent or replace a brand identity. Ask for brand guidance or provide
   neutral, clearly labelled options when the project has none.
+- Do not own product-wide visual-system generation, semantic token architecture,
+  or reusable component-system rules; hand those requests to
+  `ui-design-system` when available.
 - Do not implement, refactor, install dependencies, start processes, open a
   browser, take screenshots, or run audits without explicit approval.
 - Do not perform code review; hand completed changes to `review-diff` when it is
@@ -31,12 +50,39 @@ Apply guidance in this order:
 
 ## Design workflow
 
+Before proposing a direction, state a one-line **Design Read** covering the
+page kind, audience, requested vibe or references, and the design system or
+aesthetic family that fits. If the brief genuinely permits materially
+different directions, ask one focused clarifying question; otherwise infer and
+proceed. Supplied brand, accessibility, regulatory, and product constraints
+override aesthetic preference.
+
+When the user requests image-first design or image-to-code work, hand off to
+[`image-to-code`](../image-to-code/SKILL.md) when the active harness has the
+needed image-generation or image-inspection capability. That skill owns the
+reference-image generation, extraction, and implementation sequence; this
+skill remains the planning and accessibility contract. If the capability is
+unavailable, use supplied references or continue with this brief and report
+  the limitation rather than inventing generated-image evidence.
+
+When the request concerns a product-wide visual language, design tokens,
+typography or color system, reusable component rules, or UI anti-patterns,
+hand off to [`ui-design-system`](../ui-design-system/SKILL.md). This skill then
+owns the page-specific hierarchy, state, responsive, accessibility, and QA
+brief that applies the approved system to the requested screen or component.
+
 ### 1. Frame the page or component
 
 State the audience, user job, page or component purpose, primary action,
 information hierarchy, content assumptions, and success condition. Identify the
 existing design-system components and tokens to reuse before proposing anything
 new.
+
+For a redesign, first classify it as preserving the existing visual language or
+an explicitly approved overhaul. Audit current tokens, information
+architecture, content and copy voice, signature interactions, analytics or SEO
+dependencies, and accessibility wins before proposing changes. Preserve those
+contracts by default; do not change them merely to make the result look newer.
 
 For requests such as “polished” or “distinctive,” identify the specific product
 or audience quality to express. Avoid generic gradients, cards, rounded corners,

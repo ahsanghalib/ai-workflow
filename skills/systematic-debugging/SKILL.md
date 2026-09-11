@@ -21,6 +21,11 @@ keep the investigation narrow, reproducible, and safe.
 - If no safe reproduction or evidence path exists, report the limitation rather
   than pretending the cause is known.
 
+Stop exploration when the evidence is sufficient to name the root cause or the
+exact blocker. Report the cause and its proof; do not continue into unrelated
+investigation or apply a fix unless the task separately authorizes
+implementation.
+
 ## Debugging workflow
 
 ### 1. Preserve and frame evidence

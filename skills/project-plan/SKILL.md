@@ -64,6 +64,13 @@ for the handoff. Use `skill-creator` only when changing a skill. If a named
 companion skill is unavailable, keep its handoff contract in the plan and
 continue with the equivalent work only when the user has approved it.
 
+Use `plan-consistency-review` after requirements, design, and tasks exist and
+before implementation when cross-artifact consistency or coverage needs
+checking. Use `plan-convergence` after approved implementation when the user
+asks whether the plan and repository state still agree. Both are read-only
+companions: they report or propose follow-up work, while this skill remains the
+only plan-editing owner.
+
 Use browser interaction only for separately approved, unauthenticated localhost
 exploratory QA; it is not a durable test strategy. Route durable browser
 coverage to `webapp-testing`.

@@ -15,7 +15,7 @@ This public repository contains reusable, machine-independent workflow pieces:
 | [`codex/`](codex)                          | Codex configuration                                  |
 | [`opencode/`](opencode)                    | OpenCode configuration, plugin, quota, and TUI files |
 | [`skills/`](skills)                        | Shared Agent Skills and supporting references        |
-| [`validate-skills.sh`](validate-skills.sh) | Skill reference validator                            |
+| [`validate-skills.sh`](validate-skills.sh) | Skill entrypoint and reference validator              |
 | [`GLOBAL_AGENTS.md`](GLOBAL_AGENTS.md)     | General global agent instructions                    |
 | [`AGENTS.md`](AGENTS.md)                   | Contributor guidance for this repository             |
 
@@ -366,19 +366,36 @@ The repository includes:
 
 | Skill                            | When to use                                                                                                                |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `brainstorming`                 | Refining an incomplete idea into a user-approved direction before specialist design or implementation                      |
 | `repository-research`            | Tracing local code, seams, and conventions before a change                                                                 |
 | `technical-design`               | Proposing/comparing architecture, APIs, and migrations                                                                     |
+| `mcp-builder`                    | Designing and validating capability-conditional MCP servers and tools                                                      |
+| `diagram-design`                 | Creating evidence-grounded, accessible static HTML/SVG diagrams                                                          |
+| `archify`                        | Optional typed-source and renderer-backed architecture/workflow diagram delivery                                         |
+| `source-driven-development`      | Grounding framework and library decisions in current authoritative sources                                                 |
+| `security-and-hardening`         | Threat modeling and hardening input, auth, data, integrations, and dependencies                                           |
+| `ai-security-review`             | Defensive review of AI prompts, retrieval, memory, model output, and agent-tool boundaries                              |
+| `supply-chain-security`          | Reviewing dependencies, CI inputs, SBOMs, provenance, signatures, and release-chain risk                              |
+| `performance-optimization`       | Measure-first investigation and verification of performance changes                                                       |
+| `deprecation-and-migration`      | Planning safe replacement, compatibility, rollout, and removal of old behavior                                             |
+| `code-simplification`            | Reducing code complexity while preserving observable behavior                                                             |
 | `systematic-debugging`           | Diagnosing bugs, flakes, regressions, and recovery paths                                                                   |
 | `test-driven-development`        | Changing behavior with a red-green-refactor test loop                                                                      |
 | `verification-before-completion` | Claiming completion with fresh, task-appropriate evidence                                                                  |
 | `git-release`                    | Preparing approval-gated release validation and handoff                                                                    |
 | `implement-next`                 | Implementing and validating one approved plan task                                                                         |
 | `project-plan`                   | Planning scoped work and maintaining project planning artifacts                                                            |
+| `plan-consistency-review`        | Checking requirements, designs, plans, tasks, and validation for internal consistency                                      |
+| `plan-convergence`               | Comparing an approved plan and tasks with current implementation evidence                                                |
 | `research-brief`                 | Producing dated, source-linked research briefs                                                                             |
 | `review-diff`                    | Reviewing a diff for actionable correctness and regression findings                                                        |
 | `session-state`                  | Recording concise session continuity state                                                                                 |
 | `use-playwright`                 | Configuring an approved project-local Playwright MCP profile                                                               |
 | `frontend-design`                | Planning UI hierarchy, states, responsive behavior, accessibility                                                          |
+| `ui-design-system`              | Defining reusable visual direction, semantic tokens, component rules, and resilient UI guidance                           |
+| `image-to-code`                  | Generating or inspecting visual references and translating them into accessible frontend implementation                   |
+| `frontend-motion-review`         | Building, reviewing, and auditing purposeful, accessible frontend motion                                                   |
+| `apple-design`                   | Applying optional Apple-inspired direct manipulation, materials, typography, and inclusive interaction principles       |
 | `humanizer`                      | Removing AI-generated writing patterns from prose                                                                          |
 | `webapp-testing`                 | Repository-native Playwright test planning/execution                                                                       |
 | `agent-browser`                  | Approved exploratory browser QA on unauthenticated localhost                                                               |
@@ -387,7 +404,7 @@ The repository includes:
 | `social-content`                 | Drafting truthful, channel-specific social/editorial content and blog posts from source material                           |
 | `brand-guidelines`               | Applying user-provided brand rules to artifacts                                                                            |
 | `github-cli-workflow`            | Inspecting/preparing PRs, issues, checks, and workflow logs with `git`/`gh`                                                |
-| `skill-creator`                  | Creating/auditing OpenCode skills                                                                                          |
+| `skill-creator`                  | Creating and auditing shared, harness-neutral Agent Skills                                                                  |
 | `playwright-public-web`          | Read-only inspection of explicitly approved unauthenticated public websites through Playwright MCP                         |
 | `playwright-manual-auth`         | Read-only inspection of approved login-required sites after the user authenticates in a headed isolated Playwright browser |
 
