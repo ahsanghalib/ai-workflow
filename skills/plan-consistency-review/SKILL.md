@@ -50,8 +50,8 @@ report that scope is ambiguous. Do not choose one silently.
 Normalize the artifacts without changing them. For each requirement or
 acceptance criterion, record:
 
-| Requirement | Source | Design link | Task(s) | Validation evidence | Status |
-| --- | --- | --- | --- | --- | --- |
+| Requirement                 | Source      | Design link     | Task(s)  | Validation evidence     | Status                |
+| --------------------------- | ----------- | --------------- | -------- | ----------------------- | --------------------- |
 | exact ID or short statement | `path:line` | module/contract | task IDs | command/test or missing | confirmed/assumed/gap |
 
 Preserve the project's IDs and terminology. Do not invent IDs to make a row
@@ -95,23 +95,27 @@ guessing.
 
 Return one findings table, ordered by impact:
 
-| # | Severity | Category | Evidence | Finding | Recommended owner/action |
-| --- | --- | --- | --- | --- | --- |
-| 1 | HIGH/MEDIUM/LOW | coverage/contradiction/stale/assumption | `path:line` | exact issue | `project-plan` / `technical-design` / user decision |
+| #   | Severity        | Category                                | Evidence    | Finding     | Recommended owner/action                            |
+| --- | --------------- | --------------------------------------- | ----------- | ----------- | --------------------------------------------------- |
+| 1   | HIGH/MEDIUM/LOW | coverage/contradiction/stale/assumption | `path:line` | exact issue | `project-plan` / `technical-design` / user decision |
 
 Then report:
 
 ```markdown
 ## Confirmed coverage
+
 - ...
 
 ## Assumptions
+
 - ...
 
 ## Unresolved decisions
+
 - ...
 
 ## Consistency verdict
+
 Ready for approved implementation | Needs clarification | Plan revision required
 ```
 

@@ -48,12 +48,12 @@ Name the purpose before writing code or approving it:
 
 Use this frequency gate:
 
-| Frequency | Default decision |
-| --- | --- |
-| 100+ times/day, including keyboard shortcuts and command palettes | No animation |
-| Tens of times/day, including common hover and list navigation | Remove or make nearly imperceptible |
-| Occasional, including modals, drawers, and toasts | Standard animation |
-| Rare or first-time, including onboarding and celebrations | Delight is allowed when it supports the experience |
+| Frequency                                                         | Default decision                                   |
+| ----------------------------------------------------------------- | -------------------------------------------------- |
+| 100+ times/day, including keyboard shortcuts and command palettes | No animation                                       |
+| Tens of times/day, including common hover and list navigation     | Remove or make nearly imperceptible                |
+| Occasional, including modals, drawers, and toasts                 | Standard animation                                 |
+| Rare or first-time, including onboarding and celebrations         | Delight is allowed when it supports the experience |
 
 If there is no clear purpose, or the action is frequent enough that motion adds
 latency, say so and recommend the static alternative.
@@ -109,8 +109,8 @@ Check, in order:
 
 Use this required output:
 
-| Before | After | Why |
-| --- | --- | --- |
+| Before                                 | After                 | Why                      |
+| -------------------------------------- | --------------------- | ------------------------ |
 | `file:line` and exact current behavior | precise target change | user impact and evidence |
 
 Then give a verdict grouped by impact, highest first:

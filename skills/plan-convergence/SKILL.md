@@ -47,8 +47,8 @@ state that limitation instead of inferring one.
 For every task, locate current evidence in code, tests, configuration,
 documentation, or activity records:
 
-| Task | Expected evidence | Current evidence | Classification |
-| --- | --- | --- | --- |
+| Task          | Expected evidence                | Current evidence              | Classification                         |
+| ------------- | -------------------------------- | ----------------------------- | -------------------------------------- |
 | exact task ID | file, test, command, or artifact | `path:line`, diff, or missing | complete/partial/missing/stale/blocked |
 
 Check that:
@@ -93,24 +93,29 @@ Return:
 
 ```markdown
 ## Convergence summary
+
 Plan: <path and status>
 Baseline: <revision or unknown>
 Current: <revision>
 Result: Converged | Partially converged | Not converged | Blocked
 
 ## Evidence table
-| # | Classification | Severity | Task/criterion | Evidence | Gap or confirmation | Proposed next action |
-| --- | --- | --- | --- | --- | --- | --- |
+
+| #   | Classification | Severity | Task/criterion | Evidence | Gap or confirmation | Proposed next action |
+| --- | -------------- | -------- | -------------- | -------- | ------------------- | -------------------- |
 
 ## Unplanned changes
+
 - ... or none found
 
 ## Validation status
+
 - Verified: ...
 - Not run: ...
 - Blocked: ...
 
 ## Required approvals
+
 - ... or none
 ```
 

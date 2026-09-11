@@ -90,11 +90,11 @@ duration.
 
 Conceptual spring defaults, translated to APIs that support these parameters:
 
-| Interaction | Damping | Response |
-| --- | ---: | ---: |
-| Reposition or move | 1.0 | 0.4s |
-| Rotation | 0.8 | 0.4s |
-| Drawer or sheet | 0.8 | 0.3s |
+| Interaction        | Damping | Response |
+| ------------------ | ------: | -------: |
+| Reposition or move |     1.0 |     0.4s |
+| Rotation           |     0.8 |     0.4s |
+| Drawer or sheet    |     0.8 |     0.3s |
 
 Use the actual API and existing project tokens. For a web spring API expressed
 as bounce and duration, begin with no bounce for ordinary UI and reserve
@@ -105,8 +105,7 @@ the product's interaction model:
 
 ```js
 function project(initialVelocity, decelerationRate = 0.998) {
-  return (initialVelocity / 1000) * decelerationRate /
-    (1 - decelerationRate);
+  return ((initialVelocity / 1000) * decelerationRate) / (1 - decelerationRate);
 }
 
 const projected = currentPosition + project(releaseVelocity);
@@ -136,8 +135,10 @@ Rubber-band resistance can be modeled as:
 
 ```js
 function rubberband(overshoot, dimension, constant = 0.55) {
-  return (overshoot * dimension * constant) /
-    (dimension + constant * Math.abs(overshoot));
+  return (
+    (overshoot * dimension * constant) /
+    (dimension + constant * Math.abs(overshoot))
+  );
 }
 ```
 
@@ -192,7 +193,9 @@ not support `backdrop-filter`, the opaque fallback must remain understandable.
 
 ```css
 :root {
-  font: 100%/1.5 system-ui, sans-serif;
+  font:
+    100%/1.5 system-ui,
+    sans-serif;
 }
 
 .display {
