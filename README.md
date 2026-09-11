@@ -208,7 +208,7 @@ npm install
 If you skip this, the plugin still runs; you just cannot type-check it with
 `npx tsc --noEmit`.
 
-### 6. Authenticate your providers
+### 7. Authenticate your providers
 
 The configuration references models from several providers (see
 [Model configuration](#model-configuration)). Log in to the
@@ -225,7 +225,7 @@ opencode debug agent engineer
 opencode debug agent explore
 ```
 
-### 7. Verify the installation
+### 8. Verify the installation
 
 From any project directory:
 
