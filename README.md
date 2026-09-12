@@ -134,19 +134,20 @@ ln -s "$(pwd)/bin/worktree-new"          ~/.local/bin/
 ln -s "$(pwd)/bin/worktree-close"        ~/.local/bin/
 ```
 
-### 3. Link shared agents and skills (optional)
+### 3. Link shared agents, instructions, and skills (optional)
 
-Use the repository installer to link the shared agents, skills, and global
-instructions into both runtimes:
+Use the repository installer to link the shared agents and global instructions
+into both runtimes, and each shared skill into `~/.agents/skills`:
 
 ```bash
 ./script.sh
 ```
 
 Pass a repository path when running the script from elsewhere, or set
-`AI_WORKFLOW_REPO`. It honors `CODEX_HOME` and `XDG_CONFIG_HOME`, and refuses
-to replace existing non-symlink targets. The installer does not copy runtime
-configuration files; review and install those separately below.
+`AI_WORKFLOW_REPO`. It honors `CODEX_HOME` and `XDG_CONFIG_HOME` for runtime
+links, creates `~/.agents/skills` when needed, and refuses to replace existing
+non-symlink targets. The installer does not copy runtime configuration files;
+review and install those separately below.
 
 ### 4. Install the OpenCode configuration
 

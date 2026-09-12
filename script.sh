@@ -67,14 +67,13 @@ link_skills() {
 
   [[ -d $repository/skills ]] || die "Skills directory does not exist: $repository/skills"
 
-  mkdir -p -- "$codex_home/skills" "$opencode_home/skills"
+  mkdir -p -- "$home_dir/.agents/skills"
 
   shopt -s nullglob
   for source_path in "$repository/skills"/*; do
     [[ -d $source_path ]] || continue
     skill_name=${source_path##*/}
-    link_path "$source_path" "$codex_home/skills/$skill_name"
-    link_path "$source_path" "$opencode_home/skills/$skill_name"
+    link_path "$source_path" "$home_dir/.agents/skills/$skill_name"
   done
 }
 
