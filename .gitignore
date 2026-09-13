@@ -339,6 +339,7 @@ docs/_build/
 
 # Local tooling and temporary data
 SESSION_STATE.md
+.ai/memory/memory.sqlite
 # The project-init template is reusable repository content, not local state.
 !skills/project-init/templates/SESSION_STATE.md
 .agent-browser/*

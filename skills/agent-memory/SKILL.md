@@ -1,7 +1,8 @@
 ---
 name: agent-memory
 description: Manage lightweight project-local episodic memory and session handoff capsules for coding work. Use when prior decisions, failures, discoveries, or outcomes may help the current task, when a new session needs project context, or after verified meaningful work. Do not store routine edits, raw transcripts, or duplicate permanent project documentation.
-compatibility: Requires Python 3.10+ with SQLite FTS5 support.
+metadata:
+  compatibility: Requires Python 3.10+ with SQLite FTS5 support.
 ---
 
 # Memory Management
@@ -161,11 +162,12 @@ from the installed `SKILL.md`; otherwise leave it unchanged.
 
 Episode Markdown under `.ai/memory/episodes/` is the source of truth and may be
 committed as reviewed project history. Review and redact it before committing.
-The Git-visible `memory.sqlite` file is only a derived FTS index; it is optional
-to commit and must not be edited or manually merged. Resolve episode Markdown
-first, then move a stale or conflicted database aside and run `init` followed by
+The exact path `.ai/memory/memory.sqlite` must be ignored by the project
+`.gitignore`: it is only a derived FTS index, must not be staged or committed,
+and must not be edited or manually merged. Resolve episode Markdown first,
+then move a stale or conflicted database aside and run `init` followed by
 `reindex` to rebuild and verify it. Run `verify` after any manual database
-handling and inspect the result before staging the database.
+handling, but do not add a Git exception for the ignored database path.
 
 ## Retention and provenance
 
