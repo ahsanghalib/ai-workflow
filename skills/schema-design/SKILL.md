@@ -1,6 +1,6 @@
 ---
 name: schema-design
-description: Design or review a relational database schema before services or routes when a feature changes persistent data. Use for entities, relationships, keys, nullability, constraints, indexes, tenant boundaries, concurrency, and migration safety. Do not implement migrations, services, routes, UI, or unrelated architecture; use technical-design for broader system decisions.
+description: Design or review a relational database schema before services or routes for an initial project schema or a feature that changes persistent data. Use for entities, relationships, keys, nullability, constraints, indexes, tenant boundaries, concurrency, and migration safety. Do not implement migrations, services, routes, UI, or unrelated architecture; use technical-design for broader system decisions.
 license: MIT
 compatibility: SQL/ORM agnostic unless the repository defines one
 ---
@@ -11,9 +11,12 @@ compatibility: SQL/ORM agnostic unless the repository defines one
 
 - This skill owns data-model design and review, not DDL, migrations, backfills,
   services, routes, UI, or broad system architecture.
-- Require the exact feature SPEC and schema surface under review. If the target
-  or source of truth is ambiguous, stop and report that condition instead of
-  choosing one from the repository.
+- Require the exact feature SPEC and schema surface under review for
+  feature-specific work. For an initial project schema, require the approved
+  project direction and reviewed `docs/USER_FLOW.md` instead; label the review
+  as baseline rather than feature-specific. If the target or source of truth is
+  ambiguous, stop and report that condition instead of choosing one from the
+  repository.
 - Use `technical-design` for non-database module, API, or architecture choices.
 - Use `project-init` when the user wants a durable PLAN or migration plan
   created or edited.
@@ -27,7 +30,8 @@ compatibility: SQL/ORM agnostic unless the repository defines one
 Read:
 
 - the referenced feature SPEC, including its exact approval/status field when
-  the project defines one
+  the project defines one; or the approved project direction and reviewed
+  `docs/USER_FLOW.md` for an initial project schema
 - relevant project-direction document when needed
 - applicable `AGENTS.md` and `SESSION_STATE.md` for project context and local
   conventions when present
@@ -48,9 +52,11 @@ execution skill.
 
 ## Sequence
 
-1. Confirm the exact SPEC, schema source of truth, and current schema revision
-   before making a proposal or review. If the SPEC is not approved, report that
-   limitation separately rather than treating its requirements as settled.
+1. Confirm the exact feature SPEC, or the approved project direction plus
+   reviewed user flow for an initial project schema, together with the schema
+   source of truth and current schema revision before making a proposal or
+   review. If a feature SPEC is not approved, report that limitation separately
+   rather than treating its requirements as settled.
 2. Identify entities, ownership, cardinality, and lifecycle, including
    deletion, retention, audit, and sensitive-data handling when relevant.
 3. Choose keys and define nullability, defaults, foreign keys, and delete

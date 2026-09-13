@@ -2,6 +2,15 @@
 
 Applies to public/internal HTTP APIs and OpenAPI contracts.
 
+## Traceability
+
+Each endpoint, event, and shared transport contract must identify the relevant
+user-flow journey/state and approved schema entities when it reads or writes
+persistent data. Record the schema-impact classification and route changes to
+schema-impact review before implementation planning when fields, nullability,
+authorization scope, lifecycle, relationships, or persistence semantics
+change. Do not expose database models as transport contracts.
+
 ## 1. Resource Design
 
 - Use consistent resource-oriented naming.
@@ -58,49 +67,105 @@ Rules:
 
 ## 5. Response Standard
 
-Use one consistent response convention across the API.
+Every API response must use the same top-level envelope. The envelope keeps
+success, human-readable messaging, request correlation, and either result data
+or error details in predictable locations.
 
-Recommended success shape when an envelope is desired:
+This file owns the HTTP envelope, status-code, and endpoint pagination rules.
+When a project has a shared contracts package, its reusable transport types
+must use the same field names and optionality defined here.
 
-```json
-{
-  "data": {}
-}
-```
-
-List response:
+Success response:
 
 ```json
 {
-  "data": [],
-  "pagination": {
+  "success": true,
+  "message": "Request completed successfully",
+  "requestId": "req_01H...",
+  "data": {},
+  "meta": {
+    "total": 100,
     "limit": 20,
-    "offset": 0,
-    "total": 100
+    "offset": 0
   }
 }
 ```
 
-Recommended error shape:
+Success response rules:
+
+- `success` is required and must be a boolean. It is `true` for a successful
+  response.
+- `message` is required and should give a concise human-readable result.
+- `requestId` is required and should identify the request for logs and support.
+- `data` is required for successful responses and must be an object or array.
+  Use `{}` when the operation succeeds without a meaningful result object.
+- `meta` is included for list endpoints when pagination or other collection
+  metadata is needed. Each list endpoint chooses offset or cursor pagination
+  deliberately; do not return both shapes from one endpoint.
+
+Offset-pagination metadata:
 
 ```json
 {
+  "success": true,
+  "message": "Resources retrieved successfully",
+  "requestId": "req_01H...",
+  "data": [],
+  "meta": {
+    "total": 100,
+    "limit": 20,
+    "offset": 0
+  }
+}
+```
+
+Cursor-pagination metadata:
+
+```json
+{
+  "success": true,
+  "message": "Resources retrieved successfully",
+  "requestId": "req_01H...",
+  "data": [],
+  "meta": {
+    "next": "opaque-next-cursor",
+    "prev": "opaque-previous-cursor",
+    "limit": 20
+  }
+}
+```
+
+Error response:
+
+```json
+{
+  "success": false,
+  "message": "The requested resource was not found",
+  "requestId": "req_01H...",
   "error": {
     "code": "RESOURCE_NOT_FOUND",
     "message": "Resource not found",
-    "details": {}
+    "details": []
   }
 }
 ```
 
 Rules:
 
+- `success` is required for every response and must be `false` for errors.
+- `message` and `requestId` remain present on errors.
+- `error` is required on errors and may be one error object or an array of
+  error objects when several errors must be returned.
+- Each error object may include a stable machine-readable `code`, a safe
+  human-readable `message`, and structured `details` as an array.
 - Machine-readable `code` values must be stable.
 - Human messages may be user-facing but must not leak internals.
 - `details` should contain structured actionable information only.
-- Do not mix several unrelated response envelope conventions.
-
-If the project intentionally uses raw REST resources instead of envelopes, document that once and remain consistent.
+- Do not return `data` on an error unless the endpoint has a documented reason
+  to include partial results; do not return both `data` and `error` by default.
+- Do not mix this envelope with raw-resource or unrelated envelope conventions.
+- Do not use `204 No Content` for an operation that must return this envelope;
+  return a successful envelope with `data: {}` instead.
 
 ## 6. HTTP Status Codes
 
@@ -108,7 +173,8 @@ Use status codes semantically:
 
 - `200` successful read/update with response body
 - `201` resource created
-- `204` successful operation with no response body
+- `204` is not used with this envelope; return `200` with `success: true` and
+  `data: {}` for a successful operation without a meaningful result
 - `400` malformed/invalid request not better represented below
 - `401` unauthenticated
 - `403` authenticated but not authorized
@@ -139,12 +205,14 @@ limit
 offset
 ```
 
-Response metadata may include:
+Response `meta` must use:
 
-```text
-limit
-offset
-total
+```json
+{
+  "total": 100,
+  "limit": 20,
+  "offset": 0
+}
 ```
 
 ### Cursor Pagination
@@ -160,6 +228,8 @@ Rules:
 - Ordering must be deterministic.
 - Include a unique tie-breaker in sort order.
 - Do not mix offset and cursor semantics in one endpoint without a strong reason.
+- Response `meta` must use only the cursor fields selected for the endpoint:
+  `next`, `prev`, and optionally `limit`.
 
 ## 8. Filtering and Sorting
 

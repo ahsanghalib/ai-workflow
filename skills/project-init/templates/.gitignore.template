@@ -2,6 +2,7 @@
 # Copy this file to .gitignore for Git and/or .ignore for ripgrep and other tools.
 # Keep source, manifests, lock files, documentation, tests, and intentional fixtures.
 # Remove a rule when a project deliberately tracks a matching path.
+# `.ai/` is intentionally tracked project documentation; do not ignore it.
 
 # Operating system files
 .DS_Store
@@ -338,6 +339,7 @@ docs/_build/
 
 # Local tooling and temporary data
 SESSION_STATE.md
+.ai/memory/memory.sqlite
 .agent-browser/*
 !.agent-browser/.gitkeep
 .direnv/

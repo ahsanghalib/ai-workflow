@@ -3,6 +3,15 @@
 Applies to web clients, admin clients, desktop clients, and frontend-specific
 packages. Apply framework-specific guidance only when that framework is in use.
 
+## Traceability
+
+Each frontend route, screen, and feature surface must identify its relevant
+user-flow journey/state and the API or shared contracts it consumes. Persisted
+data behavior must trace to approved schema entities through those contracts;
+frontend work must not invent fields, permissions, entities, or lifecycle
+states. If the contract or schema reference is missing, return to the SPEC and
+schema-impact review gate.
+
 ## 1. Feature Organization
 
 - Prefer feature/domain-oriented organization over grouping every file globally by technical type.

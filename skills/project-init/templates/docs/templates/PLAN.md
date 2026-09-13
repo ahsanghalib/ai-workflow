@@ -23,6 +23,20 @@
 - Relevant rules:
 - Architecture/context:
 
+## Traceability
+
+**User-flow references:**
+
+**Approved schema entities:** `<entity/table links | not applicable | unresolved>`
+
+**API/shared-contract references:**
+
+**Frontend surface references:**
+
+**Schema impact and review:** `<classification, schema-design review, or none>`
+
+<!-- Each task group must retain the relevant flow/schema/contract links. -->
+
 ## Decision Status and Evidence
 
 ### Confirmed Requirements
@@ -44,6 +58,24 @@
 ### Group 1: <name>
 
 - [ ] TASK-0001: <observable task>
+
+#### Traceability for each task group
+
+Repeat this block for every task group. Keep exact links or explicit
+`not applicable` / `unresolved` values rather than copying summaries that can
+go stale.
+
+**User-flow references:**
+
+**Approved schema entities:**
+
+**Schema impact/review:**
+
+**API/shared-contract references:**
+
+**Frontend surface references:**
+
+**Validation evidence:**
 
 ## Dependencies
 

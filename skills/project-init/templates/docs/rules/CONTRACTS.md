@@ -3,6 +3,18 @@
 Applies to the repository's designated shared client/server API contract
 package, when one exists.
 
+`API.md` owns HTTP response-envelope and status-code semantics. This document
+owns reusable shared transport shapes; keep their field names and optionality
+aligned with the API rules.
+
+## Traceability
+
+Each shared request, response, event, or error contract must identify the
+relevant user-flow journey/state and approved schema entities when it carries
+persistent data. Record schema impact and route changes through the relevant
+SPEC, PLAN, API, frontend, and schema-impact reviews. Keep transport contracts
+separate from database models.
+
 ## 1. Purpose
 
 The designated contracts package defines data that is intentionally shared
@@ -139,12 +151,14 @@ Cursor example:
 
 ```ts
 type CursorPagination = {
-  nextCursor: string | null
-  hasMore: boolean
+  next?: string
+  prev?: string
+  limit?: number
 }
 ```
 
-Domain list responses may compose these shared types.
+Omit `next` or `prev` when that direction has no cursor. Domain list responses
+may compose these shared types.
 
 ## 12. Error Contracts
 

@@ -77,6 +77,11 @@
 
 ## Documentation
 
+Product direction is owned by `MASTER_PLAN.md`; repository operating rules are
+owned by `AGENTS.md`. When actor journeys apply, add `docs/USER_FLOW.md` and
+keep it aligned with this architecture. When persistence is approved, add
+`docs/DB_SCHEMA.md` after reviewing the user flow.
+
 ## Important Current Decisions
 
 <!-- Record current architecture, not a chronological decision history. -->

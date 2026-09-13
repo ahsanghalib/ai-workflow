@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 permissions:
   contents: read
@@ -20,7 +21,10 @@ jobs:
         run: bash validate-skills.sh
 
       - name: Check shell syntax
-        run: bash -n script.sh bin/*
+        run: bash -n script.sh bin/* skills/project-init/scripts/*.sh skills/project-init/tests/*.sh
+
+      - name: Test project-init helpers and contracts
+        run: bash skills/project-init/tests/test-project-init.sh
 
       - name: Parse Codex configuration
         run: python3 -c 'import pathlib, tomllib; tomllib.loads(pathlib.Path("codex/config.toml").read_text())'
