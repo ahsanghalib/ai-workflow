@@ -21,7 +21,7 @@ directory, a CLI, slash commands, or a particular agent integration.
 - Use `product-discovery` for unknown customer problems, outcomes, or market
   requirements.
 - Use `technical-design` for proposing architecture or interface decisions.
-- Use `project-plan` for creating or revising plans and tasks.
+- Use `project-init` for creating or revising plans and tasks.
 - Use `implement-next` only after the plan and its first task satisfy the
   repository's approval and TDD gates.
 - Use `verification-before-completion` for final completion evidence.
@@ -97,7 +97,7 @@ Return one findings table, ordered by impact:
 
 | #   | Severity        | Category                                | Evidence    | Finding     | Recommended owner/action                            |
 | --- | --------------- | --------------------------------------- | ----------- | ----------- | --------------------------------------------------- |
-| 1   | HIGH/MEDIUM/LOW | coverage/contradiction/stale/assumption | `path:line` | exact issue | `project-plan` / `technical-design` / user decision |
+| 1   | HIGH/MEDIUM/LOW | coverage/contradiction/stale/assumption | `path:line` | exact issue | `project-init` / `technical-design` / user decision |
 
 Then report:
 
@@ -126,6 +126,6 @@ inspected scope; it does not approve the plan or prove the code is correct.
 ## Safety and handoff
 
 Remain read-only. Do not edit `PLANS.md`, plan files, `SESSION_STATE.md`, code,
-tests, or issue trackers. Hand findings to `project-plan` for an authorized
+tests, or issue trackers. Hand findings to `project-init` for an authorized
 plan revision, to `technical-design` for an architecture decision, or to the
 user when a requirement is unresolved.

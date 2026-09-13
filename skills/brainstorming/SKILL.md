@@ -33,7 +33,7 @@ discovery, technical architecture, UI design, delivery planning, or code.
 - Hand UI hierarchy, interaction states, responsive behavior, and accessibility
   to `frontend-design` when the work is specifically a frontend design task.
 - Hand dependency-ordered implementation tasks and planning artifacts to
-  `project-plan` when a durable plan is needed.
+  `project-init` when a durable plan is needed.
 - Do not create files, edit code, commit, create branches or worktrees, publish,
   or invoke implementation merely because brainstorming is complete. These are
   separate actions requiring the user's authorization and the applicable
@@ -129,7 +129,7 @@ approvals separately when applicable.
   documentation, and exploratory work.
 - An architectural request goes to `technical-design`, `frontend-design`, or
   `product-discovery` for the specialist brief that matches the unresolved
-  domain. Use `project-plan` when the approved direction needs durable,
+  domain. Use `project-init` when the approved direction needs durable,
   dependency-ordered implementation tasks.
 - If no companion skill or capability is available, retain the same handoff
   contract in the response and use the safest equivalent workflow.

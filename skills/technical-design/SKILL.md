@@ -21,7 +21,7 @@ state missing evidence directly.
   that companion skill is available for evidence collection without a technical
   proposal.
 - Do not create tickets, milestones, estimates, dependency graphs, or delivery
-  sequencing; hand an approved design to `project-plan` when that companion
+  sequencing; hand an approved design to `project-init` when that companion
   skill is available.
 - Do not edit files, run generators, migrations, tests, prototypes, network
   calls, or deployments without explicit approval.
@@ -110,5 +110,5 @@ Return a concise technical-design brief:
 ## Open Questions, Non-Goals, and Required Approval
 ```
 
-Stop at the approved proposal. Hand off task decomposition to `project-plan`
+Stop at the approved proposal. Hand off task decomposition to `project-init`
 when available, and code changes to an implementation workflow.

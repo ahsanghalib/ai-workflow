@@ -25,7 +25,7 @@ details in the discovery brief; summarize only the minimum evidence needed.
   evidence, constraint, or validation decision.
 
 Hand off technical choices to `technical-design`, delivery planning to
-`project-plan`, and founder-level trade-offs to `founder-decision` when those
+`project-init`, and founder-level trade-offs to `founder-decision` when those
 companion skills are available. If they are unavailable, keep the handoff as a
 clearly labelled recommendation rather than assuming their workflow.
 

@@ -401,7 +401,7 @@ The repository includes:
 | `verification-before-completion` | Claiming completion with fresh, task-appropriate evidence                                                                  |
 | `git-release`                    | Preparing approval-gated release validation and handoff                                                                    |
 | `implement-next`                 | Implementing and validating one approved plan task                                                                         |
-| `project-plan`                   | Planning scoped work and maintaining project planning artifacts                                                            |
+| `project-init`                   | Bootstrapping project control and planning scoped work                                                                      |
 | `plan-consistency-review`        | Checking requirements, designs, plans, tasks, and validation for internal consistency                                      |
 | `plan-convergence`               | Comparing an approved plan and tasks with current implementation evidence                                                |
 | `research-brief`                 | Producing dated, source-linked research briefs                                                                             |

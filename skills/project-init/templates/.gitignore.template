@@ -20,7 +20,6 @@ ehthumbs.db
 ehthumbs_vista.db
 Desktop.ini
 $RECYCLE.BIN/
-skill-review.md
 
 # Editors and IDEs
 *~
@@ -339,8 +338,6 @@ docs/_build/
 
 # Local tooling and temporary data
 SESSION_STATE.md
-# The project-init template is reusable repository content, not local state.
-!skills/project-init/templates/SESSION_STATE.md
 .agent-browser/*
 !.agent-browser/.gitkeep
 .direnv/

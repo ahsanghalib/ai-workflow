@@ -22,7 +22,7 @@ the decision memo; summarize only the minimum needed for the decision.
   trade-offs; hand those choices to `technical-design` when that companion
   skill is available.
 - Do not create tickets, milestones, estimates, assignments, or delivery plans;
-  hand an approved decision to `project-plan` when that companion skill is
+  hand an approved decision to `project-init` when that companion skill is
   available.
 - Do not become an open-ended research workflow. Consume cited evidence or
   propose a focused research question when a fact is unknown.

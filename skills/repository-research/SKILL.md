@@ -14,7 +14,7 @@ The default workflow is read-only and works without background delegation.
 - Do not propose architecture or APIs beyond the evidence needed to hand off to
   `technical-design`.
 - Do not create tickets, estimates, milestones, or delivery sequencing; use
-  the `project-plan` skill after research is reviewed.
+  the `project-init` skill after research is reviewed.
 - Do not become open-ended web research. Use external sources only to verify a
   named dependency, API, or claim when local evidence is insufficient.
 - Never inspect, quote, infer from, or reproduce credentials, tokens, private
@@ -87,5 +87,5 @@ when the omission itself is necessary to explain a boundary.
 
 Summarize what is known, what remains uncertain, and whether evidence is enough
 to proceed. Hand off technical proposals to `technical-design` and delivery
-planning to `project-plan` only after the artifact or approved in-chat brief is
+planning to `project-init` only after the artifact or approved in-chat brief is
 reviewable, and only when those companion skills are available.

@@ -26,7 +26,7 @@ review, does not implement fixes, and does not append tasks automatically.
 4. Inspect safe repository state such as `git status`, the current diff, code,
    tests, schemas, and documented validation. Never read secrets or browser
    state.
-5. Keep `project-plan`, `technical-design`, `implement-next`, and
+5. Keep `project-init`, `technical-design`, `implement-next`, and
    `verification-before-completion` as the owners of their existing concerns.
 
 Do not assume `.specify/`, a CLI, slash commands, a branch name, or a GitHub
@@ -85,7 +85,7 @@ and already-fixed issues. For remaining gaps, propose one of:
 - a validation action; or
 - no action because the difference is an accepted non-goal.
 
-The proposal is advisory. The user or `project-plan` must authorize any edit.
+The proposal is advisory. The user or `project-init` must authorize any edit.
 
 ## Required output
 
@@ -125,7 +125,7 @@ convergence report with a code-review approval or production readiness.
 
 ## Handoff
 
-Hand proposed task or artifact changes to `project-plan`. Hand design drift to
+Hand proposed task or artifact changes to `project-init`. Hand design drift to
 `technical-design`, implementation of the next approved task to
 `implement-next`, and final evidence review to
 `verification-before-completion`. Stop after the report.
