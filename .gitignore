@@ -20,6 +20,7 @@ ehthumbs.db
 ehthumbs_vista.db
 Desktop.ini
 $RECYCLE.BIN/
+skill-review.md
 
 # Editors and IDEs
 *~
@@ -344,9 +345,3 @@ SESSION_STATE.md
 .tmp/
 tmp/
 temp/
-*.sqlite
-*.sqlite3
-*.db
-*.db-journal
-*.db-wal
-*.db-shm

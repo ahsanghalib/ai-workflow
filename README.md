@@ -136,24 +136,40 @@ ln -s "$(pwd)/bin/worktree-close"        ~/.local/bin/
 
 ### 3. Link shared agents, instructions, and skills (optional)
 
-Use the repository installer to link the shared agents and global instructions
-into both runtimes, and each shared skill into `~/.agents/skills`:
+Use the repository installer to link runtime-specific agents and global
+instructions, and all shared skills into the canonical `~/.agents/skills`
+directory:
 
 ```bash
 ./script.sh
 ```
 
+The installer creates these links:
+
+| Source | Destination |
+| --- | --- |
+| `agents/codex/` | `${CODEX_HOME:-~/.codex}/agents` |
+| `agents/opencode/` | `${XDG_CONFIG_HOME:-~/.config}/opencode/agents` |
+| `GLOBAL_AGENTS.md` | `${CODEX_HOME:-~/.codex}/AGENTS.md` and `${XDG_CONFIG_HOME:-~/.config}/opencode/AGENTS.md` |
+| Each directory under `skills/` | `~/.agents/skills/<skill-name>` |
+
 Pass a repository path when running the script from elsewhere, or set
 `AI_WORKFLOW_REPO`. It honors `CODEX_HOME` and `XDG_CONFIG_HOME` for runtime
 links, creates `~/.agents/skills` when needed, and refuses to replace existing
 non-symlink targets. The installer does not copy runtime configuration files;
-review and install those separately below.
+review and install those separately below. Each installed skill is discovered
+from its `SKILL.md` entrypoint and may include bundled scripts, templates, or
+references; no package-level README is required.
 
 ### 4. Install the OpenCode configuration
 
 OpenCode reads its global configuration from `~/.config/opencode/` (it also
 honors `$XDG_CONFIG_HOME/opencode`). Install the runtime files, agent profiles,
-skills, and global instructions:
+and global instructions. Shared skills are already linked by step 3 into
+`~/.agents/skills`:
+
+This step configures OpenCode only; do not install another copy of `skills/`
+here.
 
 > **Warning:** Back up an existing configuration before replacing it.
 
@@ -165,9 +181,8 @@ fi
 
 mkdir -p ~/.config/opencode
 rsync -a --exclude node_modules opencode/. ~/.config/opencode/
-mkdir -p ~/.config/opencode/agents ~/.config/opencode/skills
+mkdir -p ~/.config/opencode/agents
 rsync -a agents/opencode/. ~/.config/opencode/agents/
-rsync -a skills/. ~/.config/opencode/skills/
 cp GLOBAL_AGENTS.md ~/.config/opencode/AGENTS.md
 ```
 
@@ -178,22 +193,23 @@ fresh only when you need them (optional, see next step).
 
 Review `codex/config.toml` for local paths and provider choices before copying
 it to `~/.codex/config.toml`. Install the matching agent profiles under
-`~/.codex/agents/`:
+`~/.codex/agents/`; shared skills are already linked by step 3 into
+`~/.agents/skills`:
+
+This step configures Codex only; do not install another copy of `skills/` here.
 
 ```bash
 mkdir -p ~/.codex/agents
-mkdir -p ~/.codex/skills
 cp codex/config.toml ~/.codex/config.toml
 cp agents/codex/*.toml ~/.codex/agents/
-rsync -a skills/. ~/.codex/skills/
 ```
 
 The Codex configuration includes runtime, provider, memory, plugin, and MCP
 settings. Replace marketplace, plugin, and executable paths that do not exist
 on your machine before loading it. The `agents.*.config_file` entries are
 relative to the Codex configuration directory and should resolve to the copied
-profiles. The shared skills are copied separately because agent profiles do not
-register skills themselves.
+profiles. The shared skills are linked separately by step 3 into
+`~/.agents/skills` because agent profiles do not register skills themselves.
 
 ### 6. Install plugin type dependencies (optional)
 

@@ -6,7 +6,8 @@ usage() {
   cat <<'EOF'
 Usage: script.sh [repository]
 
-Link the agents and skills from this repository into both runtimes.
+Link runtime-specific agents and global instructions from this repository, and
+shared skills into ~/.agents/skills.
 
 The repository defaults to the directory containing this script. When the
 script is stored elsewhere, pass the repository path or set AI_WORKFLOW_REPO.

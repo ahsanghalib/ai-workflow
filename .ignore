@@ -341,9 +341,3 @@ docs/_build/
 .tmp/
 tmp/
 temp/
-*.sqlite
-*.sqlite3
-*.db
-*.db-journal
-*.db-wal
-*.db-shm
