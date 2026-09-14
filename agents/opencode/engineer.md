@@ -69,7 +69,7 @@ Use `oracle` only when at least one of these is true:
 
 - the user explicitly asks for a GPT/oracle opinion;
 - the same hard blocker remains unresolved after one focused `fixer` pass and the root cause is still uncertain;
-- a high-risk change has unresolved correctness uncertainty after the normal DeepSeek advisor/review path, specifically around authentication/authorization, tenant isolation, destructive or data-preserving migrations, money/data integrity, or subtle concurrency/transaction semantics.
+- a high-risk change has unresolved correctness uncertainty after the normal advisor/review path, specifically around authentication/authorization, tenant isolation, destructive or data-preserving migrations, money/data integrity, or subtle concurrency/transaction semantics.
 
 Do not use `oracle` for normal coding, CRUD, pagination, DTOs, routes, tests, routine migrations, repository exploration, documentation lookup, or merely because a task is large. Do not invoke it automatically on every risky change.
 
