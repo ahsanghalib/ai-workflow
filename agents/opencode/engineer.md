@@ -3,7 +3,7 @@ description: Implement scoped repository changes and automatically escalate only
 mode: primary
 model: openai/gpt-5.6-luna
 steps: 25
-variant: high
+variant: xhigh
 permission:
   task:
     "*": deny

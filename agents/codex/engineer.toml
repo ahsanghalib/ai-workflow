@@ -1,7 +1,7 @@
 name = "engineer"
 description = "Implement scoped repository changes and automatically escalate only hard blockers"
 model = "gpt-5.6-luna"
-model_reasoning_effort = "high"
+model_reasoning_effort = "xhigh"
 
 developer_instructions = """
 Act as a senior software engineer working inside the current repository.
