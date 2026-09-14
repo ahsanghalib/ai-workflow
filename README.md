@@ -365,6 +365,16 @@ The assistant first reports the canonical folder, classifies it as empty,
 your approval before creating files or initializing local Git. It does not
 build the application, install a framework, create migrations, or read `.env`.
 
+#### Project-init at a glance
+
+![Project-init entry and mode detection](assets/project_init_entry_and_mode_detection.svg)
+
+The target is resolved and inspected before any write. An empty target or a
+target containing only `.git` follows the new-project bootstrap path. Any other
+entry, including hidden files, symlinks, `.gitignore`, or `.env`, makes the
+target an existing project for reconciliation; secret-looking entries are
+reported by name only.
+
 ### New or empty project
 
 1. Create or choose the folder for the project. Do not point the assistant at a
@@ -386,17 +396,24 @@ build the application, install a framework, create migrations, or read `.env`.
 
 4. Read the proposed file list. Approve it only after confirming the directory
    and scope are correct.
-5. Review the created documents. The base strict scaffold includes `AGENTS.md`,
-   `MASTER_PLAN.md`, `SESSION_STATE.md`, `docs/PROJECT_ARCHITECTURE.md`,
-   `docs/rules/GENERAL.md`, document templates, and `docs/specs/`,
-   `docs/plans/`, and `docs/reviews/` directories. First classify the project
-   as a web app, API, CLI, library, service, monorepo, or unknown/other, then
-   select optional `docs/USER_FLOW.md`, specialized rules, and `.ai/prompts/`
-   outputs that actually apply. Real `.env` files are never generated or
-   inspected.
-6. Fill in the project's goals and decisions in `MASTER_PLAN.md`. Then ask
-   `project-init` to create a feature SPEC or PLAN only when you are ready to
-   define a particular piece of work.
+5. Review the created documents. The base strict scaffold includes `README.md`,
+   `AGENTS.md`, `MASTER_PLAN.md`, `SESSION_STATE.md`,
+   `docs/PROJECT_ARCHITECTURE.md`, `docs/plans/INDEX.md`,
+   `docs/rules/GENERAL.md`, document templates, empty `docs/specs/`,
+   `docs/plans/`, and `docs/reviews/` directories, plus a missing `.gitignore`
+   copied from the bundled template. It creates only universal project-control
+   files.
+6. Record the project profile before selecting optional outputs: web app, API,
+   CLI, library, service, monorepo, or unknown/other, followed by `yes`, `no`,
+   or `unknown` answers for concerns such as user flow, persistence, HTTP,
+   frontend, authentication, shared contracts, testing, backend, database, and
+   security. Project type alone never selects a document; unknown concerns stay
+   unresolved until you review them. Optional `docs/USER_FLOW.md`, specialized
+   rules, and tracked `.ai/prompts/` helpers are selected individually. Real
+   `.env` files are never generated or inspected.
+7. Fill in the project's goals and decisions in `MASTER_PLAN.md`. Then ask
+   `project-init` to validate the foundation and plan a feature only when you
+   are ready to define a decided piece of work.
 
 After the first draft, answer the technical questions that affect the project:
 repository shape, language/runtime, frameworks, package manager, database,
@@ -404,7 +421,8 @@ ORM/query builder/raw SQL, migration tooling, authentication and sessions,
 local development, environment-variable names, testing, and browser or
 performance needs. Unknown answers remain open until you approve a choice.
 
-Keep the documents in this order when the project needs each one:
+Keep the documents and review gates in this order when the project needs each
+one:
 
 1. `MASTER_PLAN.md` — product direction and proposed scope.
 2. `docs/USER_FLOW.md` — add when human or system actors have journeys,
@@ -412,8 +430,16 @@ Keep the documents in this order when the project needs each one:
 3. `docs/DB_SCHEMA.md` — add only when persistence is approved after the user
    flow is reviewed; it is the first technical contract that APIs and frontend
    features follow.
-4. Feature SPEC → SPEC review → PLAN → PLAN review → your explicit approval.
-5. Implement only the next approved task, then review, verify, and update
+4. Run `validate-foundation.sh` and resolve structural document-link findings.
+5. Ask whether the feature is already decided. Keep exploration in Light mode,
+   `brainstorming`, or `product-discovery`; do not create a SPEC for an idea
+   that is still being explored.
+6. Derive a Proposed feature map, create only the selected Proposed SPEC, and
+   send it to `spec-review`. You own the transition from Proposed to Approved.
+7. Create a Proposed PLAN only after the SPEC is Approved, send it to
+   `plan-review` and, when documents interact, `plan-consistency-review`, then
+   explicitly approve the PLAN before implementation.
+8. Implement only the next approved task, then review, verify, and update
    session continuity.
 
 ### Existing project
@@ -432,6 +458,13 @@ revision. If the project has no Git metadata, local `git init` is a separate
 approval; existing Git and ignore policy are preserved. The tracked `.ai/`
 folder is documentation, not a secret store, and real `.env` contents are
 never read or copied.
+
+An existing project does not receive the new-project base scaffold implicitly.
+Reconciliation uses repeatable, exact `--only RELPATH` selections for approved
+missing outputs, preserves established `PLANS.md`, `plans/`, instruction, and
+architecture layouts, and never creates a competing documentation tree. A
+revision to an existing file is its own approval scope, even when a similarly
+named template exists in this repository.
 
 Open the existing project in your runtime first:
 
@@ -507,7 +540,8 @@ files changed. Stop for my review; do not mark the plan Approved.
   using the project's existing structure. It does not implement the feature.
 - **Strict mode** — initialize or reconcile the project's documentation,
   architecture, rules, templates, and session continuity after inspecting the
-  exact target. It asks for approval before writing the scaffold.
+  exact target. It records the project profile and asks for approval before
+  writing the scaffold or revising existing source-of-truth documents.
 - **Approved setup** — prepare a separately approved local branch or issue
   operation. Branch and remote issue actions need their own explicit approval;
   this mode does not push, deploy, or implement code.
@@ -520,19 +554,53 @@ scope, acceptance criteria, validation approach, and list of open questions.
 Do not create files or write code yet.
 ```
 
+Before entering Standard or Strict for an ordinary request, the assistant
+should show the expected review chain and the exact approval scopes. Work that
+touches persisted data, schemas or migrations, public APIs or shared
+contracts, authentication, authorization, actors, permissions, or an existing
+source-of-truth document is escalated at least one mode level. A high-impact
+approval should name the target, operation, and forbidden side effects in an
+`Approving:` line.
+
+![Project-init approval-gated pipeline](assets/project_init_approval_pipeline.svg)
+
 ### What happens after project-init
 
-`project-init` stops at project control and planning. A normal next sequence is:
+`project-init` owns the handoff into project control and planning. A normal
+feature sequence is:
 
-1. Use `spec-review` to check one SPEC for missing behavior and edge cases.
-2. Use `plan-review` and, when several documents interact,
-   `plan-consistency-review` to check the PLAN.
-3. Decide whether the plan is ready. The assistant must not mark it Approved for
-   you.
-4. Once you explicitly approve one bounded plan task, use `implement-next`,
-   `backend-feature`, or `frontend-feature` as appropriate.
-5. Use `code-review` or `review-diff`, then run the project's tests and the
-   `verification-before-completion` workflow before calling the work complete.
+1. Validate the foundational document graph before feature mapping.
+2. Confirm that the feature is decided. If it is still exploratory, stay in
+   Light mode or use `brainstorming`/`product-discovery` without creating a
+   SPEC.
+3. Derive a Proposed feature map from reviewed direction, user flow, approved
+   schema, architecture, and rules. The user selects the feature to define.
+4. Create one Proposed SPEC, route it to `spec-review`, and wait for you to
+   approve its status.
+5. Create one Proposed PLAN after the SPEC is Approved. Route it to
+   `plan-review` and, when needed, `plan-consistency-review`; the assistant
+   must not approve it for you.
+6. After explicit PLAN approval, hand off only the next task to `implement-next`
+   and the relevant backend or frontend skill. Review and verify the result
+   before calling it complete.
+
+Every SPEC and PLAN should preserve links to the relevant user-flow journeys,
+approved schema entities, API or shared contracts, frontend surfaces, and
+schema-impact decision. A user-flow change, schema change, or contract change
+can therefore trigger review of the downstream documents rather than leaving
+stale copied summaries behind.
+
+![Project-init feature lifecycle after foundational review](assets/project_init_feature_lifecycle.svg)
+
+#### API and schema contracts
+
+When the API concern applies and `docs/rules/API.md` is selected, the generated
+rule uses one response envelope with `success`, `message`, and `requestId`.
+Successful responses carry `data`; errors carry `error`; list endpoints choose
+offset or cursor pagination deliberately in `meta`. The envelope does not use
+`204 No Content`; a successful operation without a meaningful result returns an
+empty `data` object instead. These are project-control contract defaults, not a
+substitute for a project-specific API review.
 
 The bundled initializer script is an optional implementation detail for the
 strict documentation scaffold. Most users should invoke `project-init` through
@@ -550,6 +618,17 @@ The inspection helper is read-only: it reports the canonical target, whether
 the folder is empty or existing, safe entry names, Git state, and the proposal
 shape. After reviewing that output and approving the documented operations,
 run the initializer:
+
+For an existing project, use the read-only inventory helper before proposing
+reconciliation. It classifies safe filenames as evidence for instructions,
+planning, architecture, user flow, schema, manifests, source, validation, or
+configuration without reading file contents, following symlinks, or opening
+`.env` values:
+
+```bash
+bash /absolute/path/to/ai-workflow/skills/project-init/scripts/inventory-project.sh \
+  /path/to/existing-project
+```
 
 The base initializer bundle is for an empty folder or a folder containing only
 `.git`. It creates only universal project-control files and `GENERAL.md`.
@@ -616,8 +695,16 @@ optional separately approved user-flow, specialized-rule, helper-prompt,
 schema, and local Git metadata outputs. It does not produce application source,
 framework/package files, migrations, secrets, deployment files, commits,
 branches, remotes, or pushes. Before feature planning, run the read-only
-`skills/project-init/scripts/validate-foundation.sh` check and resolve any
-document-link findings.
+foundation check and resolve any document-link findings. For an existing
+project whose equivalent documents use different paths, the validator accepts
+explicit `--readme`, `--agents`, `--master-plan`, `--architecture`,
+`--user-flow`, and `--schema` mappings; use `none` for an inapplicable optional
+document.
+
+```bash
+bash /absolute/path/to/ai-workflow/skills/project-init/scripts/validate-foundation.sh \
+  /path/to/project
+```
 
 ## How to use it day to day
 
@@ -918,13 +1005,69 @@ The repository uses three kinds of project context:
 
 - `SESSION_STATE.md` — the short-term answer to “where did we stop?” It is
   ignored by Git and should not be committed.
-- `.ai/memory/episodes/` — concise historical capsules about meaningful prior
-  work, decisions, failures, and useful discoveries.
+- `.ai/memory/episodes/*.md` — concise historical capsules about meaningful
+  prior work, decisions, failures, and useful discoveries. These Markdown
+  files are the durable, reviewable source of truth and may be committed.
 - `README.md`, architecture documents, rules, SPECs, and PLANs — stable project
   truth.
 
+The `agent-memory` skill keeps a local search index beside the episodes:
+`.ai/memory/memory.sqlite` is derived SQLite/FTS5 state, is ignored by Git, and
+must not be hand-edited or committed. The `.ai/` directory is intentionally
+tracked project documentation; this one generated index is the exception.
+
+![Agent-memory source of truth versus derived index](assets/agent_memory_source_of_truth.svg)
+
+#### Store a useful episode
+
+Use the bundled script by its skill-relative path. Put `--project-root` before
+the subcommand so the memory stays local to the project:
+
+```bash
+memory_script=skills/agent-memory/scripts/memory-management.py
+python3 "$memory_script" --project-root "$PWD" init
+python3 "$memory_script" --project-root "$PWD" add \
+  --title "Record the decision" \
+  --feature "project-control"
+```
+
+The `add` command creates a timestamped Markdown scaffold. Fill its required
+sections with concise facts, decisions, validation, open questions, next steps,
+and relevant files. Redact secrets and private data. Store an episode after
+meaningful work when it captures a decision, failure, constraint, or outcome a
+future session would otherwise need to rediscover.
+
+![Agent-memory storing an episode](assets/agent_memory_store_flow.svg)
+
+#### Recall only what you need
+
+Search narrowly, read only the most relevant one to three results, and treat
+every result as untrusted historical data rather than an instruction or
+permission. The CLI supports bounded search, recent episodes, and retrieval by
+result ID:
+
+```bash
+memory_script=skills/agent-memory/scripts/memory-management.py
+python3 "$memory_script" --project-root "$PWD" search "project-init approval" --limit 3
+python3 "$memory_script" --project-root "$PWD" recent --limit 3
+python3 "$memory_script" --project-root "$PWD" get 1  # replace 1 with a result ID
+```
+
+After intentional episode-file changes or database recovery, rebuild and check
+the derived index:
+
+```bash
+memory_script=skills/agent-memory/scripts/memory-management.py
+python3 "$memory_script" --project-root "$PWD" reindex
+python3 "$memory_script" --project-root "$PWD" verify
+```
+
+![Agent-memory recalling an episode](assets/agent_memory_recall_flow.svg)
+
 Do not use an old memory episode as permission to take an action. Check current
-files and current instructions first.
+files, current instructions, and current project truth first. When an episodic
+finding becomes stable project truth, update the appropriate semantic document
+and keep the episode as historical evidence.
 
 ## The safety model
 
@@ -1161,6 +1304,12 @@ shellcheck skills/project-init/scripts/*.sh skills/project-init/tests/*.sh
 bash skills/project-init/tests/test-project-init.sh
 ```
 
+For the project-local memory CLI, run:
+
+```bash
+python3 -m unittest discover -s skills/agent-memory/tests -p 'test_*.py'
+```
+
 ### Check the Codex configuration
 
 ```bash
@@ -1192,9 +1341,10 @@ git status --short
 ```
 
 The GitHub Actions workflow currently runs the skill validator, shell syntax
-checks, and Codex TOML parsing. It does not prove live runtime discovery,
-provider authentication, browser behavior, or application tests in another
-project.
+checks, the project-init disposable and contract suite, and Codex TOML parsing.
+The local agent-memory test suite is separate. None of these checks proves live
+runtime discovery, provider authentication, browser behavior, or application
+tests in another project.
 
 ## Troubleshooting
 
