@@ -26,6 +26,11 @@ python3 skills/linkedin-visual/scripts/render_carousel.py \
   --format both
 ```
 
+The renderer refuses to replace an existing PDF, SVG page directory, or
+metadata sidecar by default. Pass `--overwrite` only when regeneration is
+intentional. When a metadata sidecar is written, its `source` value contains
+only the input filename, never an absolute workspace path.
+
 If no `color_scheme` is present, the script randomly selects one of the five
 schemes and records it beside the output in `post.meta.json`. A rerun reuses
 that recorded choice. PDF output requires optional local `cairosvg` and `pypdf`

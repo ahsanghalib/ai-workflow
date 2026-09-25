@@ -172,6 +172,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--format", choices=("svg", "pdf", "both"), default="both")
     parser.add_argument("--scheme", help="Scheme name, or random; default reuses metadata when present")
     parser.add_argument("--page-count", type=int, choices=(5, 7), help="Override the brief page count")
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace existing generated output files or page SVGs",
+    )
     return parser.parse_args()
 
 
@@ -195,6 +200,35 @@ def choose_scheme(brief: dict[str, Any], requested: str | None, metadata_path: P
         choices = ", ".join(SCHEMES)
         raise ValueError(f"Unknown color scheme {candidate!r}. Choose: {choices}")
     return str(candidate)
+
+
+def output_targets(output: Path, output_format: str) -> list[Path]:
+    targets = [output]
+    if output_format == "both":
+        targets.append(output.with_name(output.stem + "-pages"))
+    targets.append(output.with_name(output.stem + ".meta.json"))
+    return targets
+
+
+def ensure_outputs_available(output: Path, output_format: str, overwrite: bool) -> None:
+    if overwrite:
+        return
+    conflicts = [path for path in output_targets(output, output_format) if path.exists()]
+    if conflicts:
+        joined = ", ".join(str(path) for path in conflicts)
+        raise FileExistsError(
+            f"Generated output already exists: {joined}. Use --overwrite only when replacement is intentional."
+        )
+
+
+def prepare_svg_directory(directory: Path, overwrite: bool) -> None:
+    if directory.exists() and not directory.is_dir():
+        raise RuntimeError(f"SVG output target is not a directory: {directory}")
+    directory.mkdir(parents=True, exist_ok=True)
+    if overwrite:
+        for page in directory.glob("page-*.svg"):
+            if page.is_file() or page.is_symlink():
+                page.unlink()
 
 
 def default_pages(page_count: int) -> list[dict[str, Any]]:
@@ -586,6 +620,7 @@ def main() -> int:
     brief = load_brief(args.input)
     page_count, pages = ensure_pages(brief, args.page_count)
     metadata_path = args.output.with_name(args.output.stem + ".meta.json")
+    ensure_outputs_available(args.output, args.format, args.overwrite)
     scheme_name = choose_scheme(brief, args.scheme, metadata_path)
     scheme = SCHEMES[scheme_name]
     templates = template_dir()
@@ -598,7 +633,7 @@ def main() -> int:
 
     if args.format in ("svg", "both"):
         svg_dir = args.output if args.format == "svg" else args.output.with_name(args.output.stem + "-pages")
-        svg_dir.mkdir(parents=True, exist_ok=True)
+        prepare_svg_directory(svg_dir, args.overwrite)
         for index, svg in enumerate(svg_pages):
             (svg_dir / f"page-{index + 1:02d}.svg").write_text(svg, encoding="utf-8")
 
@@ -610,7 +645,7 @@ def main() -> int:
         "page_count": page_count,
         "color_scheme": scheme_name,
         "templates": [page["template"] for page in pages],
-        "source": str(args.input),
+        "source": args.input.name,
     }
     metadata_path.parent.mkdir(parents=True, exist_ok=True)
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
@@ -621,6 +656,6 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (FileNotFoundError, ValueError, RuntimeError) as error:
+    except (FileExistsError, FileNotFoundError, ValueError, RuntimeError) as error:
         print(f"render_carousel: error: {error}", file=sys.stderr)
         raise SystemExit(2)

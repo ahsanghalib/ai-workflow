@@ -81,18 +81,20 @@ Process each topic completely before moving to the next topic.
    the user's professional direction. Do not count a post already commented on
    by the user.
 3. Before drafting each comment, inspect the live post and author identity.
-   Check the tracking file, the current-session ledger, and the visible comments
-   for the user's profile identity and an existing comment. If there is any
-   credible indication that the user already commented, skip the post and
-   continue searching; when uncertain, skip conservatively and record the
-   reason.
+   Check the tracking file and visible comments for the user's profile identity
+   and an existing comment. Maintain an in-memory set of post URLs visited in
+   the current run so repeated search results cannot create a second action. If
+   there is any credible indication that the user already commented, skip the
+   post and continue searching; when uncertain, skip conservatively and record
+   the reason.
 4. For the first eligible post, draft one concise comment. Use the `humanizer`
-   skill for the draft. Preserve facts and the user's actual experience; do not
-   invent a project, metric, client, or opinion. Aim for one specific
-   observation plus one useful addition or natural question, normally 25–70
-   words. Avoid generic praise, empty agreement, copied templates, and
-   promotional claims.
-5. Add the draft to `comments-YYYY-MM-DD.md` with `posted: pending`, then show
+   skill when available; otherwise perform an equivalent voice audit without
+   changing facts, certainty, or user identity. Preserve facts and the user's
+   actual experience; do not invent a project, metric, client, or opinion. Aim
+   for one specific observation plus one useful addition or natural question,
+   normally 25–70 words. Avoid generic praise, empty agreement, copied
+   templates, and promotional claims.
+5. Add the draft to `comments-YYYY-MM-DD.md` with `Posted: pending`, then show
    the post author, post link, and exact draft. Ask: `Submit this comment?` Wait
    for the user's answer.
 6. If approved, re-check the post identity and visible comments immediately
@@ -118,6 +120,8 @@ Process each topic completely before moving to the next topic.
   when checking existing comments.
 - Do not comment on the same post twice during one run, even if search results
   repeat it under multiple topics.
+- Keep each visited post URL in the current-run set until the action is resolved
+  or skipped.
 - Do not submit on a post with comments disabled, a missing comment control, or
   an unclear post identity. Record `no` with the reason.
 - Do not click external article, job, or tracking links merely to qualify a
@@ -137,10 +141,11 @@ the user explicitly asks for connection requests.
    relationship status is unclear, do not send.
 3. Choose at most one strong connection candidate per topic unless the user
    requests a different limit. Draft a concise, specific note using the
-   `humanizer` skill. Mention the shared topic or post without pretending to
-   know the person or claiming a relationship that does not exist. Keep it
-   within LinkedIn's current UI character limit.
-4. Add the candidate to `connect.md` with `sent: pending`, display the profile
+   `humanizer` skill when available; otherwise perform an equivalent voice
+   audit. Mention the shared topic or post without pretending to know the person
+   or claiming a relationship that does not exist. Keep it within LinkedIn's
+   current UI character limit.
+4. Add the candidate to `connect.md` with `Sent: pending`, display the profile
    and exact note, and ask: `Send this connection request?` Wait for approval.
 5. If approved, re-check the profile and relationship status immediately before
    sending. Send through the visible UI and verify the invitation is shown as

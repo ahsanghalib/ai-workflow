@@ -97,7 +97,9 @@ Read the references needed for the current branch:
    require a Figma MCP connection. Keep every page traceable to the approved
    post or evidence ledger. If no suitable renderer is available, preserve the
    approved source and proposal, mark rendering and visual QA as unverified,
-   and do not claim a completed PDF.
+   and do not claim a completed PDF. The local renderer refuses existing
+   outputs by default; use its explicit overwrite option only after the user
+   requests regeneration.
 
 7. Read [references/pdf-qa.md](references/pdf-qa.md). Run structural checks,
    render pages when possible, inspect the rendered pages, fix issues, and
