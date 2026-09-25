@@ -81,7 +81,8 @@ Examples:
 Preferred sequence:
 
 1. Search narrowly:
-   `python3 scripts/memory-management.py --project-root "$PROJECT_ROOT" search "<specific query>"`
+   `python3 scripts/memory-management.py --project-root "$PROJECT_ROOT" \
+   search "<specific query>"`
 2. Read only the most relevant memory:
    `python3 scripts/memory-management.py --project-root "$PROJECT_ROOT" get <id>`
 3. Do not load the entire episode history.
@@ -130,7 +131,8 @@ Do not store:
 Use:
 
 ```bash
-python3 scripts/memory-management.py --project-root "$PROJECT_ROOT" add --title "<short title>" --feature "<feature>"
+python3 scripts/memory-management.py --project-root "$PROJECT_ROOT" add \
+  --title "<short title>" --feature "<feature>"
 ```
 
 The command creates a scaffold. Fill every session-capsule section before
@@ -183,9 +185,9 @@ When an episodic finding becomes stable project truth:
 
 1. Update the appropriate semantic document:
    - `README.md`
-   - `MASTER_PLAN.md`
-   - `docs/PROJECT_ARCHITECTURE.md`
-   - active/specification docs
+   - `docs/specs/` and the active SPEC
+   - `docs/architecture.md` or an ADR when those documents exist and are
+     authoritative
    - ADR/decision record
    - engineering rules
 2. Keep the episode as historical evidence.

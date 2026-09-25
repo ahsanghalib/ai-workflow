@@ -1,8 +1,7 @@
 ---
 name: backend-feature
-description: Implement one approved backend/API PLAN task for a feature while following its SPEC and relevant repository rules. Use after planning is approved. Keep scope bounded, use TDD for testable behavior, use an available structural index when useful, and verify before completion. Do not redesign the product or expand into frontend work unless the approved task requires a shared-contract change.
+description: Implement exactly one bounded backend/API task selected from an approved or in-progress SPEC while following its contract and repository rules. Use for server-side feature, bug, improvement, migration, or maintenance work; do not use for SPEC authoring, repository bootstrap, or frontend design.
 license: MIT
-compatibility: repository commands determine runtime dependencies
 ---
 
 # Backend Feature
@@ -11,35 +10,39 @@ compatibility: repository commands determine runtime dependencies
 
 For substantial work, require:
 
-- the exact approved SPEC and backend PLAN path or identifier
-- the exact first eligible PLAN task, selected through `implement-next` when
+- the exact approved or in-progress SPEC path or identifier
+- valid `Approval: Explicit user approval — YYYY-MM-DD` evidence
+- the exact first eligible SPEC task, selected through `implement-next` when
   that companion is available
-- a PLAN status of `Approved` and a matching SPEC scope; never infer approval
-  from the user's implementation request
+- a matching SPEC scope; never infer approval from the user's implementation
+  request, a review verdict, an existing task, or a legacy PLAN
 
 An explicitly requested trivial/localized fix may proceed without persistent
-SPEC/PLAN files only when it is one bounded behavior or defect, does not change
+SPEC files only when it is one bounded behavior or defect, does not change
 schema, public API, authentication/authorization, security boundaries, or
 deployment behavior, and has a clear narrow validation command. If any of those
-conditions is uncertain, stop and route the work through `project-init`.
+conditions is uncertain, stop and route the work through `spec-workflow`.
 
 ## Task ownership
 
-When the approved PLAN has ordered unchecked tasks, use `implement-next` to
-select the first eligible task and preserve its red/green/refactor gates. Do
-not choose a later task or implement several plan tasks in one pass. If that
-companion is unavailable, require the same exact-plan, first-task, and TDD
-checks directly; do not silently select a task from repository context.
+When the SPEC has ordered unchecked tasks, use `implement-next` to select the
+first dependency-ready task and preserve its red/green/refactor gates. Do not
+choose a later task or implement several SPEC tasks in one pass. If that
+companion is unavailable, require the same exact-SPEC, first-task, approval,
+and TDD checks directly; do not silently select a task from repository
+context. If tasks are missing, hand back to `spec-workflow`.
 
 ## Context loading
 
 Read only:
 
 - root `AGENTS.md` and `SESSION_STATE.md` when present
-- active SPEC and backend PLAN
-- the repository's `GENERAL.md` and `BACKEND.md`
-- the repository's `DATABASE.md`, `API.md`, `AUTH.md`, `CONTRACTS.md`,
-  `SECURITY.md`, and `TESTING.md` only when the change touches those areas
+- the active SPEC, selected task, and its execution context
+- applicable repository rules discovered from `AGENTS.md`, `docs/rules/`, and
+  existing project conventions
+- database, API, authentication, contracts, security, and testing rules only
+  when the change touches those areas; preserve user-owned legacy locations
+  when they remain authoritative
 
 Use an available repository structural index, such as CodeGraph, for indexed
 structural questions. Use normal reads/search for docs, configuration, and
@@ -52,10 +55,12 @@ tooling without approval.
 
 ## Implementation
 
-1. Confirm the exact SPEC, PLAN, selected task, affected area, current worktree
+1. Confirm the exact SPEC, selected task, affected area, current worktree
    state, and validation target before editing.
 2. Use `test-driven-development` for testable behavior.
-3. If persistent data changes, ensure `schema-design` decisions are approved before services/routes.
+3. If persistent data changes, ensure the SPEC's data-design decision is
+   recorded and any required `schema-design` review is complete before
+   services/routes.
 4. Implement only the selected task and the smallest coherent change it needs.
 5. Validate external input at the transport boundary, enforce authorization
    server-side at the resource/action scope, and keep persistence models out of
@@ -80,6 +85,6 @@ with alternative verification. Use configured deterministic tools only when
 relevant. Before claiming done, use `verification-before-completion`.
 
 Hand off completed substantial work to `code-review` when available; otherwise
-use the repository's existing diff-review workflow. Report the selected task,
-changed files, validation evidence, untested paths, assumptions, and handoff;
-do not mark the whole PLAN complete from this skill.
+use the repository's existing diff-review workflow. Report the selected SPEC
+task, changed files, validation evidence, untested paths, assumptions, and
+handoff; do not mark the SPEC completed from this skill.

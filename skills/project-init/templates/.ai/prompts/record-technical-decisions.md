@@ -3,8 +3,10 @@
 
 # Record Approved Technical Decisions
 
-Use `project-init` after the user has explicitly approved one or more
-technical choices.
+Use `technical-design` after the user has explicitly approved one or more
+technical choices. This is compatibility guidance for existing project-control
+documents; technical conclusions for normal work belong in the approved SPEC's
+`# Execution` section or a justified durable architecture/rules document.
 
 Read the current `MASTER_PLAN.md`, architecture source, `AGENTS.md`, relevant
 rules, and `docs/DB_SCHEMA.md` when it exists. Record only approved decisions:

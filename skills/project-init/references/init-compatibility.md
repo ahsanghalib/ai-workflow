@@ -59,7 +59,8 @@ approved write that changes `AGENTS.md` or equivalent instruction routing:
 4. keep working under the instructions already active until the reload occurs;
 5. do not claim that the new rules governed earlier actions.
 
-The handoff should also point to `SESSION_STATE.md`, the active SPEC/PLAN, and
-any unresolved approval. If the harness cannot reload, provide the manual
+The handoff should also point to `SESSION_STATE.md`, the active SPEC and task,
+any optional legacy PLAN, and any unresolved approval. If the harness cannot
+reload, provide the manual
 fallback: start a new session in the target, read the applicable `AGENTS.md`
 files, then resume from the recorded state.

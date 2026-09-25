@@ -1,8 +1,9 @@
 # Reconciliation Population Rules
 
-Use this reference after source-of-truth detection and before proposing missing
-Markdown documents. Population is a documentation operation; it does not
-implement application behavior or rewrite an existing source by default.
+Use this reference after source-of-truth detection and before proposing a
+missing project-control document. Population is a documentation operation; it
+does not implement application behavior, create a feature plan, or rewrite an
+existing source by default.
 
 ## Evidence levels
 
@@ -65,23 +66,18 @@ decision and preserve the existing output.
    matching sections.
 5. If a missing document depends on an unresolved decision, create a clearly
    labelled draft only after approval; do not fabricate the decision.
-6. Report evidence-to-field mappings and stop for foundational-document review.
-   The user must review the populated direction, user flow, architecture, and
-   baseline schema when applicable before feature candidates, SPEC, PLAN,
-   migration, API, frontend, or application implementation work. Resume the
-   feature lifecycle only after that review is complete.
+6. Report evidence-to-field mappings and stop for review of the affected
+   project control. Do not infer that a populated control authorizes a SPEC,
+   PLAN, migration, API, frontend, or application implementation. Substantive
+  work hands off to `spec-workflow`.
 
 ## Document-specific boundaries
 
-- `MASTER_PLAN.md`: product direction, outcomes, proposed scope, non-goals,
-  assumptions, and open questions. Do not invent features or priorities.
-- `docs/USER_FLOW.md`: confirmed and proposed actors, journeys, permissions,
-  states, validation, failure, and recovery. Keep it technology-neutral.
-- `docs/DB_SCHEMA.md`: only after persistence approval and user-flow review;
-  record confirmed or explicitly proposed data design, access style, and
-  migration decisions. Do not create migrations or models.
-- `docs/PROJECT_ARCHITECTURE.md`: safe architecture evidence and open choices;
-  do not turn framework detection into approval of the future design.
+- `MASTER_PLAN.md`, `docs/USER_FLOW.md`, `docs/DB_SCHEMA.md`, and
+  `docs/PROJECT_ARCHITECTURE.md`: legacy or explicitly requested documents;
+  preserve them when user-owned, and never create them by default. Do not turn
+  filename or framework detection into approval of product, schema, or future
+  architecture decisions.
 - `AGENTS.md`: operational commands, validation, source layout, security,
   generated-file ownership, and routing. Never place secrets or invent
   commands that were not confirmed or verified.

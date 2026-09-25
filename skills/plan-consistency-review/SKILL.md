@@ -1,6 +1,6 @@
 ---
 name: plan-consistency-review
-description: Review project requirements, architecture, plans, tasks, and validation artifacts for contradictions, missing coverage, stale references, and unresolved assumptions before implementation. Use after planning or task decomposition and before an approved task is implemented. Do not create or revise planning artifacts.
+description: Review an explicitly selected legacy or unusually large PLAN workflow for contradictions, missing coverage, stale references, and unresolved assumptions across requirements, architecture, tasks, and validation artifacts. This optional path is not required for normal SPEC/task work; do not create or revise planning artifacts.
 license: MIT
 metadata:
   source: github/spec-kit
@@ -13,6 +13,10 @@ Check whether the planning artifacts agree with one another. This is a
 read-only analysis skill. It does not create a second specification system,
 rewrite plans, implement code, create issues, or decide that a plan is approved.
 
+Use it only when the user explicitly selects a PLAN-based workflow for
+unusually large or legacy work. Normal SPEC/task work does not require this
+cross-artifact PLAN review and must not depend on it.
+
 Use the repository's actual artifact names. Do not assume a `.specify/`
 directory, a CLI, slash commands, or a particular agent integration.
 
@@ -21,9 +25,12 @@ directory, a CLI, slash commands, or a particular agent integration.
 - Use `product-discovery` for unknown customer problems, outcomes, or market
   requirements.
 - Use `technical-design` for proposing architecture or interface decisions.
-- Use `project-init` for creating or revising plans and tasks.
-- Use `implement-next` only after the plan and its first task satisfy the
-  repository's approval and TDD gates.
+- For an explicitly selected legacy PLAN, use `project-init` only when the
+  repository documents it as the compatibility owner; otherwise return the
+  finding to the user. Normal SPEC/task work is owned by `spec-workflow` and
+  does not create or revise a PLAN.
+- For an explicitly selected PLAN workflow, use `implement-next` only after the
+  plan and its first task satisfy the repository's approval and TDD gates.
 - Use `verification-before-completion` for final completion evidence.
 
 ## Review workflow
@@ -50,9 +57,11 @@ report that scope is ambiguous. Do not choose one silently.
 Normalize the artifacts without changing them. For each requirement or
 acceptance criterion, record:
 
+<!-- markdownlint-disable MD013 -->
 | Requirement                 | Source      | Design link     | Task(s)  | Validation evidence     | Status                |
 | --------------------------- | ----------- | --------------- | -------- | ----------------------- | --------------------- |
 | exact ID or short statement | `path:line` | module/contract | task IDs | command/test or missing | confirmed/assumed/gap |
+<!-- markdownlint-enable MD013 -->
 
 Preserve the project's IDs and terminology. Do not invent IDs to make a row
 look complete.
@@ -95,9 +104,11 @@ guessing.
 
 Return one findings table, ordered by impact:
 
+<!-- markdownlint-disable MD013 -->
 | #   | Severity        | Category                                | Evidence    | Finding     | Recommended owner/action                            |
 | --- | --------------- | --------------------------------------- | ----------- | ----------- | --------------------------------------------------- |
 | 1   | HIGH/MEDIUM/LOW | coverage/contradiction/stale/assumption | `path:line` | exact issue | `project-init` / `technical-design` / user decision |
+<!-- markdownlint-enable MD013 -->
 
 Then report:
 
@@ -116,16 +127,18 @@ Then report:
 
 ## Consistency verdict
 
-Ready for approved implementation | Needs clarification | Plan revision required
+No material contradiction | Needs clarification | Plan revision required
 ```
 
 State the exact artifacts inspected and any validation not run. A clean result
 means no material contradiction or missing acceptance path was found within the
-inspected scope; it does not approve the plan or prove the code is correct.
+inspected scope; it is a consistency verdict only, not user approval of the
+plan or SPEC and not proof that the code is correct.
 
 ## Safety and handoff
 
 Remain read-only. Do not edit `PLANS.md`, plan files, `SESSION_STATE.md`, code,
-tests, or issue trackers. Hand findings to `project-init` for an authorized
-plan revision, to `technical-design` for an architecture decision, or to the
-user when a requirement is unresolved.
+tests, or issue trackers. Hand findings for an explicitly selected legacy PLAN
+to its documented owner (possibly `project-init`) for an authorized revision,
+to `technical-design` for an architecture decision, or to the user when a
+requirement is unresolved. Route normal SPEC corrections to `spec-workflow`.

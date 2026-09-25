@@ -5,6 +5,10 @@ description: Use when reviewing a working-tree diff or specified local Git range
 
 # Review Diff
 
+Use this as the minimal read-only path for an explicitly scoped working-tree
+diff or local Git range when contract reconciliation is not requested. It does
+not require a SPEC or PLAN and is not part of an approval workflow.
+
 ## Review contract
 
 - If no scope is supplied, review the current working-tree diff. If a scope is
@@ -21,6 +25,7 @@ description: Use when reviewing a working-tree diff or specified local Git range
 - Order findings by severity. Every finding must include a concise title, exact
   file and line evidence, impact, and a concrete remediation direction.
 - If there are no actionable findings, say so in one sentence. Then list only
-  concise residual risks and testing gaps.
+  concise residual risks and testing gaps. A finding-free result is a review
+  verdict, not user approval of the change.
 - Do not approve, merge, commit, push, publish, deploy, or modify the reviewed
   work. The user retains every follow-up decision.

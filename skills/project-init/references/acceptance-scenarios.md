@@ -70,12 +70,12 @@ or harness-reload check in the target environment.
 ## Output boundary after approval
 
 **Given** approved documentation bootstrap, **when** the initializer runs,
-**then** it creates only the base project-control Markdown, optional
-`.gitignore`, empty documentation directories, and separately approved local
-Git metadata. Profile-selected user-flow, specialized rules, prompts, and
-schema are separate outputs. It does not create application source, framework
-files, dependencies, migrations, secrets, commits, branches, remotes, or
-pushes.
+**then** it creates only `AGENTS.md`, `SESSION_STATE.md`, `.ai/memory/`,
+`docs/specs/`, optional missing `.gitignore`, and separately approved local Git
+metadata. Legacy documents, rules, prompts, plan/review directories, and
+schema outputs are separate explicit selections. It does not create application
+source, framework files, dependencies, migrations, secrets, commits, branches,
+remotes, or pushes.
 
 Automated evidence: the aggregate disposable suite and initializer tests. Live
 evidence still requires reviewing the final diff and reporting unexercised
@@ -85,13 +85,14 @@ runtime behavior separately.
 
 **Given** an existing target or an established planning layout, **when** a
 bootstrap write is approved, **then** the full new-project scaffold is refused
-and only explicitly selected `--only RELPATH` outputs are eligible. The helper
-does not create a competing plan, schema, or instruction tree.
+and only explicitly selected `--only RELPATH` outputs are eligible. Existing
+legacy files and layouts remain preserved; the helper does not create a
+competing plan, schema, or instruction tree.
 
 **Given** a reviewed user flow and approved persistence, **when** schema output
-is approved, **then** it is a separate exact selection of
-`docs/DB_SCHEMA.md --with-schema`; the initial scaffold does not create the
-schema as a side effect.
+is explicitly requested and approved, **then** it is a separate exact
+selection of `docs/DB_SCHEMA.md --with-schema`; the initial scaffold does not
+create the schema as a side effect or require it for a later SPEC.
 
 Automated evidence: initializer tests cover existing `PLANS.md`, selected
 output, schema sequencing, copy failure, traversal failure, and symlink
@@ -100,11 +101,10 @@ boundaries. Live evidence still requires reviewing the per-file approval scope.
 ## Conditional scaffold profile
 
 **Given** a project shape and concern answers, **when** the base scaffold is
-approved, **then** it creates only universal control documents and
-`GENERAL.md`. `USER_FLOW.md`, specialized rules, and `.ai/prompts/` are added
-only after the profile is reviewed and the exact outputs are selected.
-Unknown concerns remain unresolved rather than being inferred from a project
-type. `DB_SCHEMA.md` remains a separate selection after user-flow review.
+approved, **then** it creates only the minimal control plane. Legacy documents,
+specialized rules, and `.ai/prompts/` are added only after a concrete need is
+reviewed and the exact outputs are selected. Unknown concerns remain
+unresolved rather than being inferred from a project type.
 
 Automated evidence: the initializer and traceability tests check the base
 outputs, optional selections, and schema gate. Live evidence still requires
@@ -125,12 +125,12 @@ diff in the target project.
 ## Foundational consistency validation
 
 **Given** base control documents, **when** `scripts/validate-foundation.sh`
-runs before feature planning, **then** it verifies the required references
-among `MASTER_PLAN.md`, `AGENTS.md`, `docs/PROJECT_ARCHITECTURE.md`, and
-`README.md`, plus selected `USER_FLOW.md` and `DB_SCHEMA.md` dependencies. A
-failure stops the lifecycle at **Foundational review pending** with actionable
-document-level findings. The check proves structural consistency only; it does
-not prove that product meaning, architecture, or approvals are correct.
+runs after bootstrap or reconciliation, **then** it verifies `AGENTS.md`,
+`SESSION_STATE.md`, `.ai/memory/`, and `docs/specs/` (or explicitly mapped
+equivalents). Optional legacy paths are checked only when explicitly selected.
+A failure reports actionable control-level findings. The check proves
+structural consistency only; it does not prove product meaning, architecture,
+or approvals are correct.
 
 Automated evidence: `test-validate-foundation.sh` covers base, selected flow,
 selected schema, inconsistent references, and `.env` exclusion. Live evidence
@@ -141,10 +141,10 @@ still requires user review of the documents and approval state.
 **Given** an existing project whose equivalent control documents live at
 project-specific paths, **when** reconciliation identifies those files,
 **then** the validator accepts an explicit mapping through `--readme`,
-`--agents`, `--master-plan`, `--architecture`, `--user-flow`, and `--schema`
-without forcing duplicate canonical files. `none` disables an inapplicable
-optional document, while selected paths must exist and satisfy the same
-cross-document reference checks.
+`--agents`, `--session-state`, `--specs`, and `--memory` without forcing
+duplicate canonical files. Legacy `--master-plan`, `--architecture`,
+`--user-flow`, `--schema`, `--plans`, and `--reviews` paths are optional and
+checked only when selected.
 
 Automated evidence: `test-validate-foundation.sh` validates a renamed and
 nested existing layout. Live evidence still requires reviewing the mapping and
@@ -153,16 +153,18 @@ the resulting document-level findings.
 ## Decided versus explored
 
 **Given** a feature request, **when** it has not yet been decided, **then** the
-workflow asks whether it is already decided or still being explored and routes
-exploration to Light, `brainstorming`, or `product-discovery` without creating
-a SPEC. A decided feature may continue to the proposed SPEC lifecycle.
+workflow does not plan it internally; **then** project-init completes only the
+control bootstrap/reconciliation and routes the request to
+`spec-workflow`. Exploration may still use `brainstorming` or
+`product-discovery`, but project-init creates no SPEC or PLAN.
 
 ## Review ceremony preview
 
 **Given** a request that may enter Standard or Strict, **when** the mode is
-selected, **then** the handoff states the expected
-`SPEC → spec-review → PLAN → plan-review/plan-consistency-review → explicit
-user approval` chain and waits before writing.
+selected, **then** the handoff states that project-init owns only
+`inspect → propose → explicit approval → bootstrap/reconcile → validate`, and
+that substantive work routes to `spec-workflow` before any SPEC or
+implementation lifecycle.
 
 ## Risk-based escalation
 

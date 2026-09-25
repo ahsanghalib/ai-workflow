@@ -1,5 +1,10 @@
 # Feature Map and SPEC Lifecycle
 
+This is an explicit legacy compatibility reference for repositories that still
+use a feature map and PLAN artifacts. Normal substantive work uses
+`spec-workflow`, keeps tasks inside the SPEC, and does not require the document
+sequence described below. Do not load this reference for ordinary bootstrap.
+
 Use this reference after the product direction and relevant user-flow/schema
 contracts have been reviewed. The initial project schema is an exception to
 feature-SPEC ordering: `schema-design` may review that baseline from approved

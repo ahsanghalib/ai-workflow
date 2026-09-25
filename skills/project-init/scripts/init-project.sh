@@ -3,9 +3,9 @@ set -euo pipefail
 
 usage() {
   printf 'usage: %s [--with-schema] [--only RELPATH]... [--init-git] [--allow-nested] [target-directory]\n' "$0"
-  printf 'Copy the project-init documentation scaffold into a target directory.\n'
+  printf 'Copy the minimal project-init control scaffold into a target directory.\n'
   printf '%s\n' 'Use --only after reviewing and approving the exact selected output paths.'
-  printf '%s\n' 'Use --with-schema only with --only docs/DB_SCHEMA.md after persistence and user-flow review.'
+  printf '%s\n' 'Use --with-schema only with --only docs/DB_SCHEMA.md for explicit legacy schema support.'
   printf '%s\n' 'Use --init-git only after separate approval for this exact target; it creates no commit or remote.'
   printf '%s\n' 'Use --allow-nested only after separate approval to initialize inside another Git worktree.'
 }
@@ -263,11 +263,14 @@ while IFS= read -r -d '' src; do
   template_files+=("$src")
 done < "$template_list"
 
+default_directories=(.ai/memory docs/specs)
+scaffold_directories=(.ai/memory docs/specs docs/plans docs/reviews)
+
 selection_matches() {
   local rel="$1" selected_path
   if [[ "$selected_mode" != true ]]; then
     case "$rel" in
-      README.md|AGENTS.md|MASTER_PLAN.md|SESSION_STATE.md|docs/PROJECT_ARCHITECTURE.md|docs/plans/INDEX.md|docs/rules/GENERAL.md|docs/templates/*|.gitignore.template)
+      AGENTS.md|SESSION_STATE.md|.gitignore.template)
         return 0
         ;;
       *)
@@ -284,14 +287,10 @@ selection_matches() {
 selection_matches_directory() {
   local directory="$1" selected_path
   if [[ "$selected_mode" != true ]]; then
-    case "$directory" in
-      docs/specs|docs/plans|docs/reviews)
-        return 0
-        ;;
-      *)
-        return 1
-        ;;
-    esac
+    for default_directory in "${default_directories[@]}"; do
+      [[ "$directory" == "$default_directory" ]] && return 0
+    done
+    return 1
   fi
   for selected_path in "${selected_paths[@]}"; do
     [[ "$selected_path" == "$directory" || "$selected_path" == "$directory/"* ]] && return 0
@@ -304,7 +303,7 @@ scaffold_path_is_known() {
 
   [[ "$relative" == .git || "$relative" == .git/* ]] && return 0
   case "$relative" in
-    docs/specs|docs/plans|docs/reviews)
+    .ai/memory|docs/specs|docs/plans|docs/reviews)
       return 0
       ;;
   esac
@@ -342,7 +341,7 @@ base_scaffold_is_complete() {
     [[ "$destination_rel" == '.gitignore.template' ]] && destination_rel='.gitignore'
     [[ -e "$target/$destination_rel" || -L "$target/$destination_rel" ]] || return 1
   done
-  for directory in docs/specs docs/plans docs/reviews; do
+  for directory in "${default_directories[@]}"; do
     [[ -d "$target/$directory" && ! -L "$target/$directory" ]] || return 1
   done
   return 0
@@ -352,7 +351,7 @@ if [[ "$selected_mode" != true && "$new_project" != true ]]; then
   if base_scaffold_is_complete && scaffold_contains_only_known_outputs; then
     if [[ "$initialize_git" != true || -e "$target/.git" || -L "$target/.git" ]]; then
       printf 'target: %s\n' "$target"
-      printf 'no-op: project-init base scaffold already exists; no files written\n'
+      printf 'no-op: project-init minimal scaffold already exists; no files written\n'
       exit 0
     fi
   else
@@ -364,11 +363,12 @@ fi
 if [[ "$selected_mode" == true ]]; then
   for selected_path in "${selected_paths[@]}"; do
     selection_found=false
-    case "$selected_path" in
-      docs/specs|docs/plans|docs/reviews)
+    for scaffold_directory in "${scaffold_directories[@]}"; do
+      if [[ "$selected_path" == "$scaffold_directory" ]]; then
         selection_found=true
-        ;;
-    esac
+        break
+      fi
+    done
     if [[ "$selection_found" != true ]]; then
       for src in "${template_files[@]}"; do
         rel="${src#"$template_root"/}"
@@ -444,7 +444,7 @@ preflight_scaffold() {
     preflight_directory "$directory"
   done
 
-  for directory in docs/specs docs/plans docs/reviews; do
+  for directory in "${scaffold_directories[@]}"; do
     if selection_matches_directory "$directory"; then
       preflight_directory "$target/$directory"
     fi
@@ -534,7 +534,7 @@ for src in "${template_files[@]}"; do
   fi
 done
 
-for directory in docs/specs docs/plans docs/reviews; do
+for directory in "${scaffold_directories[@]}"; do
   if selection_matches_directory "$directory" && ! ensure_parent_dir "$target/$directory"; then
     exit 1
   fi
@@ -551,4 +551,4 @@ if [[ "$initialize_git" == true ]]; then
   fi
 fi
 
-echo "Project documentation scaffold initialized. Fill MASTER_PLAN.md before asking AI to refine project-specific docs."
+echo 'Project-init minimal control scaffold initialized; feature requests hand off to spec-workflow.'

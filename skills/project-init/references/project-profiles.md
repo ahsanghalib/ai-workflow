@@ -1,8 +1,8 @@
 # Project-Init Profiles
 
-Use this reference to decide which project-control documents apply before
-copying optional scaffold outputs. Project type is a discovery input, not
-permission to invent a stack or product behavior.
+Use this reference only when reconciliation or an explicitly requested
+project-control output needs a concern check. Project type is a discovery
+input, not permission to invent a stack, product behavior, or documentation.
 
 ## Profile discovery
 
@@ -18,10 +18,11 @@ Ask the user to choose the closest project shape:
 
 Then record each applicability answer as `yes`, `no`, or `unknown` for:
 
+<!-- markdownlint-disable MD013 -->
 | Concern | Why it selects documents |
 | --- | --- |
-| Actor or user flow | Select `docs/USER_FLOW.md` for human or system journeys, permissions, and states. |
-| Persistence | Select the reviewed `docs/DB_SCHEMA.md` step only after the flow and data needs are approved. |
+| Actor or user flow | Consider contextual flow documentation only when several features share a non-trivial lifecycle. |
+| Persistence | Consider database rules or schema context only when executable schema leaves durable invariants unclear. |
 | HTTP or OpenAPI | Select `docs/rules/API.md`. |
 | Frontend or UI | Select `docs/rules/FRONTEND.md` and, when a shared visual system exists, `UI.md`. |
 | Authentication or authorization | Select `docs/rules/AUTH.md` and `SECURITY.md`. |
@@ -30,39 +31,38 @@ Then record each applicability answer as `yes`, `no`, or `unknown` for:
 | Backend or server implementation | Select `docs/rules/BACKEND.md`. |
 | Security-sensitive work | Select `docs/rules/SECURITY.md`. |
 | Database or schema work | Select `docs/rules/DATABASE.md`. |
+<!-- markdownlint-enable MD013 -->
 
 Do not infer `yes` from a project type alone. If the answer is `unknown`, keep
 the output unselected, record the unresolved question in the handoff, and ask
-before adding the specialized document.
+before adding a specialized document. A concern may exist without justifying a
+new Markdown artifact.
 
 ## Base scaffold
 
-Every approved new-project scaffold may create these missing outputs:
+Every approved new-project scaffold normally creates only `AGENTS.md`,
+`SESSION_STATE.md`, `.ai/memory/`, and `docs/specs/`. It may also copy the
+`.gitignore.template` source as `.gitignore` when that file is missing.
 
-- `README.md`, `AGENTS.md`, `MASTER_PLAN.md`, and `SESSION_STATE.md`;
-- `docs/PROJECT_ARCHITECTURE.md` and `docs/plans/INDEX.md`;
-- `docs/rules/GENERAL.md`;
-- every `docs/templates/*.md` file;
-- the `.gitignore.template` source as `.gitignore`; and
-- empty `docs/specs/`, `docs/plans/`, and `docs/reviews/` directories.
-
-The initializer copies this base only. It never chooses a profile or writes
-optional outputs silently.
+The initializer does not choose a profile or write optional outputs silently.
+`README.md`, legacy direction/architecture/flow/schema files, rules, prompts,
+plan indexes, review directories, and templates require explicit selections.
 
 ## Optional outputs
 
-After the profile and concern answers are reviewed, select the applicable
-outputs individually with `--only`:
+After the profile and concern answers are reviewed, select an actually
+justified output individually with `--only`:
 
-- `docs/USER_FLOW.md` when actor or system journeys apply;
+- contextual flow documentation when several features share a non-trivial
+  lifecycle;
 - the specialized rule files selected by the concern answers;
 - `.ai/prompts/` when the project wants the tracked helper-prompt library;
-- `docs/DB_SCHEMA.md` only with the separate exact command
-  `--only docs/DB_SCHEMA.md --with-schema`, after persistence and user-flow
-  review; and
+- legacy `docs/DB_SCHEMA.md` only with the separate exact command
+  `--only docs/DB_SCHEMA.md --with-schema`; and
 - any other bundled file only when its exact purpose and approval are recorded.
 
 Optional files are copy-if-missing and are never a license to overwrite an
-existing project document. This profile contract controls bootstrap output;
-existing-project reconciliation still requires explicit repeatable selections
-and preserve-first review.
+existing project document. This profile contract controls explicit output;
+existing-project reconciliation still requires repeatable selections and
+preserve-first review. Feature requests hand off to `spec-workflow`, not to
+this profile interview.

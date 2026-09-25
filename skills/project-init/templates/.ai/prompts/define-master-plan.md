@@ -3,6 +3,10 @@
 
 # Define the Master Plan
 
+This is an explicit legacy compatibility prompt. New repositories do not
+require a master plan; use `product-discovery` for unresolved product outcomes
+and `spec-workflow` for a decided substantive work request.
+
 Use `project-init` to draft or revise product direction in `MASTER_PLAN.md`.
 
 Record the product goal, users, outcomes, scope, non-goals, proposed features,

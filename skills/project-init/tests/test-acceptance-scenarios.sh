@@ -18,8 +18,8 @@ grep -Fq 'No write before approval' "$acceptance" ||
   fail 'acceptance reference omitted no-write scenario'
 grep -Fq 'Reload after instruction changes' "$acceptance" ||
   fail 'acceptance reference omitted reload scenario'
-grep -Fq 'Default mode and escalation' "$script_dir/SKILL.md" ||
-  fail 'skill omitted adaptive mode acceptance contract'
+grep -Fq 'spec-workflow' "$script_dir/SKILL.md" ||
+  fail 'skill omitted the substantive-work handoff contract'
 grep -Fq 'Decided versus explored' "$acceptance" ||
   fail 'acceptance reference omitted the discovery gate scenario'
 grep -Fq 'Review ceremony preview' "$acceptance" ||

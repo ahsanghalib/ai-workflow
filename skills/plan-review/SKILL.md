@@ -1,17 +1,24 @@
 ---
 name: plan-review
-description: Review one user-authored implementation PLAN against an approved SPEC, repository rules, and current architecture before implementation. Use to find missing work, wrong ordering, scope creep, test/contract/schema/security gaps, or invalid assumptions. Do not edit plans; use project-init for plan authoring/refinement and plan-consistency-review for cross-artifact traceability.
+description: Review one explicitly requested legacy or unusually large implementation PLAN against its SPEC, repository rules, and current architecture. Use to find missing work, wrong ordering, scope creep, test/contract/schema/security gaps, or invalid assumptions. This is not a mandatory path for normal SPEC/task work; do not edit plans.
 license: MIT
-compatibility: no bundled executable dependencies
 ---
 
 # Plan Review
 
 A PLAN answers **how this implementation slice will be built**.
 
+## When this skill applies
+
+Use this skill only when the user names the exact PLAN or explicitly chooses a
+formal PLAN workflow for unusually large or legacy work. Normal work is
+SPEC/task-centric and must not be routed through this skill or depend on its
+verdict.
+
 ## Boundaries
 
-- Review one proposed PLAN for executability and coverage before implementation.
+- Review one explicitly selected PLAN for executability and coverage before
+  implementation.
 - Require the exact PLAN path or identifier from the user. If the target or its
   referenced SPEC is ambiguous, do not choose one from the repository.
 - Use `project-init` when the user wants a plan created or edited; do not edit
@@ -21,7 +28,8 @@ A PLAN answers **how this implementation slice will be built**.
 - Use `technical-design` when a missing architecture or interface decision must
   be proposed before the PLAN can be judged.
 - Do not change plan or SPEC status, create branches or issues, or authorize
-  implementation from a review verdict.
+  implementation from a review verdict. A ready verdict is review evidence,
+  not user approval of the PLAN, SPEC, code, or implementation.
 
 ## Inputs
 
@@ -44,7 +52,7 @@ read secrets, credentials, `.env` files, browser state, or unrelated history.
 
 1. Confirm the exact selected PLAN and its referenced SPEC before reviewing the
    current text. If either is missing or ambiguous, stop and report that
-   condition.
+   condition. Do not infer either artifact from normal SPEC/task work.
 2. Check the SPEC's approval/status gate when one exists. If the SPEC is not
    approved, report that limitation separately; do not treat an unapproved
    requirement as settled fact.
@@ -83,9 +91,11 @@ Default: a read-only findings report and verdict in chat. For each actionable
 finding include severity, PLAN location when available, evidence, impact, and
 the smallest remediation. Separate confirmed coverage from assumptions,
 unresolved decisions, and unverified paths. State whether the SPEC approval
-gate was verified. A ready verdict means the PLAN is sufficiently actionable
-for the next approved workflow; it does not approve the PLAN, SPEC, code, or
-implementation. Do not create or edit a plan or review artifact in this skill.
+gate was verified. A ready verdict means only that the PLAN appears
+sufficiently actionable for the explicitly selected legacy/formal workflow; it
+does not approve the PLAN, SPEC, code, or implementation and does not replace
+explicit user approval. Do not create or edit a plan or review artifact in this
+skill.
 
 If the user asks for refinement, hand the existing PLAN and findings to
 `project-init`; preserve the user's structure and decisions unless an

@@ -1,7 +1,10 @@
 <!-- Provenance: bundled project-init template.
      Routing index: .ai/prompts/README.md. -->
 
-# Create an Implementation PLAN
+# Create an Explicit Legacy Implementation PLAN
+
+This prompt is compatibility support only. Normal substantive work keeps
+execution tasks inside the approved SPEC and does not create a PLAN.
 
 Use `project-init` only after the exact SPEC has been reviewed and approved.
 

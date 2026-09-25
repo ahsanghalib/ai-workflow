@@ -33,18 +33,17 @@ for phrase in 'web-app' 'monorepo' 'unknown/other' 'Actor or user flow' 'Persist
 done
 grep -Fq 'validate-foundation.sh' "$workflow" ||
   fail 'workflow omitted foundation validator routing'
-for option in '--readme' '--agents' '--master-plan' '--architecture' '--user-flow' '--schema'; do
-  grep -Fq -- "$option" "$workflow" || fail "workflow omitted validator option: $option"
-done
+grep -Fq 'explicit mapping' "$workflow" ||
+  fail 'workflow omitted explicit existing-layout mapping'
 grep -Fq 'inapplicable optional document' "$workflow" ||
   fail 'workflow omitted conditional optional-document handling'
 grep -Fq 'project-profiles.md' "$workflow" ||
   fail 'workflow omitted project profile routing'
 grep -Fq 'no-op' "$workflow" ||
   fail 'workflow omitted unchanged scaffold no-op behavior'
-grep -Fq 'Base outputs when missing' "$manifest" ||
+grep -Fq 'Default outputs when missing' "$manifest" ||
   fail 'manifest omitted base-output section'
-grep -Fq 'Optional after profile review and approval' "$manifest" ||
+grep -Fq 'Explicit outputs after review and approval' "$manifest" ||
   fail 'manifest omitted profile-selected output section'
 if grep -Fq 'docs/USER_FLOW.md is required for the normal scaffold' "$workflow"; then
   fail 'workflow retained unconditional user-flow requirement'
@@ -68,24 +67,14 @@ for phrase in 'Traceability for each task group' 'User-flow references' \
   'Validation evidence'; do
   grep -Fq "$phrase" "$plan" || fail "PLAN omitted task-group traceability: $phrase"
 done
-grep -Fq 'project schema' "$workflow" ||
-  fail 'workflow omitted the initial-schema path'
-grep -Fq 'applicable foundational documents' "$script_dir/references/workflow.md" ||
-  fail 'workflow omitted reviewed user-flow prerequisite'
 grep -Fq 'Existing-layout foundation mapping' "$acceptance" ||
   fail 'acceptance scenarios omitted existing-layout validator mapping'
-grep -Fq 'initial project schema' "$script_dir/references/feature-lifecycle.md" ||
-  fail 'feature lifecycle omitted initial-schema exception'
-grep -Fq 'initial project schema' "$script_dir/../schema-design/SKILL.md" 2>/dev/null ||
-  fail 'schema-design omitted initial-schema context'
 grep -Fq "Status to \`Approved\`" "$feature_lifecycle" ||
   fail 'feature lifecycle omitted explicit SPEC approval transition'
-grep -Fq 'selected output' "$workflow" ||
+grep -Fq -- '--only' "$workflow" ||
   fail 'workflow omitted selected-output approval mode'
-grep -Fq 'new-project-only' "$workflow" ||
+grep -Fq 'existing/reconciliation' "$workflow" ||
   fail 'workflow omitted reconciliation scaffold boundary'
-grep -Fq 'initial project schema' "$schema_prompt" ||
-  fail 'schema prompt omitted initial-schema branch'
 grep -Fq 'persistence is not approved' "$schema_prompt" ||
   fail 'schema prompt omitted no-persistence branch'
 grep -Fq 'persistence is not approved' "$spec_prompt" ||
@@ -121,8 +110,8 @@ for script in "$script_dir/scripts/init-project.sh" \
 done
 grep -Fq 'test-project-init.sh' "$ci" ||
   fail 'CI omitted the project-init disposable suite'
-grep -Fq 'Database Schema: add' "$script_dir/templates/README.md" ||
-  fail 'template README retained a dead optional-schema link'
+grep -Fq 'schema, architecture, plans, reviews' "$script_dir/templates/README.md" ||
+  fail 'template README omitted optional legacy-document guidance'
 if grep -Fq '[Database Schema](./docs/DB_SCHEMA.md)' "$script_dir/templates/README.md"; then
   fail 'template README still links to absent optional schema'
 fi
@@ -134,18 +123,12 @@ grep -Fq 'validate-foundation.sh' "$script_dir/SKILL.md" ||
   fail 'skill omitted foundation validator routing'
 grep -Fq 'traceability.md' "$script_dir/references/workflow.md" ||
   fail 'workflow omitted traceability routing'
-grep -Fq 'Light is the default' "$script_dir/SKILL.md" ||
-  fail 'skill omitted the Light default for ordinary iteration'
-grep -Fq 'Strict remains the default' "$script_dir/SKILL.md" ||
-  fail 'skill omitted the Strict bootstrap exception'
-grep -Fq 'Ambiguity resolves to Light' "$workflow" ||
-  fail 'workflow omitted lighter-mode ambiguity resolution'
 grep -Fq 'already decided or still being explored' "$feature_lifecycle" ||
   fail 'feature lifecycle omitted the discovery gate'
 grep -Fq 'does not create a SPEC' "$feature_lifecycle" ||
   fail 'feature lifecycle did not stop exploratory work before SPEC creation'
-grep -Fq 'SPEC → spec-review → PLAN' "$workflow" ||
-  fail 'workflow omitted the visible review ceremony'
+grep -Fq 'spec-workflow' "$workflow" ||
+  fail 'workflow omitted the SPEC workflow handoff'
 grep -Fq 'Risk-based escalation' "$workflow" ||
   fail 'workflow omitted risk-based escalation'
 grep -Fq 'public API/shared contract' "$workflow" ||

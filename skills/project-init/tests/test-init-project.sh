@@ -24,7 +24,16 @@ bash "$initializer" "$target" >/dev/null
 
 assert_file "$target/.gitignore"
 grep -Fxq '.env' "$target/.gitignore" || fail 'missing .env ignore rule'
-assert_file "$target/docs/rules/GENERAL.md"
+assert_file "$target/AGENTS.md"
+assert_file "$target/SESSION_STATE.md"
+[[ -d "$target/.ai/memory" ]] || fail 'missing agent memory directory'
+[[ -d "$target/docs/specs" ]] || fail 'missing specs directory'
+[[ ! -e "$target/README.md" ]] || fail 'created optional README by default'
+[[ ! -e "$target/MASTER_PLAN.md" ]] || fail 'created legacy master plan by default'
+[[ ! -e "$target/docs/PROJECT_ARCHITECTURE.md" ]] || fail 'created legacy architecture by default'
+[[ ! -e "$target/docs/plans" ]] || fail 'created legacy plans directory by default'
+[[ ! -e "$target/docs/reviews" ]] || fail 'created legacy reviews directory by default'
+[[ ! -e "$target/docs/rules" ]] || fail 'created optional rules by default'
 [[ ! -e "$target/.ai/prompts" ]] || fail 'copied optional helper prompts by default'
 [[ ! -e "$target/docs/USER_FLOW.md" ]] || fail 'copied optional user flow by default'
 [[ ! -e "$target/docs/rules/API.md" ]] || fail 'copied specialized API rule by default'
@@ -32,7 +41,7 @@ assert_file "$target/docs/rules/GENERAL.md"
 [[ ! -e "$target/.git" ]] || fail 'initialized Git without explicit selection'
 
 second_output="$(bash "$initializer" "$target")"
-grep -Fq 'no-op: project-init base scaffold already exists' <<<"$second_output" ||
+grep -Fq 'no-op: project-init minimal scaffold already exists' <<<"$second_output" ||
   fail 'repeated unchanged base scaffold was not an explicit no-op'
 
 populated_scaffold="$temp_root/populated-scaffold"

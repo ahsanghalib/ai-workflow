@@ -31,19 +31,26 @@ directory or expect the harness to discover them automatically.
 
 ## Prompt map
 
+The normal feature path is `spec-workflow` → `spec-review` → explicit user
+approval → `implement-next`. The prompts for master plans, plans, and legacy
+schema/user-flow documents are compatibility prompts and are not default
+project-init outputs.
+
+<!-- markdownlint-disable MD013 -->
 | Prompt | Use for | Primary skill |
 | --- | --- | --- |
 | `bootstrap-project.md` | New or empty project setup | `project-init` |
 | `reconcile-existing-project.md` | Existing-project docs | `project-init` |
-| `define-master-plan.md` | Product direction and scope | `project-init` |
+| `define-master-plan.md` | Explicit legacy product direction | `project-init` |
 | `choose-technical-direction.md` | Stack/local choices | `technical-design` |
-| `record-technical-decisions.md` | Approved decisions | `project-init` |
-| `design-database-schema.md` | Persisted-data design | `schema-design` |
-| `create-spec.md` | Feature behavior draft | `project-init` |
+| `record-technical-decisions.md` | Explicit approved decisions | `technical-design` |
+| `design-database-schema.md` | Explicit persisted-data design | `schema-design` |
+| `create-spec.md` | Feature behavior draft | `spec-workflow` |
 | `review-spec.md` | Feature behavior review | `spec-review` |
-| `create-plan.md` | Implementation plan draft | `project-init` |
+| `create-plan.md` | Explicit legacy PLAN draft | `project-init` |
 | `review-plan.md` | Implementation plan review | `plan-review` |
 | `implement-next.md` | One approved task | `implement-next` |
 | `update-session-state.md` | Handoff continuity | `session-state` |
+<!-- markdownlint-enable MD013 -->
 
 Prompt files may be updated only through a reviewed project-control change.

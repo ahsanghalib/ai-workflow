@@ -9,10 +9,10 @@ Last updated: YYYY-MM-DD
 
 ## Current Focus
 
-## Active SPEC / PLAN
+## Active SPEC / Task
 
 - SPEC:
-- PLAN:
+- Task:
 
 ## Current Status
 

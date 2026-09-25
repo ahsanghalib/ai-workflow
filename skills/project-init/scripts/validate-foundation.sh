@@ -2,10 +2,13 @@
 set -euo pipefail
 
 usage() {
-  printf 'usage: %s [--readme RELPATH] [--agents RELPATH]\n' "$0"
-  printf '       [--master-plan RELPATH] [--architecture RELPATH]\n'
-  printf '       [--user-flow RELPATH|none] [--schema RELPATH|none] [project-directory]\n'
-  printf '%s\n' 'Validate the structural links among project-control documents.'
+  printf 'usage: %s [--agents RELPATH] [--session-state RELPATH]\n' "$0"
+  printf '       [--specs RELPATH] [--memory RELPATH]\n'
+  printf '       [--readme RELPATH] [--master-plan RELPATH]\n'
+  printf '       [--architecture RELPATH] [--user-flow RELPATH|none]\n'
+  printf '       [--schema RELPATH|none] [--plans RELPATH|none]\n'
+  printf '       [--reviews RELPATH|none] [project-directory]\n'
+  printf '%s\n' 'Validate the minimal project-control structure and explicitly selected legacy paths.'
 }
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,14 +16,17 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
 source "$script_dir/common.sh"
 
-readme_path='README.md'
 agents_path='AGENTS.md'
-master_plan_path='MASTER_PLAN.md'
-architecture_path='docs/PROJECT_ARCHITECTURE.md'
-user_flow_path='docs/USER_FLOW.md'
-schema_path='docs/DB_SCHEMA.md'
-user_flow_explicit=false
-schema_explicit=false
+session_state_path='SESSION_STATE.md'
+specs_path='docs/specs'
+memory_path='.ai/memory'
+readme_path=''
+master_plan_path=''
+architecture_path=''
+user_flow_path=''
+schema_path=''
+plans_path=''
+reviews_path=''
 target=''
 target_set=false
 
@@ -30,18 +36,24 @@ while [[ "$#" -gt 0 ]]; do
       usage
       exit 0
       ;;
-    --readme|--agents|--master-plan|--architecture|--user-flow|--schema)
+    --agents|--session-state|--specs|--memory|--readme|--master-plan|\
+    --architecture|--user-flow|--schema|--plans|--reviews)
       if [[ "$#" -lt 2 ]]; then
         usage >&2
         exit 64
       fi
       case "$1" in
-        --readme) readme_path="$2" ;;
         --agents) agents_path="$2" ;;
+        --session-state) session_state_path="$2" ;;
+        --specs) specs_path="$2" ;;
+        --memory) memory_path="$2" ;;
+        --readme) readme_path="$2" ;;
         --master-plan) master_plan_path="$2" ;;
         --architecture) architecture_path="$2" ;;
-        --user-flow) user_flow_path="$2"; user_flow_explicit=true ;;
-        --schema) schema_path="$2"; schema_explicit=true ;;
+        --user-flow) user_flow_path="$2" ;;
+        --schema) schema_path="$2" ;;
+        --plans) plans_path="$2" ;;
+        --reviews) reviews_path="$2" ;;
       esac
       shift
       ;;
@@ -65,7 +77,7 @@ if [[ "$target_set" != true ]]; then
   target="$PWD"
 fi
 
-normalize_document_path() {
+normalize_path() {
   local raw="$1" component normalized=''
   local -a components
 
@@ -94,26 +106,39 @@ normalize_document_path() {
   printf '%s\n' "$normalized"
 }
 
-for document_spec in readme agents master_plan architecture user_flow schema; do
+for document_spec in agents session_state specs memory readme master_plan \
+  architecture user_flow schema plans reviews; do
   case "$document_spec" in
-    readme) raw_path="$readme_path" ;;
     agents) raw_path="$agents_path" ;;
+    session_state) raw_path="$session_state_path" ;;
+    specs) raw_path="$specs_path" ;;
+    memory) raw_path="$memory_path" ;;
+    readme) raw_path="$readme_path" ;;
     master_plan) raw_path="$master_plan_path" ;;
     architecture) raw_path="$architecture_path" ;;
     user_flow) raw_path="$user_flow_path" ;;
     schema) raw_path="$schema_path" ;;
+    plans) raw_path="$plans_path" ;;
+    reviews) raw_path="$reviews_path" ;;
   esac
-  if ! normalized_path="$(normalize_document_path "$raw_path")"; then
-    printf 'error: invalid %s document path: %s\n' "$document_spec" "$raw_path" >&2
+  if [[ -z "$raw_path" ]]; then
+    normalized_path=''
+  elif ! normalized_path="$(normalize_path "$raw_path")"; then
+    printf 'error: invalid %s path: %s\n' "$document_spec" "$raw_path" >&2
     exit 64
   fi
   case "$document_spec" in
-    readme) readme_path="$normalized_path" ;;
     agents) agents_path="$normalized_path" ;;
+    session_state) session_state_path="$normalized_path" ;;
+    specs) specs_path="$normalized_path" ;;
+    memory) memory_path="$normalized_path" ;;
+    readme) readme_path="$normalized_path" ;;
     master_plan) master_plan_path="$normalized_path" ;;
     architecture) architecture_path="$normalized_path" ;;
     user_flow) user_flow_path="$normalized_path" ;;
     schema) schema_path="$normalized_path" ;;
+    plans) plans_path="$normalized_path" ;;
+    reviews) reviews_path="$normalized_path" ;;
   esac
 done
 
@@ -139,94 +164,52 @@ error() {
 require_file() {
   local relative="$1"
   if [[ ! -f "$target/$relative" || -L "$target/$relative" ]]; then
-    error "missing required foundation document: $relative"
+    error "missing required project-control document: $relative"
   fi
 }
 
-require_reference() {
-  local relative="$1" reference="$2" description="$3"
-  if [[ -f "$target/$relative" && ! -L "$target/$relative" ]] &&
-     ! grep -Fq -- "$reference" "$target/$relative"; then
-    error "$relative must reference $reference ($description)"
+require_directory() {
+  local relative="$1"
+  if [[ ! -d "$target/$relative" || -L "$target/$relative" ]]; then
+    error "missing required project-control directory: $relative"
   fi
 }
 
-reject_dead_optional_link() {
-  local relative="$1" reference="$2"
-  if [[ -f "$target/$relative" && ! -L "$target/$relative" ]] &&
-     grep -Fq -- "$reference" "$target/$relative"; then
-    error "$relative contains a link to an unselected optional document: $reference"
+require_optional_path() {
+  local relative="$1" kind="$2"
+  [[ -z "$relative" ]] && return 0
+  if [[ "$kind" == directory && ! -d "$target/$relative" ]]; then
+    error "selected project-control directory is missing: $relative"
+  elif [[ "$kind" == file && ! -f "$target/$relative" ]]; then
+    error "selected project-control document is missing: $relative"
+  elif [[ -L "$target/$relative" ]]; then
+    error "selected project-control path must not be a symlink: $relative"
   fi
 }
 
-for required_path in "$readme_path" "$agents_path" "$master_plan_path" "$architecture_path"; do
-  if [[ -z "$required_path" ]]; then
-    error 'required foundation document paths cannot be none'
-  else
-    require_file "$required_path"
-  fi
-done
+require_file "$agents_path"
+require_file "$session_state_path"
+require_directory "$specs_path"
+require_directory "$memory_path"
 
-if [[ "$user_flow_explicit" == true && -n "$user_flow_path" &&
-      ! -e "$target/$user_flow_path" ]]; then
-  error "selected user-flow document is missing: $user_flow_path"
-fi
-if [[ "$schema_explicit" == true && -n "$schema_path" &&
-      ! -e "$target/$schema_path" ]]; then
-  error "selected schema document is missing: $schema_path"
-fi
+require_optional_path "$readme_path" file
+require_optional_path "$master_plan_path" file
+require_optional_path "$architecture_path" file
+require_optional_path "$user_flow_path" file
+require_optional_path "$schema_path" file
+require_optional_path "$plans_path" directory
+require_optional_path "$reviews_path" directory
 
-require_reference "$master_plan_path" "$agents_path" 'operating rules'
-require_reference "$master_plan_path" "$architecture_path" 'technical architecture'
-require_reference "$agents_path" "$master_plan_path" 'product direction'
-require_reference "$agents_path" "$architecture_path" 'technical architecture'
-require_reference "$architecture_path" "$master_plan_path" 'product direction'
-require_reference "$architecture_path" "$agents_path" 'operating rules'
-require_reference "$readme_path" "$master_plan_path" 'project direction'
-require_reference "$readme_path" "$architecture_path" 'architecture'
-
-if [[ -z "$user_flow_path" ]]; then
-  for document in "$readme_path" "$master_plan_path" "$agents_path" "$architecture_path"; do
-    reject_dead_optional_link "$document" '](./docs/USER_FLOW.md)'
-    reject_dead_optional_link "$document" '](docs/USER_FLOW.md)'
-  done
-elif [[ -e "$target/$user_flow_path" ]]; then
-  if [[ ! -f "$target/$user_flow_path" || -L "$target/$user_flow_path" ]]; then
-    error "$user_flow_path must be a regular file when selected"
-  else
-    require_reference "$master_plan_path" "$user_flow_path" 'actor/system journeys'
-    require_reference "$agents_path" "$user_flow_path" 'user-flow ownership'
-    require_reference "$architecture_path" "$user_flow_path" 'architecture alignment'
-  fi
-fi
-
-if [[ -z "$schema_path" ]]; then
-  :
-elif [[ ! -e "$target/$schema_path" ]]; then
-  if [[ "$schema_explicit" != true ]]; then
-    for document in "$readme_path" "$master_plan_path" "$agents_path" "$architecture_path"; do
-      reject_dead_optional_link "$document" '](./docs/DB_SCHEMA.md)'
-      reject_dead_optional_link "$document" '](docs/DB_SCHEMA.md)'
-    done
-  fi
-elif [[ ! -f "$target/$schema_path" || -L "$target/$schema_path" ]]; then
-  error "$schema_path must be a regular file when selected"
-else
-  if [[ -n "$user_flow_path" &&
-        ! -f "$target/$user_flow_path" ]]; then
-    error "$schema_path requires a selected user-flow document or --user-flow none"
-  else
-    require_reference "$master_plan_path" "$schema_path" 'persistence ownership'
-    require_reference "$agents_path" "$schema_path" 'schema ownership'
-    require_reference "$architecture_path" "$schema_path" 'data architecture alignment'
-    if [[ -n "$user_flow_path" ]]; then
-      require_reference "$user_flow_path" "$schema_path" 'flow/data dependency'
-    fi
-  fi
+if [[ -f "$target/$agents_path" && ! -L "$target/$agents_path" ]]; then
+  grep -Fq -- "$session_state_path" "$target/$agents_path" ||
+    error "$agents_path must route to $session_state_path"
+  grep -Fq -- "$specs_path" "$target/$agents_path" ||
+    error "$agents_path must route to $specs_path"
 fi
 
 if [[ "$errors" -gt 0 ]]; then
-  printf 'foundation: inconsistent (%d finding%s)\n' "$errors" "$([[ "$errors" -eq 1 ]] || printf s)" >&2
+  printf 'foundation: inconsistent (%d finding%s)\n' \
+    "$errors" "$([[ "$errors" -eq 1 ]] || printf s)" >&2
   exit 1
 fi
 

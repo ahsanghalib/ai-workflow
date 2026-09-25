@@ -56,9 +56,11 @@ If a needed check is unavailable, blocked, too expensive, or requires approval,
 record it as such and state the safest next action. Do not silently substitute a
 weaker check.
 
-For plan-managed work, a `plan-convergence` report can provide supplementary
-plan-to-code evidence, but it never replaces task acceptance, targeted
-validation, or this final evidence pass.
+For SPEC-managed work, a `plan-convergence` report can provide supplementary
+traceability evidence when an explicit legacy PLAN or another planning
+artifact exists, but it never replaces SPEC/task acceptance, targeted
+validation, or this final evidence pass. Normal work must remain SPEC/task
+centric and must not acquire a PLAN dependency merely to complete verification.
 
 When the requested acceptance proof is complete, stop. Do not add polish,
 cleanup, or unrelated tests after the criteria pass.
@@ -75,7 +77,7 @@ redact sensitive output and state the resulting verification limitation.
 
 ## 4. Report the actual outcome
 
-Use this completion report:
+Use this completion report for normal SPEC/task work:
 
 ```markdown
 ## Verification
@@ -91,7 +93,7 @@ Use this completion report:
 
 - `<check>` — why it was not run and the required next action
 
-## Diff Review
+## SPEC/task and Diff Review
 
 ## Untested Paths and Residual Risk
 ```

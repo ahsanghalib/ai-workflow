@@ -14,9 +14,9 @@ fail() {
 }
 
 [[ -f "$output_boundary" ]] || fail 'missing output-boundary reference'
-grep -Fq 'No application source' "$output_boundary" ||
+grep -Fq 'application source, routes' "$output_boundary" ||
   fail 'output boundary omitted application-source prohibition'
-grep -Fq 'No framework or dependency files' "$output_boundary" ||
+grep -Fq 'framework scaffolds, package manifests' "$output_boundary" ||
   fail 'output boundary omitted framework/dependency prohibition'
 
 bash "$test_dir/test-inspect-project.sh"
@@ -30,8 +30,15 @@ output_target="$temp_root/output-target"
 output="$(bash "$initializer" --init-git "$output_target")"
 grep -Fxq "target: $output_target" <<<"$output" ||
   fail 'did not report the canonical output target'
-[[ -f "$output_target/README.md" ]] || fail 'missing generated README'
-[[ -f "$output_target/docs/rules/GENERAL.md" ]] || fail 'missing general engineering rules'
+[[ -f "$output_target/AGENTS.md" ]] || fail 'missing generated AGENTS.md'
+[[ -f "$output_target/SESSION_STATE.md" ]] || fail 'missing generated SESSION_STATE.md'
+[[ -d "$output_target/.ai/memory" ]] || fail 'missing generated agent memory directory'
+[[ -d "$output_target/docs/specs" ]] || fail 'missing generated specs directory'
+[[ ! -e "$output_target/README.md" ]] || fail 'created optional README by default'
+[[ ! -e "$output_target/MASTER_PLAN.md" ]] || fail 'created legacy master plan by default'
+[[ ! -e "$output_target/docs/PROJECT_ARCHITECTURE.md" ]] || fail 'created legacy architecture by default'
+[[ ! -e "$output_target/docs/plans" ]] || fail 'created legacy plans directory by default'
+[[ ! -e "$output_target/docs/reviews" ]] || fail 'created legacy reviews directory by default'
 [[ ! -e "$output_target/docs/USER_FLOW.md" ]] || fail 'created optional user-flow document by default'
 [[ ! -e "$output_target/.ai/prompts" ]] || fail 'created optional prompts by default'
 bash "$initializer" --only docs/USER_FLOW.md --only .ai/prompts "$output_target" >/dev/null
@@ -65,7 +72,7 @@ fi
 [[ ! -e "$nested_target/README.md" ]] ||
   fail 'wrote nested target before override'
 bash "$initializer" --allow-nested "$nested_target" >/dev/null
-[[ -f "$nested_target/README.md" ]] || fail 'did not accept explicit nested override'
+[[ -f "$nested_target/AGENTS.md" ]] || fail 'did not accept explicit nested override'
 
 nested_missing="$nested_worktree/new nested project"
 if bash "$initializer" "$nested_missing" >/dev/null 2>&1; then
@@ -73,14 +80,14 @@ if bash "$initializer" "$nested_missing" >/dev/null 2>&1; then
 fi
 [[ ! -e "$nested_missing" ]] || fail 'created nested target before approval'
 bash "$initializer" --allow-nested "$nested_missing" >/dev/null
-[[ -f "$nested_missing/README.md" ]] ||
+[[ -f "$nested_missing/AGENTS.md" ]] ||
   fail 'did not initialize approved missing nested target'
 
 alias_target="$temp_root/missing-alias-parent/../nested-worktree/alias project"
 if bash "$initializer" "$alias_target" >/dev/null 2>&1; then
   fail 'accepted a missing target alias nested in a Git worktree'
 fi
-[[ ! -e "$nested_worktree/alias project/README.md" ]] ||
+[[ ! -e "$nested_worktree/alias project/AGENTS.md" ]] ||
   fail 'wrote through a missing target alias before nested approval'
 
 printf 'ok: project-init disposable suite and Markdown-only output\n'

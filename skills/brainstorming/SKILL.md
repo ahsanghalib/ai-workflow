@@ -32,8 +32,8 @@ discovery, technical architecture, UI design, delivery planning, or code.
   seams to `technical-design` after the intent is clear.
 - Hand UI hierarchy, interaction states, responsive behavior, and accessibility
   to `frontend-design` when the work is specifically a frontend design task.
-- Hand dependency-ordered implementation tasks and planning artifacts to
-  `project-init` when a durable plan is needed.
+- Hand a user-approved direction to `spec-workflow` when a durable SPEC and
+  dependency-ordered implementation tasks are needed.
 - Do not create files, edit code, commit, create branches or worktrees, publish,
   or invoke implementation merely because brainstorming is complete. These are
   separate actions requiring the user's authorization and the applicable
@@ -129,8 +129,8 @@ approvals separately when applicable.
   documentation, and exploratory work.
 - An architectural request goes to `technical-design`, `frontend-design`, or
   `product-discovery` for the specialist brief that matches the unresolved
-  domain. Use `project-init` when the approved direction needs durable,
-  dependency-ordered implementation tasks.
+  domain. Use `spec-workflow` when the approved direction needs a durable SPEC
+  and dependency-ordered implementation tasks.
 - If no companion skill or capability is available, retain the same handoff
   contract in the response and use the safest equivalent workflow.
 

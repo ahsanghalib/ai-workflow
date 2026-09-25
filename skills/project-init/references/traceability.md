@@ -1,5 +1,10 @@
 # User-Flow, Schema, and Contract Traceability
 
+This reference is optional compatibility guidance for an existing repository
+that already maintains these documents or explicitly requests a legacy PLAN.
+Normal work uses the approved SPEC and its Execution section; `USER_FLOW.md`
+and `DB_SCHEMA.md` are not default prerequisites.
+
 Traceability keeps product behavior, persisted data, transport contracts, and
 implementation planning aligned. It links documents; it does not authorize
 implementation or silently create schema, API, or frontend behavior.
@@ -36,7 +41,7 @@ Every feature SPEC records:
 - **Schema impact:** `none`, `read-only`, `new entity`, `field/constraint
   change`, `relationship change`, `retirement`, or `unresolved`.
 
-### Implementation PLAN
+### Optional legacy implementation PLAN
 
 Every PLAN repeats the SPEC's traceability and adds:
 

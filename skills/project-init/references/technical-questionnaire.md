@@ -1,5 +1,11 @@
 # Project Technical Questionnaire
 
+Use this only when the user explicitly wants project-level technical decisions
+recorded during reconciliation or an optional legacy planning flow. Normal
+feature behavior belongs in an approved SPEC; route architecture and interface
+choices to `technical-design` and persistence design to `schema-design` when
+those decisions are justified.
+
 Use this questionnaire after the initial product-direction draft and before
 recording technical decisions. Ask only the groups that affect the requested
 project-control documents. The user may answer `unknown`, `not applicable`, or

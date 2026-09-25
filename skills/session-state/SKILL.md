@@ -1,8 +1,7 @@
 ---
 name: session-state
-description: Update an existing active project's root SESSION_STATE.md and its AGENTS.md continuity section after meaningful work or before handoff. Record current focus, active SPEC/PLAN, status, completed/in-progress work, blockers, findings, validation, and next steps. Use project-init for template-based creation; do not use for permanent architecture, changelogs, transcripts, or auditing this skill.
+description: Update an existing active project's root SESSION_STATE.md and its AGENTS.md continuity section after meaningful work or before handoff. Record current focus, active SPEC/task, status, completed/in-progress work, blockers, findings, validation, and next steps. Use project-init for template-based creation; do not use for permanent architecture, changelogs, transcripts, or auditing this skill.
 license: MIT
-compatibility: no bundled executable dependencies
 ---
 
 # Session State
@@ -46,7 +45,8 @@ writing elsewhere.
   needed by the next session.
 - Move permanent knowledge to README, architecture, rules, SPEC, or the
   project's chosen decision/journal location.
-- Do not duplicate full SPEC/PLAN content; link or name active files instead.
+- Do not duplicate full SPEC content; link or name the active SPEC and task
+  instead.
 - Do not include credentials, tokens, private keys, secret values, raw logs,
   or a complete conversation transcript. Record environment-variable names
   without their values when necessary.

@@ -3,28 +3,26 @@
 
 # Create a Feature SPEC
 
-Use `project-init` after reading the approved project direction, user flow,
-architecture, relevant rules, and plan index. If persistence is approved,
-read the approved schema; if persistence is not approved, record
-`Schema: not applicable` and do not invent entities. If persistence is still
-unresolved, record `Schema: unresolved` and stop at the open approval gate.
+Use `spec-workflow` for a substantive feature, bug, improvement, refactor,
+performance, security, migration, maintenance, or technical-debt request.
+Read only the project context and current behavior needed to define its
+contract. Persistence and architecture details are conditional; do not require
+`USER_FLOW.md`, `DB_SCHEMA.md`, a master plan, or a plan index.
+If persistence is not approved, record that no persistence behavior is in scope
+and do not invent entities; leave an unresolved persistence decision open.
 
-Create only the requested SPEC with status `Proposed`. Define goal, scope,
+Create only the requested SPEC with status `Draft`. Define goal, scope,
 non-goals, actors, behavior, invariants, validation, states, failures, edge
 cases, authorization, compatibility, and acceptance criteria.
 
-Include exact user-flow references, approved schema entities or an explicit
-not-applicable/unresolved status, API/shared-contract references, frontend
-surfaces, and a schema-impact classification. Route nontrivial persistence or
-contract impact to schema-impact review before PLAN creation.
+Include relevant behavior, API/shared-contract, frontend, persistence, and
+security impact only when applicable. Route non-trivial architecture or
+persistence decisions to the named design skill after the contract is approved.
 
-For an initial feature map, derive candidates from reviewed `MASTER_PLAN.md`,
-`docs/USER_FLOW.md`, and the approved schema when persistence is relevant. Let
-the user select one feature before creating its SPEC. For later requests,
-confirm whether the request is a new feature or SPEC revision and trace any
-persisted data to approved schema entities. For example, “create a SPEC for
-adding income details” must create or revise only that feature's SPEC and must
-repeat the same review/PLAN/approval gates.
+If the request is still product exploration, route to `product-discovery` or
+`brainstorming` first. For later requests, confirm whether it is a new feature,
+SPEC revision, or an approved task. Preserve stable SPEC IDs and do not create
+a second source-of-truth tree.
 
-Do not create a PLAN or implement code. Stop for user review and route to
-`spec-review` when requested.
+Do not create a PLAN or implement code. Route the exact SPEC to `spec-review`,
+wait for the user's explicit approval, and keep tasks under `# Execution`.

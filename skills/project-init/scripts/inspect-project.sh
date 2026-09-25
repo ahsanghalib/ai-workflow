@@ -121,4 +121,4 @@ else
 fi
 printf 'write: none (inspection only)\n'
 printf 'proposal: review the file list and approvals before any write or Git mutation\n'
-printf 'proposal: ask separately before creating docs/DB_SCHEMA.md for persisted data\n'
+printf 'proposal: feature and change requests hand off to spec-workflow; no planning artifact is selected by default\n'

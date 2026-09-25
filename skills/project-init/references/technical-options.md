@@ -1,13 +1,15 @@
 # Technical Option Comparison Handoff
 
-Use this reference when the user has not selected a technical direction or
-asks for recommendations. Project-init coordinates the decision; it does not
-silently choose an option.
+Use this reference only when the user explicitly requests a project-level
+technical option comparison or an existing repository uses this compatibility
+flow. `technical-design` owns the comparison; project-init only records or
+reconciles approved project controls. Normal feature decisions belong in the
+approved SPEC's `# Execution` section.
 
 ## Comparison procedure
 
-1. Read the approved product direction, reviewed user flow, relevant schema
-   decision, existing repository evidence, and local rules.
+1. Read the approved SPEC or explicitly selected project-control documents,
+   existing repository evidence, and local rules.
 2. State the exact decision to make and the constraints that matter.
 3. Ask `technical-design` to compare a bounded set of options, interfaces,
    boundaries, trade-offs, migration implications, and validation needs.

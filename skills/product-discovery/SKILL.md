@@ -24,10 +24,11 @@ details in the discovery brief; summarize only the minimum evidence needed.
 - Do not generate unconstrained idea lists; tie alternatives to a problem,
   evidence, constraint, or validation decision.
 
-Hand off technical choices to `technical-design`, delivery planning to
-`project-init`, and founder-level trade-offs to `founder-decision` when those
-companion skills are available. If they are unavailable, keep the handoff as a
-clearly labelled recommendation rather than assuming their workflow.
+Hand off technical choices to `technical-design`, a durable approved problem
+brief to `spec-workflow`, and founder-level trade-offs to `founder-decision`
+when those companion skills are available. If they are unavailable, keep the
+handoff as a clearly labelled recommendation rather than assuming their
+workflow.
 
 ## Discovery workflow
 

@@ -3,17 +3,17 @@
 
 # Design the Database Schema
 
-Use `schema-design` only after the user-flow document has been reviewed and
-persistence has been approved. For a new project, design the initial project schema
-from the approved project direction and reviewed user flow; this path
-does not require a feature SPEC. For a later feature, use its approved feature
-context and selected schema source of truth. If persistence is not approved or
-the product has no persisted data, record `Schema: not applicable` and stop
-without creating `docs/DB_SCHEMA.md`.
+Use `schema-design` when an approved SPEC or current executable repository
+evidence shows that non-trivial persistence design is justified. Do not require
+`USER_FLOW.md`, a master plan, or a legacy `DB_SCHEMA.md` before the SPEC. If
+persistence is not approved or the product has no persisted data, record
+`Schema: not applicable` and stop without creating a schema document.
 
-Design entities, fields, keys, relationships, ownership, tenant boundaries,
-nullability, defaults, constraints, indexes, concurrency, privacy, access
-strategy, and migration implications in `docs/DB_SCHEMA.md`.
+Record design conclusions in the SPEC's `# Execution` section or the project's
+existing approved schema source. Design entities, fields, keys, relationships,
+ownership, tenant boundaries, nullability, defaults, constraints, indexes,
+concurrency, privacy, access strategy, and migration implications without
+duplicating executable schema unnecessarily.
 
 Keep the document design-only. Do not create migrations, models, tables,
 services, routes, UI, or secret values. Stop for schema review and approval.

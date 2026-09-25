@@ -1,42 +1,45 @@
 ---
 name: frontend-feature
-description: Implement one approved frontend/web/admin PLAN task for a feature using existing contracts, API conventions, shared UI, and frontend rules. Use after the backend/API contract is known or intentionally mocked by the approved task. Keep scope bounded and verify user-observable behavior. Do not redesign backend/domain behavior or create catch-all API modules.
+description: Implement exactly one bounded frontend/web/admin task selected from an approved or in-progress SPEC using existing contracts, shared UI, and repository rules. Use for user-visible feature, bug, improvement, or maintenance work; do not use for SPEC authoring, repository bootstrap, or backend design.
 license: MIT
-compatibility: no bundled executable dependencies
 ---
 
 # Frontend Feature
 
 ## Preconditions
 
-For substantial work, require the exact approved SPEC and frontend PLAN path or
-identifier, plus the first eligible PLAN task selected through `implement-next`
-when that companion is available. Require a PLAN status of `Approved` and a
-matching SPEC scope; never infer approval from the implementation request.
+For substantial work, require the exact approved or in-progress SPEC path or
+identifier, valid `Approval: Explicit user approval — YYYY-MM-DD` evidence, and
+the first eligible SPEC task selected through `implement-next` when that
+companion is available. Require a matching SPEC scope; never infer approval
+from the implementation request, a review verdict, an existing task, or a
+legacy PLAN.
 
 An explicitly requested trivial/localized fix may use the lightweight path only
 when it is one bounded user-visible behavior or defect, does not change API
 contracts, authentication/authorization, security boundaries, persistence, or
 deployment behavior, and has a clear narrow validation command. If any of
-those conditions is uncertain, stop and route the work through `project-init`.
+those conditions is uncertain, stop and route the work through `spec-workflow`.
 
 ## Task ownership
 
-When the approved PLAN has ordered unchecked tasks, use `implement-next` to
-select the first eligible task and preserve its red/green/refactor gates. Do
-not choose a later task or implement several plan tasks in one pass. If that
-companion is unavailable, require the same exact-plan, first-task, and TDD
-checks directly; do not silently select a task from repository context.
+When the SPEC has ordered unchecked tasks, use `implement-next` to select the
+first dependency-ready task and preserve its red/green/refactor gates. Do not
+choose a later task or implement several SPEC tasks in one pass. If that
+companion is unavailable, require the same exact-SPEC, first-task, approval,
+and TDD checks directly; do not silently select a task from repository
+context. If tasks are missing, hand back to `spec-workflow`.
 
 ## Context loading
 
 Read only:
 
 - root `AGENTS.md` and `SESSION_STATE.md` when present
-- active SPEC and frontend PLAN
-- the repository's `GENERAL.md` and `FRONTEND.md`
-- the repository's `API.md`, `AUTH.md`, `CONTRACTS.md`, `UI.md`, `SECURITY.md`,
-  and `TESTING.md` only when relevant
+- the active SPEC, selected task, and its execution context
+- applicable repository rules discovered from `AGENTS.md`, `docs/rules/`, and
+  existing project conventions
+- API, authentication, contracts, UI, security, and testing rules only when
+  relevant; preserve user-owned legacy locations when they remain authoritative
 
 Use an available repository structural index, such as CodeGraph, for indexed
 structural questions and blast radius. Use normal reads/search for docs,
@@ -49,13 +52,14 @@ dependencies or tooling without approval.
 
 ## Implementation
 
-1. Confirm the exact SPEC, PLAN, selected task, affected UI, backend/shared
+1. Confirm the exact SPEC, selected task, affected UI, backend/shared
    contract, current worktree state, and validation target before editing. If a
    required contract is absent and not explicitly mocked by the approved task,
    stop and route the dependency to the backend/API workflow.
 2. Use feature/domain-local API modules (for example, `features/auth/api.ts`)
    rather than a catch-all endpoint or API module.
-3. Prefer the narrowest state scope: local → URL → server/query cache → global store only when genuinely shared.
+3. Prefer the narrowest state scope: local → URL → server/query cache →
+   global store only when genuinely shared.
 4. Client validation improves UX; server validation remains authoritative.
 5. Represent loading, success, empty, error, permission-denied, disabled, and
    retry states where they apply; preserve user input after recoverable errors
@@ -87,4 +91,4 @@ diff-review workflow. For browser checks, record the approved origin,
 viewport/fixture scope, user-visible assertions, console/network observations,
 and artifacts; do not claim untested states or cross-browser behavior. Report
 the selected task, changed files, validation evidence, untested paths,
-assumptions, and handoff; do not mark the whole PLAN complete from this skill.
+assumptions, and handoff; do not mark the SPEC completed from this skill.

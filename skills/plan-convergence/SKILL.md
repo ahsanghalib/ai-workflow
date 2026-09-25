@@ -1,6 +1,6 @@
 ---
 name: plan-convergence
-description: Compare an approved project plan and its tasks with the current repository state to identify completed, partial, missing, stale, blocked, or unplanned work. Use during or after implementation when convergence against requirements, design, tasks, and validation is requested. Report or propose work only; do not edit plans or implement fixes.
+description: Compare an explicitly selected approved PLAN and its tasks with the current repository state to identify completed, partial, missing, stale, blocked, or unplanned work. Use only for explicit legacy or unusually large PLAN workflows; normal SPEC/task work does not require it. Report or propose work only.
 license: MIT
 metadata:
   source: github/spec-kit
@@ -12,6 +12,10 @@ metadata:
 Assess whether implementation has converged with an approved plan. This is a
 read-only evidence and reconciliation workflow. It does not replace code
 review, does not implement fixes, and does not append tasks automatically.
+
+This is an optional, isolated path for an explicitly selected legacy or
+unusually large PLAN workflow. It is not a prerequisite for normal
+SPEC/task-centric execution or completion.
 
 ## Preconditions and boundaries
 
@@ -47,9 +51,11 @@ state that limitation instead of inferring one.
 For every task, locate current evidence in code, tests, configuration,
 documentation, or activity records:
 
+<!-- markdownlint-disable MD013 -->
 | Task          | Expected evidence                | Current evidence              | Classification                         |
 | ------------- | -------------------------------- | ----------------------------- | -------------------------------------- |
 | exact task ID | file, test, command, or artifact | `path:line`, diff, or missing | complete/partial/missing/stale/blocked |
+<!-- markdownlint-enable MD013 -->
 
 Check that:
 
@@ -85,7 +91,9 @@ and already-fixed issues. For remaining gaps, propose one of:
 - a validation action; or
 - no action because the difference is an accepted non-goal.
 
-The proposal is advisory. The user or `project-init` must authorize any edit.
+The proposal is advisory. For an explicitly selected legacy PLAN, the user or
+its documented owner (possibly `project-init`) must authorize any edit. Normal
+SPEC/task changes return to `spec-workflow`.
 
 ## Required output
 
@@ -101,8 +109,10 @@ Result: Converged | Partially converged | Not converged | Blocked
 
 ## Evidence table
 
+<!-- markdownlint-disable MD013 -->
 | #   | Classification | Severity | Task/criterion | Evidence | Gap or confirmation | Proposed next action |
 | --- | -------------- | -------- | -------------- | -------- | ------------------- | -------------------- |
+<!-- markdownlint-enable MD013 -->
 
 ## Unplanned changes
 
@@ -120,12 +130,15 @@ Result: Converged | Partially converged | Not converged | Blocked
 ```
 
 Use `Converged` only when all in-scope tasks and acceptance criteria have
-current evidence and no blocking validation remains. Do not equate a clean
-convergence report with a code-review approval or production readiness.
+current evidence and no blocking validation remains. A convergence result and
+the required-approval list are evidence only; they do not approve the PLAN,
+SPEC, code, or implementation, and do not equate to a code-review verdict or
+production readiness.
 
 ## Handoff
 
-Hand proposed task or artifact changes to `project-init`. Hand design drift to
-`technical-design`, implementation of the next approved task to
-`implement-next`, and final evidence review to
-`verification-before-completion`. Stop after the report.
+Hand proposed changes for an explicitly selected legacy PLAN to its documented
+owner (possibly `project-init`). Hand design drift to `technical-design`,
+implementation of the next approved SPEC task to `implement-next`, and final
+evidence review to `verification-before-completion`. Route normal SPEC changes
+to `spec-workflow`. Stop after the report.

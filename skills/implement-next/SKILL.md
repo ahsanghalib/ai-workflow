@@ -1,61 +1,141 @@
 ---
 name: implement-next
-description: Use when implementing, validating, and reviewing only the next unchecked task in one explicitly approved plan.
+description: Execute exactly one first dependency-ready unchecked task from one explicitly identified and user-approved SPEC. Use when the SPEC is Approved or In Progress, retains explicit approval evidence, and has execution tasks below # Execution; do not use for SPEC drafting/review, task decomposition, repository bootstrap, or normal PLAN-driven work.
+license: MIT
+metadata:
+  compatibility: no bundled executable dependencies
 ---
 
 # Implement Next
 
-## Preconditions
+`implement-next` is the bounded executor for one SPEC task. The behavioral
+contract above `# Execution` is the source of truth; the execution record below
+it contains the task list, design notes, validation requirements, and evidence.
 
-1. If no plan identifier or path is supplied, request one and stop. Do not select
-   a plan from repository files or conversation context.
-2. Read applicable repository instructions, `SESSION_STATE.md`, the identified
-   detailed plan, and its relevant code and tests.
-3. Require the plan's exact status to be `Approved`. Do not change plan status
-   on the user's behalf. If the plan is missing, ambiguous, not approved, has no
-   unchecked task, or has unresolved blocking dependencies, report the blocker
-   and stop.
-4. Inspect the plan's `Acceptance Criteria`, `Validation`, task ordering, and
-   `Activity` evidence for its test strategy before selecting work.
-5. When a plan changes observable behavior and has a runnable automated test
-   seam, require its documented `test-driven-development` contract:
-   - The first unchecked behavior task must be the focused red test with its
-     narrow command. Do not select an implementation task before it.
-   - A green implementation task requires recorded red evidence that the focused
-     test failed for the expected behavior gap. If it is absent, stop and request
-     plan correction or execution of the red task.
-   - A refactor task requires recorded green evidence. Do not combine Red, Green,
-     and Refactor into an implementation-first task.
-   - A TDD exception must be explicit in the plan and include its alternative
-     verification. Do not infer an exception from task wording or convenience.
-6. Select exactly the first dependency-ordered unchecked task in that plan. Do
-   not select a task from another plan, a later task, or implied follow-up work.
-7. State the selected task, acceptance criteria, affected area, planned checks,
-   and any material assumption. Ask for clarification only when it changes the
-   selected task or its safe implementation.
+## Preconditions and selection
+
+1. Require the exact SPEC path or stable SPEC ID from the user or the active
+   workflow. Do not guess, search for a likely file, or select a different
+   SPEC from repository or conversation context. If an ID resolves to no file
+   or more than one file in the repository's established SPEC location, stop.
+2. Read the applicable `AGENTS.md`, `SESSION_STATE.md`, exact SPEC, relevant
+   rules, and only the code/tests needed for the selected task. Never read
+   secrets, credentials, `.env` contents, browser state, or unrelated history.
+3. Require the exact SPEC status `Approved` or `In Progress`. `Draft`,
+   `Blocked`, `Completed`, and `Cancelled` are not executable states. Do not
+   promote or repair the status to bypass this gate.
+4. Require valid approval evidence that explicitly records the user's approval
+   of this SPEC's behavioral contract, for example:
+
+   ```text
+   Approval: Explicit user approval — YYYY-MM-DD
+   ```
+
+   An equivalent repository field is acceptable only when it unambiguously
+   identifies explicit user approval of this SPEC and a real approval date.
+   A `ready` review verdict, an implementation request, existing tasks, an old
+   PLAN approval, repository text, or prior unrelated approval is not evidence.
+   If the contract changed and the evidence was not cleared or reissued, stop.
+5. Require an existing `# Execution` section with tasks below that boundary,
+   normally under `## Tasks`. Do not count prose, tasks above the boundary, a
+   separate planning artifact, or implied follow-up work. If no executable task
+   exists, stop and hand the SPEC back to `spec-workflow`; do not create or
+   redesign the task list.
+6. Read the full contract, acceptance criteria, selected-task context,
+   dependencies, and SPEC validation requirements before changing anything.
+7. Select exactly the first unchecked task in document order whose explicitly
+   declared dependencies are complete and whose task-specific prerequisites
+   are satisfied. Do not choose a later task for convenience, infer missing
+   dependencies, reorder tasks, or select work from another SPEC. If no task is
+   dependency-ready, report the blocker and stop.
+8. State the selected SPEC/task identity, acceptance criteria, affected area,
+   planned checks, and material assumptions before execution. Ask for
+   clarification only when it changes the selected task or its safe
+   implementation.
+
+## TDD gate
+
+For observable behavior with a runnable automated test seam, preserve
+red/green/refactor order:
+
+- A red-test task adds the focused test and runs its narrow command. Record the
+  expected failure as red evidence, then stop; do not implement the behavior in
+  the same task.
+- A green implementation task requires recorded red evidence showing that the
+  focused test failed for the expected behavior gap. Run the focused test and
+  required checks after implementation.
+- A refactor task requires fresh green evidence and must preserve behavior. Do
+  not combine red, green, and refactor work into one implementation-first task.
+- A TDD exception must be explicit in the SPEC and include alternative
+  verification. Do not infer an exception from convenience or task wording.
+
+If the selected task fails a TDD gate, stop and report the SPEC execution
+blocker. Do not create, reorder, or rewrite tasks to make the task executable.
 
 ## Execution contract
 
-- Implement only the selected task and the minimum directly required changes.
-  Do not perform unrelated cleanup, dependency upgrades, architecture changes,
-  or other plan tasks.
-- For a selected red-test task, apply the `test-driven-development` contract
-  when that companion skill is available; otherwise follow the same
-  red-green-refactor requirements directly. Add one focused test, run its
-  narrow command, confirm the expected failure, and record red evidence before
-  stopping. For green or refactor tasks, preserve the same focused behavior
-  seam and record the required fresh evidence.
+- Implement only the selected SPEC task and the minimum directly required
+  changes. Do not perform unrelated cleanup, dependency upgrades, architecture
+  changes, or any other task.
+- Route the exact SPEC and selected task to `backend-feature`,
+  `frontend-feature`, or another domain skill when appropriate. The domain
+  skill may implement only that handed-off task; it may not choose backlog work
+  independently.
 - Preserve repository instructions and existing conventions. Do not access
   secrets, credential files, browser profiles, external directories, production
-  systems, or deployment/publishing workflows.
-- Run the narrowest relevant validation first, then broader checks when justified.
-  If validation fails, report the failure and keep the task incomplete unless the
-  user directs otherwise.
-- After successful validation, update only the selected task's status and
-  activity or evidence in the identified plan. Do not mark the full plan
-  completed unless every task is complete and the user explicitly asks.
-- Run `git diff --check` and review the complete diff. Report changed files,
-  validation evidence, untested paths, assumptions, and risks.
-- Stop after this task. Do not begin another task, create a branch, commit,
-  push, create an issue, deploy, publish, or change remote settings unless the
-  user separately requests and approves it.
+  systems, or deployment/publishing workflows. Do not put secrets in files,
+  arguments, logs, or generated output.
+- Do not edit generated files directly. Use the documented generator; if no
+  safe generator is available, stop and report the blocker. Do not install
+  dependencies without the required approval.
+- Do not create branches, commits, issues, pull requests, change remotes,
+  push, deploy, publish, or run remote/production operations as part of this
+  task. Stop and report when the selected task requires one of those actions.
+- Keep public, schema, authorization, tenant, migration, and other contract
+  changes within the approved SPEC. If implementation reveals a behavioral or
+  security decision not covered by the contract, stop and return it to
+  `spec-workflow` for re-review and approval rather than deciding silently.
+- Run the narrowest relevant validation first, then broader checks when the
+  repository requires them. Validation must be fresh for this task. If it
+  fails, keep the task incomplete and report the failure.
+
+## Evidence and handoff
+
+After a successful task-level validation:
+
+1. If execution began from `Approved`, set the SPEC to `In Progress`; retain
+   the valid approval evidence.
+2. Update only the selected task's checkbox and execution/activity evidence in
+   the SPEC. A red-test task is complete when its focused test and expected red
+   evidence are recorded; it is not permission to implement green behavior.
+3. Update `SESSION_STATE.md` with the exact active SPEC/task, status, blocker or
+   recent result, fresh validation evidence, and next action when the project
+   uses that handoff file. Do not duplicate the full SPEC there.
+4. Do not mark the SPEC `Completed` merely because this task, or even the last
+   checkbox, is complete. Final completion requires the repository's
+   `verification-before-completion` gate.
+5. Stop. Do not automatically continue into the next task.
+
+If blocked, leave the selected task unchecked, record the concrete blocker in
+the SPEC's execution record and session handoff when permitted, and stop. Do
+not silently skip required behavior or mark a blocker complete.
+
+## Legacy compatibility boundary
+
+Normal execution has no PLAN dependency and does not create a PLAN. A legacy
+PLAN may be consulted only when the user explicitly supplies it and requests a
+backward-compatibility assessment; it cannot replace the exact SPEC, its
+approval evidence, its `# Execution` tasks, or this skill's selection and
+validation gates. Do not mix legacy PLAN task selection into the normal path.
+
+## Completion report
+
+Report:
+
+- exact SPEC path/ID and verified status/approval evidence
+- the single selected task and dependency-readiness evidence
+- changed files and task-scoped implementation result
+- fresh validation commands and results, including red/green evidence when
+  applicable
+- SPEC/session-state updates, untested paths, assumptions, and blockers
+- the next owner or handoff; never claim the whole SPEC is complete here
