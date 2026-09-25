@@ -1,0 +1,82 @@
+{
+  "page_count": 7,
+  "color_scheme": "random",
+  "pages": [
+    {
+      "template": "cover",
+      "eyebrow": "RAG / CONTEXT ENGINEERING",
+      "title": "YOUR TITLE\nGOES HERE",
+      "subtitle": "A short promise for the approved carousel.",
+      "thesis": "State the main idea in one sentence.",
+      "meta": "SOURCE-GROUNDED NOTE",
+      "bottom": "SWIPE FOR THE SYSTEM →"
+    },
+    {
+      "template": "chat",
+      "eyebrow": "CONVERSATION",
+      "title": "Let the disagreement expose the idea.",
+      "bubbles": [
+        {"label": "QUESTION", "text": "What assumption is doing the hidden work?"},
+        {"label": "REPLY", "text": "Make the context explicit before trusting the result."},
+        {"label": "FOLLOW-UP", "text": "What should the reader verify next?"},
+        {"label": "TAKEAWAY", "text": "Make the tradeoff visible."}
+      ]
+    },
+    {
+      "template": "table",
+      "eyebrow": "COMPARISON TABLE",
+      "title": "Make the tradeoff readable at a glance.",
+      "columns": ["CHOICE", "STRENGTH", "COST", "WHEN TO USE"],
+      "rows": [
+        ["FAST PATH", "Easy to explain", "Less nuance", "Early exploration"],
+        ["CONTROLLED", "Clear constraints", "More setup", "Production systems"],
+        ["ADAPTIVE", "Handles change", "Harder to test", "Uncertain inputs"],
+        ["HUMAN CHECK", "Trustworthy edge cases", "Needs review", "High-impact output"]
+      ],
+      "note": "Support comparisons with the approved evidence ledger."
+    },
+    {
+      "template": "grid-4",
+      "eyebrow": "FOUR CHECKS",
+      "title": "Four boxes. One decision the reader can make.",
+      "cards": [
+        {"number": "01", "title": "SIGNAL", "text": "What should be noticed first?"},
+        {"number": "02", "title": "CONTEXT", "text": "What information changes the reading?"},
+        {"number": "03", "title": "TRADEOFF", "text": "What becomes harder or more expensive?"},
+        {"number": "04", "title": "TEST", "text": "What can be checked before shipping?"}
+      ]
+    },
+    {
+      "template": "steps-5",
+      "eyebrow": "FIVE STEPS",
+      "title": "Turn the method into an ordered path.",
+      "steps": [
+        {"number": "01", "title": "NAME THE SIGNAL", "text": "Start with the observable problem."},
+        {"number": "02", "title": "SET THE CONTEXT", "text": "State what the reader needs to know."},
+        {"number": "03", "title": "SHOW THE MECHANISM", "text": "Make the moving parts explicit."},
+        {"number": "04", "title": "CHECK THE TRADEOFF", "text": "Name what the solution does not solve."},
+        {"number": "05", "title": "LEAVE A TEST", "text": "Give the reader a next action."}
+      ]
+    },
+    {
+      "template": "diagram",
+      "eyebrow": "SYSTEM MAP",
+      "title": "Show the mechanism behind the claim.",
+      "nodes": [
+        {"label": "INPUT", "text": "source"},
+        {"label": "CONTEXT", "text": "retrieval"},
+        {"label": "DECISION", "text": "evaluation"},
+        {"label": "OUTPUT", "text": "response"}
+      ],
+      "caption": "READ LEFT TO RIGHT / REPLACE WITH APPROVED MODEL"
+    },
+    {
+      "template": "closing",
+      "eyebrow": "TAKEAWAY",
+      "title": "Make the final slide useful on its own.",
+      "takeaway": "One bounded conclusion the reader can repeat.",
+      "source": "Add the evidence link, limitation, or approved question.",
+      "cta": "SAVE THIS  •  SHARE WITH YOUR TEAM  •  DISCUSS BELOW"
+    }
+  ]
+}
