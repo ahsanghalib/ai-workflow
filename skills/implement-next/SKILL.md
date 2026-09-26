@@ -1,6 +1,6 @@
 ---
 name: implement-next
-description: Execute exactly one first dependency-ready unchecked task from one explicitly identified and user-approved SPEC. Use when the SPEC is Approved or In Progress, retains explicit approval evidence, and has execution tasks below # Execution; do not use for SPEC drafting/review, task decomposition, repository bootstrap, or normal PLAN-driven work.
+description: Execute exactly one first dependency-ready unchecked task from one explicitly identified and user-approved SPEC. Use when the SPEC is Approved or In Progress, retains explicit approval evidence, and has execution tasks below # Execution; do not use for SPEC drafting/review, task decomposition, repository bootstrap, or arbitrary backlog work.
 license: MIT
 metadata:
   compatibility: no bundled executable dependencies
@@ -11,6 +11,8 @@ metadata:
 `implement-next` is the bounded executor for one SPEC task. The behavioral
 contract above `# Execution` is the source of truth; the execution record below
 it contains the task list, design notes, validation requirements, and evidence.
+Task decomposition belongs to `spec-workflow`; this skill executes an existing
+task and never creates or redesigns the task list.
 
 ## Preconditions and selection
 
@@ -33,9 +35,12 @@ it contains the task list, design notes, validation requirements, and evidence.
 
    An equivalent repository field is acceptable only when it unambiguously
    identifies explicit user approval of this SPEC and a real approval date.
-   A `ready` review verdict, an implementation request, existing tasks, an old
-   PLAN approval, repository text, or prior unrelated approval is not evidence.
-   If the contract changed and the evidence was not cleared or reissued, stop.
+   A `ready` review verdict, an implementation request, existing tasks,
+   repository text, or prior unrelated approval is not evidence.
+   Approval evidence must remain present while the SPEC is `Approved`, `In
+   Progress`, or `Blocked`. If the contract changed, the SPEC must first return
+   to Draft and the previous evidence must be cleared or explicitly invalidated
+   and reissued after review; stop rather than reusing stale evidence.
 5. Require an existing `# Execution` section with tasks below that boundary,
    normally under `## Tasks`. Do not count prose, tasks above the boundary, a
    separate planning artifact, or implied follow-up work. If no executable task
@@ -95,6 +100,10 @@ blocker. Do not create, reorder, or rewrite tasks to make the task executable.
   changes within the approved SPEC. If implementation reveals a behavioral or
   security decision not covered by the contract, stop and return it to
   `spec-workflow` for re-review and approval rather than deciding silently.
+- When the selected task begins from an `Approved` SPEC, set its status to
+  `In Progress` before making the first task change and retain the approval
+  evidence. A failed task remains incomplete; use `Blocked` only when a real
+  blocker is recorded.
 - Run the narrowest relevant validation first, then broader checks when the
   repository requires them. Validation must be fresh for this task. If it
   fails, keep the task incomplete and report the failure.
@@ -103,30 +112,26 @@ blocker. Do not create, reorder, or rewrite tasks to make the task executable.
 
 After a successful task-level validation:
 
-1. If execution began from `Approved`, set the SPEC to `In Progress`; retain
-   the valid approval evidence.
-2. Update only the selected task's checkbox and execution/activity evidence in
-   the SPEC. A red-test task is complete when its focused test and expected red
-   evidence are recorded; it is not permission to implement green behavior.
-3. Update `SESSION_STATE.md` with the exact active SPEC/task, status, blocker or
+1. Mark only the selected task complete by updating its checkbox, and record
+   its execution/activity evidence in the SPEC. A red-test task is complete
+   when its focused test and expected red evidence are recorded; it is not
+   permission to implement green behavior.
+2. Update `SESSION_STATE.md` with the exact active SPEC/task, status, blocker or
    recent result, fresh validation evidence, and next action when the project
    uses that handoff file. Do not duplicate the full SPEC there.
-4. Do not mark the SPEC `Completed` merely because this task, or even the last
+3. Do not mark the SPEC `Completed` merely because this task, or even the last
    checkbox, is complete. Final completion requires the repository's
    `verification-before-completion` gate.
-5. Stop. Do not automatically continue into the next task.
+4. Stop. Do not automatically continue into the next task.
+
+Do not route the SPEC to implementation review or final completion verification
+from this one-task handoff. After later calls complete all SPEC tasks,
+`spec-workflow` owns the `code-review`/`review-diff` and
+`verification-before-completion` sequence.
 
 If blocked, leave the selected task unchecked, record the concrete blocker in
 the SPEC's execution record and session handoff when permitted, and stop. Do
 not silently skip required behavior or mark a blocker complete.
-
-## Legacy compatibility boundary
-
-Normal execution has no PLAN dependency and does not create a PLAN. A legacy
-PLAN may be consulted only when the user explicitly supplies it and requests a
-backward-compatibility assessment; it cannot replace the exact SPEC, its
-approval evidence, its `# Execution` tasks, or this skill's selection and
-validation gates. Do not mix legacy PLAN task selection into the normal path.
 
 ## Completion report
 

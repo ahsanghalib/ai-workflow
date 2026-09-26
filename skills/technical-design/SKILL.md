@@ -34,6 +34,11 @@ and state missing evidence directly.
   prototypes; do not run network calls or deployments. This skill is
   read-only/design-only and returns conclusions for the owning workflow to
   record.
+- Keep feature-specific conclusions in the active SPEC's `# Execution`
+  section. When a conclusion becomes durable cross-feature or project
+  knowledge, propose promotion to `docs/architecture.md`, `docs/rules/`, or
+  `docs/decisions/` through the owning project workflow; do not create or
+  update those documents automatically from this read-only skill.
 - Do not treat a design verdict as approval. Ordinary behavior-preserving
   implementation details do not require a second user approval. Pause and
   route back through `spec-workflow` when the design exposes a new
@@ -141,4 +146,4 @@ paths, and whether the conclusions are behavior-preserving. Mark unresolved
 user-owned decisions separately from implementation detail. Stop after the
 execution-ready conclusion: hand task decomposition to `spec-workflow` and code
 changes to the relevant implementation workflow. Do not create a separate
-artifact or use a legacy planning handoff as the default path.
+technical-design artifact.

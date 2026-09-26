@@ -10,16 +10,34 @@ Design or review persistence only when the approved behavioral contract makes
 non-trivial data-model decisions necessary. Requirements drive this work; the
 schema does not become a prerequisite for defining the feature.
 
+## When schema design is appropriate
+
+Invoke this skill when persistence decisions require judgment about one or
+more of the following:
+
+- new domain entities or non-trivial relationships;
+- complex migrations, backfills, or backward compatibility;
+- uniqueness, lifecycle, retention, deletion, or other complex invariants;
+- concurrency, cross-service ownership, or tenant isolation; or
+- indexing and access-pattern strategy.
+
+Do not invoke heavyweight schema design for every small persistence change.
+When the approved SPEC and current executable schema make an obvious change
+clear, report that no separate design is needed and let the owning workflow
+continue without adding schema-design ceremony.
+
+Do not invoke this skill for work with no persistence impact. Keep that work in
+the normal SPEC and implementation workflow.
+
 ## Boundaries
 
 - This skill owns data-model design and review, not DDL, migrations, backfills,
   services, routes, UI, or broad system architecture. It is read-only and
   design-only.
 - For feature-specific work, require the exact SPEC path and explicit approval
-  evidence. A project direction, user flow, Markdown schema, or execution plan
-  may provide context when present, but none is a prerequisite.
-- In particular, do not require `MASTER_PLAN.md`, `USER_FLOW.md`,
-  `DB_SCHEMA.md`, `project-init`, or a PLAN for normal feature work.
+  evidence. Existing project-direction or architecture documents may provide
+  secondary context when relevant, but none is a prerequisite and none replaces
+  the approved SPEC or executable schema.
 - An initial or project-wide schema review is conditional too: invoke it only
   when an approved SPEC actually requires that scope. Do not run baseline
   schema design automatically during project initialization.
@@ -62,6 +80,8 @@ introduce destructive data loss, an irreversible migration strategy, new
 user-visible behavior, a public compatibility break, a new security or privacy
 trade-off, a new retention/deletion policy, an unresolved business invariant,
 or material operational risk not implied by the approved SPEC.
+Those decisions require explicit user approval of the revised SPEC before
+implementation; a schema-design handoff is not approval.
 
 ## Sequence
 

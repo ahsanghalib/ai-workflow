@@ -7,7 +7,7 @@ description: Use when reviewing a working-tree diff or specified local Git range
 
 Use this as the minimal read-only path for an explicitly scoped working-tree
 diff or local Git range when contract reconciliation is not requested. It does
-not require a SPEC or PLAN and is not part of an approval workflow.
+not require a SPEC and is not part of an approval workflow.
 
 ## Review contract
 

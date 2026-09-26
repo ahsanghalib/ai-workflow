@@ -12,8 +12,7 @@ For substantial work, require the exact approved or in-progress SPEC path or
 identifier, valid `Approval: Explicit user approval — YYYY-MM-DD` evidence, and
 the first eligible SPEC task selected through `implement-next` when that
 companion is available. Require a matching SPEC scope; never infer approval
-from the implementation request, a review verdict, an existing task, or a
-legacy PLAN.
+from the implementation request, a review verdict, or an existing task.
 
 An explicitly requested trivial/localized fix may use the lightweight path only
 when it is one bounded user-visible behavior or defect, does not change API
@@ -30,16 +29,22 @@ companion is unavailable, require the same exact-SPEC, first-task, approval,
 and TDD checks directly; do not silently select a task from repository
 context. If tasks are missing, hand back to `spec-workflow`.
 
+`implement-next` owns task selection, task execution state, task completion,
+and the `SESSION_STATE.md` handoff. This skill owns only the selected frontend
+implementation and task-specific tests/checks, then returns its evidence; it
+does not select another task or mark work complete independently.
+
 ## Context loading
 
 Read only:
 
 - root `AGENTS.md` and `SESSION_STATE.md` when present
 - the active SPEC, selected task, and its execution context
-- applicable repository rules discovered from `AGENTS.md`, `docs/rules/`, and
-  existing project conventions
+- applicable repository rules discovered from `AGENTS.md`, `docs/rules/`,
+  existing project conventions, and user-owned legacy rule locations in an
+  existing repository
 - API, authentication, contracts, UI, security, and testing rules only when
-  relevant; preserve user-owned legacy locations when they remain authoritative
+  relevant
 
 Use an available repository structural index, such as CodeGraph, for indexed
 structural questions and blast radius. Use normal reads/search for docs,
@@ -84,10 +89,16 @@ push, deploy, publish, or run production operations as part of implementation.
 ## Verification
 
 Verify user-observable behavior, typecheck/lint/tests as required, and preserve
-TDD evidence or record an explicit exception with alternative verification. Use
-`verification-before-completion` before claiming done. Hand off substantial
-work to `code-review` when available; otherwise use the repository's existing
-diff-review workflow. For browser checks, record the approved origin,
+TDD evidence or record an explicit exception with alternative verification in
+the same SPEC's `# Execution` section. Do not create or use a separate planning
+or execution-tracking artifact. Use `verification-before-completion` before
+claiming the SPEC complete only after all SPEC tasks are complete and the
+SPEC-level review/final verification sequence succeeds. For this selected task,
+return task-scoped evidence to `implement-next` and stop; do not run the
+SPEC-level review or final verification gate here. After all SPEC tasks are
+complete, `spec-workflow` routes `code-review` or `review-diff` when appropriate
+and then `verification-before-completion`. For browser checks, record the
+approved origin,
 viewport/fixture scope, user-visible assertions, console/network observations,
 and artifacts; do not claim untested states or cross-browser behavior. Report
 the selected task, changed files, validation evidence, untested paths,

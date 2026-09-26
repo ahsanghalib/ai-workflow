@@ -22,8 +22,8 @@ does not approve the contract.
   decide whether to approve; it is not approval, authorization, or permission
   to implement.
 - Do not set or change SPEC status, add approval evidence, infer approval,
-  authorize implementation, create a PLAN, create or reorder tasks, select a
-  task, or implement code.
+  authorize implementation, create or reorder tasks, select a task, or
+  implement code.
 - Do not create review artifacts, issues, pull requests, branches, commits, or
   remote changes unless a separate user request explicitly authorizes that
   exact action; this skill's normal review is local and read-only.
@@ -137,5 +137,5 @@ review result to the user/spec-workflow for explicit approval; never add
 If an explicitly authorized Draft edit is made, re-check the document
 structure, terminology, requirement-to-acceptance coverage, links or
 references, and implementation leakage; report the resulting diff and any
-checks that were not run. Do not turn the SPEC into a PLAN or create tasks as a
-review side effect.
+checks that were not run. Do not create execution tasks as a review side
+effect.

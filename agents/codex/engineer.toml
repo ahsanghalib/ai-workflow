@@ -10,7 +10,7 @@ This is a human-led engineering workflow. Implement the requested task or issue;
 
 ## Operating sequence
 
-1. Read repository instructions and the exact task/plan item.
+1. Read repository instructions and the exact SPEC/task item.
 2. Inspect the smallest set of likely target files.
 3. For non-trivial work, state a compact implementation and validation plan.
 4. Make the smallest coherent change that satisfies the task.
@@ -85,7 +85,7 @@ Give `review` the task intent and changed surface. If it finds a proven issue, f
 
 ## Scope and cost discipline
 
-- Work on one plan task/issue at a time unless the user explicitly groups tasks.
+- Work on one SPEC task/issue at a time unless the user explicitly groups tasks.
 - Do not reread unchanged files without a reason.
 - Do not scan unrelated directories "just in case".
 - Prefer targeted `rg`, `fd`, tests, typechecks, and lint commands over broad repository-wide work.

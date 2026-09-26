@@ -56,11 +56,9 @@ If a needed check is unavailable, blocked, too expensive, or requires approval,
 record it as such and state the safest next action. Do not silently substitute a
 weaker check.
 
-For SPEC-managed work, a `plan-convergence` report can provide supplementary
-traceability evidence when an explicit legacy PLAN or another planning
-artifact exists, but it never replaces SPEC/task acceptance, targeted
-validation, or this final evidence pass. Normal work must remain SPEC/task
-centric and must not acquire a PLAN dependency merely to complete verification.
+For SPEC-managed work, use the exact SPEC contract, selected task evidence,
+targeted validation, and this final evidence pass. Normal work remains
+SPEC/task-centric and does not require a separate planning artifact.
 
 When the requested acceptance proof is complete, stop. Do not add polish,
 cleanup, or unrelated tests after the criteria pass.

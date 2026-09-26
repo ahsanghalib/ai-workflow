@@ -1,7 +1,8 @@
 # SPEC Template
 
-Use this template for substantive work. Remove optional sections that do not
-carry a real decision. Do not add a separate PLAN for the normal workflow.
+Use this template for substantive work. The default skeleton contains only
+required contract and execution sections. Add an optional section below only
+when it carries a real decision. Keep execution tasks inside this SPEC.
 
 ```markdown
 # SPEC-0001 — <short title>
@@ -17,9 +18,6 @@ Type: <one supported work type>
 
 <Observable outcome this SPEC must achieve.>
 
-## Context / Evidence
-<!-- Optional. Include only relevant repository, user, or research evidence. -->
-
 ## Requirements
 
 - <The behavior that must exist.>
@@ -28,30 +26,9 @@ Type: <one supported work type>
 
 - [ ] <Observable success or failure condition.>
 
-## Non-goals
-<!-- Optional. State explicit exclusions when scope could be confused. -->
-
-## Constraints
-<!-- Optional. Include user, product, compatibility, security, or operational
-constraints. -->
-
-## Impact
-<!-- Optional. Mention API, persistence, frontend, security, or compatibility
-impact. -->
-
-## Open Questions
-<!-- Optional. Material user-owned decisions must be resolved before approval. -->
-
 ---
 
 # Execution
-
-## Technical Design
-<!-- Optional. Record only approved or behavior-preserving design conclusions. -->
-
-## Data Design
-<!-- Optional. Use when persistence design is justified. Prefer executable
-schema as structural truth. -->
 
 ## Tasks
 
@@ -65,9 +42,39 @@ schema as structural truth. -->
 
 <Short-lived decisions, blockers, and task evidence.>
 
+```
+
+Optional contract sections (add only when applicable):
+
+```markdown
+## Context / Evidence
+<!-- Relevant repository, user, or research evidence. -->
+
+## Non-goals
+<!-- Explicit exclusions when scope could be confused. -->
+
+## Constraints
+<!-- User, product, compatibility, security, or operational constraints. -->
+
+## Impact
+<!-- API, persistence, frontend, security, or compatibility impact. -->
+
+## Open Questions
+<!-- Material user-owned decisions that must be resolved before approval. -->
+```
+
+Optional execution sections (add only when justified):
+
+```markdown
+## Technical Design
+<!-- Approved or behavior-preserving design conclusions. -->
+
+## Data Design
+<!-- Persistence design when justified; prefer executable schema as structural
+truth. -->
+
 ## Tracking
-<!-- Optional. GitHub issue/project/PR references are tracking metadata, not
-requirements. -->
+<!-- Verified, user-approved Issue/Project/PR references only. -->
 ```
 
 ## Template rules

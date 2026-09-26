@@ -15,7 +15,7 @@ For substantial work, require:
 - the exact first eligible SPEC task, selected through `implement-next` when
   that companion is available
 - a matching SPEC scope; never infer approval from the user's implementation
-  request, a review verdict, an existing task, or a legacy PLAN
+  request, a review verdict, or an existing task
 
 An explicitly requested trivial/localized fix may proceed without persistent
 SPEC files only when it is one bounded behavior or defect, does not change
@@ -32,17 +32,22 @@ companion is unavailable, require the same exact-SPEC, first-task, approval,
 and TDD checks directly; do not silently select a task from repository
 context. If tasks are missing, hand back to `spec-workflow`.
 
+`implement-next` owns task selection, task execution state, task completion,
+and the `SESSION_STATE.md` handoff. This skill owns only the selected backend
+implementation and task-specific tests/checks, then returns its evidence; it
+does not select another task or mark work complete independently.
+
 ## Context loading
 
 Read only:
 
 - root `AGENTS.md` and `SESSION_STATE.md` when present
 - the active SPEC, selected task, and its execution context
-- applicable repository rules discovered from `AGENTS.md`, `docs/rules/`, and
-  existing project conventions
+- applicable repository rules discovered from `AGENTS.md`, `docs/rules/`,
+  existing project conventions, and user-owned legacy rule locations in an
+  existing repository
 - database, API, authentication, contracts, security, and testing rules only
-  when the change touches those areas; preserve user-owned legacy locations
-  when they remain authoritative
+  when the change touches those areas
 
 Use an available repository structural index, such as CodeGraph, for indexed
 structural questions. Use normal reads/search for docs, configuration, and
@@ -81,10 +86,14 @@ run production operations as part of implementation.
 
 Run the narrowest relevant tests first, then required repository checks. For
 behavioral changes, preserve the TDD evidence or record an explicit exception
-with alternative verification. Use configured deterministic tools only when
-relevant. Before claiming done, use `verification-before-completion`.
+with alternative verification in the same SPEC's `# Execution` section. Do not
+create or use a separate planning or execution-tracking artifact. Use configured
+deterministic tools only when relevant. Return the task-scoped evidence to
+`implement-next` and stop; do not run the SPEC-level review or final
+`verification-before-completion` gate for one task. After all SPEC tasks are
+complete, `spec-workflow` routes `code-review` or `review-diff` when appropriate
+and then the final verification gate.
 
-Hand off completed substantial work to `code-review` when available; otherwise
-use the repository's existing diff-review workflow. Report the selected SPEC
-task, changed files, validation evidence, untested paths, assumptions, and
-handoff; do not mark the SPEC completed from this skill.
+Report the selected SPEC task, changed files, validation evidence, untested
+paths, assumptions, and handoff; do not mark the SPEC completed from this
+skill.

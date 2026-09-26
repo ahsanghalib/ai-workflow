@@ -26,11 +26,20 @@ jobs:
       - name: Test project-init helpers and contracts
         run: bash skills/project-init/tests/test-project-init.sh
 
+      - name: Test project-init traceability contract
+        run: bash skills/project-init/tests/test-traceability-contract.sh
+
       - name: Test SPEC workflow contract
         run: bash skills/spec-workflow/tests/test-contract.sh
 
       - name: Test cross-skill SPEC workflow contract
         run: bash skills/spec-workflow/tests/test-cross-skill-contract.sh
+
+      - name: Test SPEC lifecycle contract
+        run: bash skills/spec-workflow/tests/test-lifecycle-contract.sh
+
+      - name: Test design and completion contract
+        run: bash skills/spec-workflow/tests/test-design-completion-contract.sh
 
       - name: Parse Codex configuration
         run: python3 -c 'import pathlib, tomllib; tomllib.loads(pathlib.Path("codex/config.toml").read_text())'

@@ -85,6 +85,7 @@ that matter for your project.
 - [What this repository is for](#what-this-repository-is-for)
 - [What it is not](#what-it-is-not)
 - [How the pieces fit together](#how-the-pieces-fit-together)
+  - [Workflow ownership](#workflow-ownership)
 - [Installation](#installation)
   - [Before you begin](#before-you-begin)
   - [Install the repository](#install-the-repository)
@@ -127,6 +128,47 @@ When you use an AI runtime with this repository, the pieces are layered:
 The same skill can often be used by OpenCode, Codex, and another runtime that
 supports the common `SKILL.md` format. The exact discovery and permission
 behavior still belongs to the runtime you are using.
+
+### Workflow ownership
+
+The normal workflow is routed by need; it is not a checklist that requires
+every skill for every change.
+
+| Component | Responsibility |
+| --- | --- |
+| `project-init` | Repository-control bootstrap and reconciliation |
+| `spec-workflow` | One substantive unit-of-work lifecycle |
+| SPEC | Behavioral contract plus mutable execution record |
+| `spec-review` | Contract-quality review and readiness, not approval |
+| Tasks inside the SPEC | The execution plan for that unit of work |
+| `technical-design` | Conditional implementation architecture design |
+| `schema-design` | Conditional non-trivial persistence design |
+| `implement-next` | One bounded task from an approved or in-progress SPEC |
+| GitHub Issue | Optional tracking item |
+| GitHub Project | Optional dashboard |
+| `verification-before-completion` | Final completion gate |
+
+### Knowledge placement
+
+Keep each fact in the smallest authoritative location that matches its
+lifespan and scope:
+
+| Knowledge | Authoritative placement |
+| --- | --- |
+| Temporary current work state | `SESSION_STATE.md` |
+| Feature behavior, requirements, and acceptance | SPEC above `# Execution` |
+| Feature-specific technical or data design | SPEC below `# Execution` |
+| Feature tasks and validation notes | SPEC below `# Execution` |
+| Cross-feature engineering convention | `docs/rules/` |
+| Cross-feature architecture | `docs/architecture.md` or an ADR when justified |
+| Agent/runtime memory | `.ai/memory/` |
+| Structural truth | Source code, schema, migrations, or config |
+
+Feature tasks, validation, and implementation notes also belong below the
+SPEC `# Execution` boundary.
+
+Do not duplicate the same fact across files unless there is a strong reason;
+link to the authoritative source instead.
 
 ## Installation
 
@@ -329,8 +371,7 @@ For a real change, give the assistant:
 - the files or feature area, if known;
 - what must not change;
 - the command or test that should prove the change; and
-- whether you want discovery, a SPEC, implementation, review, or an
-  explicitly requested legacy PLAN.
+- whether you want discovery, a SPEC, implementation, or review.
 
 Example:
 
@@ -344,10 +385,10 @@ files you would change, and validation command you would run.
 
 `project-init` is the starting point when you want to establish or reconcile a
 project's minimal control plane before asking an AI assistant to build it. It
-preserves user-owned layouts and creates only the controls the repository
-currently needs. It does not plan a feature, create a normal-work PLAN, create
-the application itself, choose your programming language, install dependencies,
-create a database, or deploy anything.
+preserves source/configuration and creates only the controls the repository
+currently needs. It does not plan a feature, create a separate execution
+document, create the application itself, choose your programming language,
+install dependencies, create a database, or deploy anything.
 
 You can use it with either a new folder or a project that already contains
 code. In both cases, begin with an exact directory and ask the assistant to
@@ -401,14 +442,16 @@ reported by name only.
    and scope are correct.
 5. Review the created controls. The minimal default includes `AGENTS.md`,
    `SESSION_STATE.md`, `.ai/memory/`, and `docs/specs/`, plus a missing
-   `.gitignore` copied from the bundled template. It does not require or create
-   `MASTER_PLAN.md`, `docs/DB_SCHEMA.md`, `docs/USER_FLOW.md`,
-   `docs/PROJECT_ARCHITECTURE.md`, `docs/plans/`, or `docs/reviews/` by default.
+   `.gitignore` copied from the bundled template. It does not create project-
+   wide roadmap, schema, flow, architecture, decision, plan, or review
+   documents.
 6. Add other controls only when the project needs them and you explicitly
-   approve them. Architecture, user-flow, schema, rules, helper prompts, and
-   legacy planning documents are conditional outputs, not a checklist to fill
-   in. Existing user-owned artifacts remain in place, and real `.env` files are
-   never generated or inspected.
+   approve them. Architecture, user-flow, schema, rules, and decisions are
+   conditional outputs, not a checklist to fill in. Existing project controls
+   remain in place, and real `.env` files are never generated or inspected.
+   Reusable starting points for these conditional documents remain under
+   `skills/project-init/templates/docs/`; they are copied or adapted only
+   after source-of-truth review and approval.
 7. Run the foundation check when appropriate. For a substantive feature, bug,
    improvement, refactor, migration, or other work request, hand off to
    `spec-workflow` rather than asking project-init to create a plan.
@@ -422,43 +465,39 @@ For substantive work, use this default sequence:
 3. `spec-review` returns a readiness verdict. After review, you must explicitly
    approve the SPEC; `ready` is not approval.
 4. After approval, prepare execution details and dependency-ordered tasks in
-   the same SPEC. A separate PLAN is not part of the default workflow.
+   the same SPEC.
 5. `implement-next` executes exactly one dependency-ready SPEC task. The
    relevant `backend-feature` or `frontend-feature` skill consumes the exact
    approved or in-progress SPEC and selected task.
 6. Review and verify the implementation, then complete the SPEC only after its
    final acceptance and validation evidence passes.
 
-Explicit PLAN workflows and user-owned legacy artifacts remain supported as
-optional compatibility paths. Use them only when the user asks for that
-existing layout or workflow; they do not become requirements for new projects.
 GitHub Issues and Projects are optional tracking layers. The repository SPEC is
 the durable requirements source of truth when a SPEC exists; a work item may
-have no issue, one issue, or several issues.
+have no issue, one issue, or several issues. `project-init` never creates or
+requires a GitHub Project; use one only when the user requests it, the
+repository already uses it, or an authorized workflow explicitly chooses it.
 
 ### Existing project
 
 For an existing project, `project-init` is a project-control reconciliation
 tool. It should first read the project's current instructions, source layout,
-relevant architecture or planning artifacts, Git state, and validation
+relevant project-control artifacts, Git state, and validation
 commands. It then reports what is already present, what is missing or
 inconsistent, and what it would change. It should preserve the project's
 existing layout and avoid overwriting files unless you explicitly request that.
 
 It reports each relevant file as keep, create, revise, preserve, or conflict.
-Existing `AGENTS.md`, README, plans, architecture, user-flow, schema,
-`.gitignore`, and other source-of-truth files need separate approval before
+Existing `AGENTS.md`, README, architecture, user-flow, schema, `.gitignore`,
+and other source-of-truth files need separate approval before
 revision. If the project has no Git metadata, local `git init` is a separate
 approval; existing Git and ignore policy are preserved. The tracked `.ai/`
 folder is documentation, not a secret store, and real `.env` contents are
 never read or copied.
 
-An existing project does not receive the new-project base scaffold implicitly.
-Reconciliation uses repeatable, exact `--only RELPATH` selections for approved
-missing outputs, preserves established `PLANS.md`, `plans/`, instruction, and
-architecture layouts, and never creates a competing documentation tree. A
-revision to an existing file is its own approval scope, even when a similarly
-named template exists in this repository.
+An existing project receives only missing minimal controls after approval.
+Reconciliation never creates a competing documentation tree. A revision to an
+existing file is its own approval scope.
 
 Open the existing project in your runtime first:
 
@@ -467,34 +506,29 @@ cd /path/to/existing-project
 opencode  # or: codex
 ```
 
-Use this prompt when the repository has code but lacks a reliable planning
-structure:
+Use this prompt when the repository has code but lacks reliable project
+controls:
 
 ```text
 Use the project-init skill in strict mode for this exact existing repository:
 /path/to/existing-project
 
-Inspect first. Read the applicable AGENTS.md files, README, existing planning
-documents, architecture notes, source layout, Git state, and validation
+Inspect first. Read the applicable AGENTS.md files, README, project-control
+documents, source layout, Git state, and validation
 commands. Do not write yet. Report:
 
 - which project-control documents already exist;
-- whether the project already has a planning system or source of truth;
+- which current sources of truth apply;
 - what is missing, stale, or contradictory;
 - the smallest reconciliation you recommend; and
 - the exact files that would be created or revised.
 
-Preserve the existing layout and do not create a second planning system. Do not
-change application code, dependencies, or remote Git state. Wait for my approval
-before writing.
+Do not create a second documentation tree. Do not change application code,
+dependencies, or remote Git state. Wait for my approval before writing.
 ```
 
-If the project already has files such as `PLANS.md`, `plans/`, or an
-architecture document, `project-init` should build on that system rather than
-silently creating a competing tree. If the existing controls are sufficient,
-it may recommend no bootstrap changes. User-owned legacy artifacts and explicit
-PLAN workflows remain available when requested; otherwise a substantive request
-continues through `spec-workflow`.
+If the existing controls are sufficient, project-init may recommend no changes.
+A substantive request continues through `spec-workflow`.
 
 ### Native `/init` and project instructions
 
@@ -521,8 +555,8 @@ Use the project-init skill in standard mode for this existing project:
 
 Feature goal: [describe the outcome]
 
-Read the current project instructions and planning system first. Reconcile only
-the approved project controls that are missing or stale, then hand this feature
+Read the current project instructions and project controls first. Reconcile only
+the approved controls that are missing or stale, then hand this feature
 request to spec-workflow. Preserve the project's existing document locations
 and numbering. Do not implement code, change dependencies, create migrations,
 or change remote Git state. List open questions, assumptions, acceptance
@@ -534,8 +568,8 @@ evidence, validation commands, and the exact files changed. Stop for my review.
 - **Light mode** — discuss the goal, boundaries, acceptance criteria, risks, and
   open questions in chat. It does not create files.
 - **Standard mode** — reconcile selected project controls using the project's
-  existing structure. It does not create a normal-work PLAN or implement the
-  feature; substantive work goes to `spec-workflow`.
+  existing structure. It does not create a separate execution document or
+  implement the feature; substantive work goes to `spec-workflow`.
 - **Strict mode** — initialize or reconcile the minimal project controls after
   inspecting the exact target. It asks for approval before writing the default
   control plane or revising existing source-of-truth documents.
@@ -572,28 +606,16 @@ substantive-work sequence is:
 3. Route the SPEC to `spec-review`, incorporate authorized findings, and wait
    for explicit user approval. A `ready` verdict does not approve the SPEC.
 4. After approval, record justified technical or data design and dependency-
-   ordered tasks below `# Execution`; do not create a normal-work PLAN.
+   ordered tasks below `# Execution`; keep them in the same SPEC.
 5. Hand the exact SPEC and one selected task to `implement-next`, which routes
    to `backend-feature` or `frontend-feature` when appropriate.
 6. Review and verify the implementation before completing the SPEC.
 
 Each SPEC links to relevant project documents and contracts when they exist;
-none of `MASTER_PLAN.md`, `DB_SCHEMA.md`, `USER_FLOW.md`,
-`PROJECT_ARCHITECTURE.md`, `docs/plans/`, or `docs/reviews/` is a prerequisite
-for creating a SPEC. Explicit legacy PLAN workflows remain separate and
-approval-gated.
+no project-wide roadmap, schema, flow, architecture, decision, plan, or review
+document is a prerequisite for creating a SPEC.
 
 ![Project-init feature lifecycle after foundational review](assets/project_init_feature_lifecycle.svg)
-
-#### API and schema contracts
-
-When the API concern applies and `docs/rules/API.md` is selected, the generated
-rule uses one response envelope with `success`, `message`, and `requestId`.
-Successful responses carry `data`; errors carry `error`; list endpoints choose
-offset or cursor pagination deliberately in `meta`. The envelope does not use
-`204 No Content`; a successful operation without a meaningful result returns an
-empty `data` object instead. These are project-control contract defaults, not a
-substitute for a project-specific API review.
 
 The bundled initializer script is an optional implementation detail for the
 strict control-plane scaffold. Most users should invoke `project-init` through
@@ -614,7 +636,7 @@ run the initializer:
 
 For an existing project, use the read-only inventory helper before proposing
 reconciliation. It classifies safe filenames as evidence for instructions,
-planning, architecture, user flow, schema, manifests, source, validation, or
+specifications, architecture, schema, manifests, source, validation, or
 configuration without reading file contents, following symlinks, or opening
 `.env` values:
 
@@ -624,35 +646,23 @@ bash "$scripts/inventory-project.sh" \
   /path/to/existing-project
 ```
 
-The base initializer bundle is for an empty folder or a folder containing only
-`.git`. It creates only the minimal control plane: `AGENTS.md`,
+The initializer creates only the minimal control plane: `AGENTS.md`,
 `SESSION_STATE.md`, `.ai/memory/`, and `docs/specs/`, plus a missing
-`.gitignore`. Select every non-default output with repeatable `--only` flags.
-For an existing project, select only the approved missing outputs; this keeps
-an established `PLANS.md`, `plans/`, `AGENTS.md`, or other source of truth from
-being accompanied by a competing template tree:
+`.gitignore`. It uses copy-if-missing semantics for projects without an
+existing alternate SPEC source and has no option for generating project-wide
+work documents. If an existing project already uses `specifications/`, `specs/`,
+or `docs/specifications/`, it refuses to guess and requires an explicitly
+approved `--spec-dir` mapping:
 
 ```bash
 bash /absolute/path/to/ai-workflow/skills/project-init/scripts/init-project.sh \
-  --only docs/USER_FLOW.md \
-  --only .ai/prompts/README.md \
+  --spec-dir specifications \
   /path/to/existing-project
 ```
 
-The script still uses copy-if-missing semantics, so an existing selected file
-is preserved. An unchanged recognized project-init scaffold is an explicit
-no-op when the command is repeated. Creating `docs/DB_SCHEMA.md` is a separate,
-explicit optional selection after reviewing whether the project needs a durable
-schema document; it is not required before creating a SPEC. Run only this exact
-selection in a later invocation:
-
-```bash
-bash /absolute/path/to/ai-workflow/skills/project-init/scripts/init-project.sh \
-  --only docs/DB_SCHEMA.md --with-schema \
-  /path/to/project
-```
-
-Do not combine the schema selection with the initial user-flow scaffold.
+An unchanged target reports copy-if-missing skips. Architecture, decision,
+user-flow, schema, and rules documents are created later by the workflow that
+justifies them, not by this helper.
 
 If the target is nested inside another Git worktree, the inspection output shows
 both paths and the initializer stops unless you separately approve that exact
@@ -678,30 +688,28 @@ That option creates only local Git metadata. It does not create a commit,
 remote, branch, push, or any other Git operation; without it, Git state is
 unchanged.
 
-Git is optional for the documentation scaffold. If Git is not installed, or
-you do not approve local initialization, omit `--init-git`: the approved
-control files and any explicitly selected outputs can still be created, and the
-target simply remains outside Git. The inspection and handoff must say that
-branch, history, and Git-state validation were unavailable. Asking for Git
-later is a separate operation.
+Git is optional for the control scaffold. If Git is not installed, or you do
+not approve local initialization, omit `--init-git`: the approved control
+files can still be created, and the target simply remains outside Git. The
+inspection and handoff must say that branch, history, and Git-state validation
+were unavailable. Asking for Git later is a separate operation.
 
 The output boundary is deliberate: project-init produces the minimal
-project-control files and directories, plus a missing `.gitignore`. Optional
-user-flow, specialized-rule, helper-prompt, schema, legacy planning, and local
-Git metadata outputs require separate selection and approval. It does not
-produce application source, framework/package files, migrations, secrets,
-deployment files, commits, branches, remotes, or pushes. Run the foundation
-check after an approved control-plane write or before a substantive-work
-handoff when appropriate. For an existing project whose equivalent controls
-use different paths, the validator accepts explicit `--readme`, `--agents`,
-`--master-plan`, `--architecture`, `--user-flow`, and `--schema` mappings; use
-`none` for an inapplicable optional document.
+project-control files and directories, plus a missing `.gitignore` and
+separately approved local Git metadata. It does not produce application
+source, project-wide work documents, framework/package files, migrations,
+secrets, deployment files, commits, branches, remotes, or pushes. Run the
+foundation check after an approved control-plane write or before a
+substantive-work handoff when appropriate.
 
 ```bash
 scripts=/absolute/path/to/ai-workflow/skills/project-init/scripts
 bash "$scripts/validate-foundation.sh" \
   /path/to/project
 ```
+
+Pass the same approved `--spec-dir` mapping to the validator when the project
+uses an existing SPEC source outside `docs/specs/`.
 
 ## How to use it day to day
 
@@ -730,6 +738,10 @@ also name a skill directly, for example:
 ```text
 Use the repository-research skill to trace where this setting is read.
 ```
+
+Only the relevant and justified skills should run for a request. The ownership
+model below describes available handoffs; it is not a requirement to invoke
+every capability in sequence.
 
 ### A practical working loop
 
@@ -832,26 +844,20 @@ refer to when asking an assistant to use one explicitly.
 - `source-driven-development` — use current authoritative documentation when a
   framework, library, runtime, or API detail may have changed.
 
-#### Project control and planning
+#### Project control and work lifecycle
 
 - `project-init` — bootstrap project-control documents and create or revise
   the minimal control plane without implementing application work; hand
   substantive requests to `spec-workflow`.
-- `spec-workflow` — create, refine, review, approve, and prepare one durable
-  SPEC for a substantive request.
-- `spec-review` — review one feature specification for missing behavior,
-  permissions, edge cases, and acceptance evidence.
-- `plan-review` — review one explicitly requested legacy implementation plan
-  before work begins.
-- `plan-consistency-review` — check an explicit PLAN and related requirements,
-  architecture, tasks, and validation artifacts for contradictions.
-- `plan-convergence` — compare an explicit approved PLAN with current
-  implementation evidence.
+- `spec-workflow` — own one substantive unit-of-work lifecycle from contract
+  drafting through approval, execution preparation, and completion.
+- `spec-review` — review one feature specification for contract quality and
+  readiness; it does not approve the SPEC.
 - `implement-next` — implement exactly one dependency-ready task from an
   approved or in-progress SPEC.
 - `session-state` — update an existing project's short-term handoff state.
-- `verification-before-completion` — require fresh evidence before claiming a
-  task is complete or safe to merge.
+- `verification-before-completion` — provide the final completion gate with
+  fresh evidence before claiming a SPEC is complete or safe to merge.
 
 #### Implementation, debugging, and review
 
@@ -869,10 +875,10 @@ refer to when asking an assistant to use one explicitly.
   problem.
 - `deprecation-and-migration` — safely replace or retire an API, dependency,
   feature, configuration, or schema.
-- `schema-design` — design or review persistent relational data before services
-  or routes are changed.
-- `code-review` — perform a substantial plan-backed read-only review for an
-  explicit legacy PLAN workflow.
+- `schema-design` — conditionally design or review non-trivial persistence
+  decisions when the approved behavior requires them.
+- `code-review` — perform a substantial SPEC/task-backed read-only review for
+  an explicitly scoped implementation.
 - `review-diff` — perform a focused read-only review of a diff.
 
 #### Security and external boundaries
@@ -1013,8 +1019,7 @@ The repository uses three kinds of project context:
 - `.ai/memory/episodes/*.md` — concise historical capsules about meaningful
   prior work, decisions, failures, and useful discoveries. These Markdown
   files are the durable, reviewable source of truth and may be committed.
-- `README.md`, architecture documents, rules, SPECs, and any explicit legacy
-  PLANs — stable project truth.
+- `README.md`, architecture documents, rules, and SPECs — stable project truth.
 
 The `agent-memory` skill keeps a local search index beside the episodes:
 `.ai/memory/memory.sqlite` is derived SQLite/FTS5 state, is ignored by Git, and
@@ -1311,6 +1316,8 @@ shellcheck skills/project-init/scripts/*.sh skills/project-init/tests/*.sh
 bash skills/project-init/tests/test-project-init.sh
 bash skills/spec-workflow/tests/test-contract.sh
 bash skills/spec-workflow/tests/test-cross-skill-contract.sh
+bash skills/spec-workflow/tests/test-lifecycle-contract.sh
+bash skills/spec-workflow/tests/test-design-completion-contract.sh
 ```
 
 For the project-local memory CLI, run:
@@ -1480,9 +1487,6 @@ linker only if you want them available globally. Skip copying `opencode/` and
 - **Runtime** — the application that loads agents and skills and communicates
   with a model.
 - **SPEC** — a project document describing what behavior must exist.
-- **PLAN** — an optional legacy project document describing how an approved
-  implementation slice will be built. Normal work keeps execution tasks in the
-  SPEC below `# Execution`.
 - **Session state** — a short handoff note describing where current work
   stopped.
 - **TOML/JSON/Markdown** — text formats used by the runtime configuration,
