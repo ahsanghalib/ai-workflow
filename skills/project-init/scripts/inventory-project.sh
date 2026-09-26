@@ -72,16 +72,13 @@ classify() {
     */AGENTS.md|AGENTS.md|README.md|README.*|CLAUDE.md|GEMINI.md|.cursorrules|.windsurfrules)
       printf 'instruction'
       ;;
-    docs/USER_FLOW.md|*USER_FLOW.md|*user-flow*)
-      printf 'user-flow'
+    *SPEC*|*specs/*|docs/specifications/*|specifications/*)
+      printf 'specification'
       ;;
-    MASTER_PLAN.md|PLANS.md|*MASTER_PLAN*|*plans/*|*plan*|*SPEC*|*specs/*)
-      printf 'planning'
-      ;;
-    *ARCHITECTURE*|*architecture*)
+    *architecture*)
       printf 'architecture'
       ;;
-    docs/DB_SCHEMA.md|*DB_SCHEMA*|*schema.prisma|*schema*|*migrations/*|*migration*)
+    *schema.prisma|*schema*|*migrations/*|*migration*)
       printf 'schema'
       ;;
     package.json|package-lock.json|yarn.lock|pnpm-lock.yaml|bun.lockb|pyproject.toml|poetry.lock|requirements*.txt|Pipfile*|Cargo.toml|Cargo.lock|go.mod|go.sum|Gemfile*|composer.json|composer.lock)

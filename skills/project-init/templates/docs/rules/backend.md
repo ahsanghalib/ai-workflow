@@ -1,4 +1,4 @@
-# Backend Engineering Rules
+# Backend Rules
 
 Applies to backend applications, workers, jobs, server-side packages, and service logic.
 

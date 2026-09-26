@@ -42,7 +42,7 @@ maintain one.
 The default project-init controls are `AGENTS.md`, `SESSION_STATE.md`,
 `.ai/memory/`, and `docs/specs/`. Add links here only for documents that the
 project actually creates or adopts. Existing legacy roadmaps, user-flow,
-schema, architecture, plans, reviews, and rule files remain user-owned and
+schema, architecture, decision, review, and rule files remain user-owned and
 optional.
 
 ## Project-Control Workflow
@@ -55,10 +55,12 @@ optional.
 4. `implement-next` executes one bounded approved SPEC task when available.
 5. `SESSION_STATE.md` records the current active SPEC/task and handoff.
 
-Existing `MASTER_PLAN.md`, `docs/DB_SCHEMA.md`, `docs/USER_FLOW.md`,
-`docs/PROJECT_ARCHITECTURE.md`, `docs/plans/`, and `docs/reviews/` are preserved
-when present. They are not created or required by default. Explicit legacy PLAN
-support remains available only when the user asks for it.
+Existing roadmaps, architecture, flow, schema, decision, review, and rule
+documents are preserved when present, including projects that use older
+filenames. They are not renamed, created, or required by default. New shared
+documents use the lowercase `docs/` convention; consequential ADRs use
+`docs/decisions/<adr>.md` when justified. Normal work uses one approved SPEC
+with execution tasks below `# Execution`.
 
 Project-init does not scaffold application source, install frameworks, create
 migrations, or run remote Git operations. Local `git init` is a separate

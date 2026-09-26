@@ -1,4 +1,4 @@
-# Application Security Rules
+# Security Rules
 
 These are engineering security rules. They do not replace a public vulnerability-reporting `SECURITY.md` if the repository needs one.
 
@@ -38,7 +38,7 @@ Validation must occur at trusted boundaries before business logic uses the data.
 
 ## 4. Authentication
 
-Follow `AUTH.md`.
+Follow `auth.md`.
 
 Additionally:
 

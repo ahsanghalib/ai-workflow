@@ -7,80 +7,111 @@ project-control maintenance. It owns the repository control plane only.
 
 - Prefer the Git worktree root when the user names the current repository;
   otherwise use the explicitly selected target root.
-- Treat local project-control files as authoritative. Do not silently replace
-  user-authored documents, accepted decisions, plans, branches, settings, or
-  generated outputs.
+- Treat project-control files as evidence and preserve their names and content
+  until a revision is explicitly approved.
 - Never create, copy, read, parse, print, or write `.env` files or secret
-  contents. Record variable names only when they are already safely known.
+  contents. Record variable names only when safely known without opening them.
 - Treat `.ai/` as intentional tracked project documentation/runtime support.
-  Do not add an `.ai/` ignore rule or use it as hidden authorization.
 - Keep bootstrap, reconciliation, product decisions, work-request contracts,
-  implementation, validation, Git, issue, provider, deployment, and publishing
-  as separate gates.
-- Do not add services, queues, databases, Docker, remote dependencies, or
-  abstractions without a demonstrated current need.
+  implementation, validation, Git, provider, deployment, and publishing as
+  separate gates.
 - Never run production migrations, backfills, deployments, deletions, or remote
   operations from this workflow.
+
+## Context and execution discipline
+
+For a repository refactor or a substantial control-plane change, establish
+context before editing:
+
+- inspect the whole relevant skill graph and current handoff contracts;
+- read the test expectations that protect those contracts; and
+- distinguish user-authored artifacts and source of truth from generated
+  artifacts before proposing a change.
+
+During editing, change the smallest coherent set of files, keep terminology
+consistent across skills, update tests when a contract changes, and preserve
+one authoritative source instead of creating parallel state. Avoid unrelated
+stylistic rewrites and never silently weaken an existing safety guarantee.
+
+After each major refactor area, run its most relevant focused tests and fix
+failures before moving on when practical. Before handoff, run the full
+available test suite, rerun stale-reference searches, inspect the final diff,
+and confirm the default workflow has no accidental
+`PLAN`/`MASTER_PLAN.md`/`DB_SCHEMA.md`/`USER_FLOW.md` dependency.
+
+Resolve routine implementation choices from repository evidence. Ask the user
+only when the repository does not answer a genuinely user-owned decision.
+
+## Anti-overengineering guardrails
+
+Do not introduce a SPEC metadata database, mandatory YAML/JSON registry, global
+SPEC index, replacement master-plan file, separate execution-plan file, or
+duplicate state. Do not make GitHub or external services mandatory, require a
+particular application tech stack, assume frontend/backend/database/auth
+concerns exist, or create every possible rule file, nested `AGENTS.md`
+hierarchy, or architecture document by default.
+
+Do not require blanket schema or technical-design approval. Do not fabricate
+repository requirements, user approval, or GitHub state, and do not delete
+useful legacy artifacts merely because they are no longer mandatory. Prefer
+simple Markdown plus executable repository evidence.
+
+## Artifact decision rule
+
+Before creating or requiring any artifact, ask:
+
+> Does this represent durable information the current project actually needs,
+> and is there no clearer existing source of truth?
+
+If the answer is no, do not create or require the artifact. If a clearer
+source already exists, preserve and reference it rather than duplicating its
+facts. Create a new project-control artifact only when the current project
+has a demonstrated durable need, no clearer authoritative source exists, and
+the owning workflow's approval boundary permits the write.
 
 ## Detect the target
 
 Resolve and canonicalize the exact target before proposing writes. Inspect only
-immediate entry names and safe metadata to determine the mode:
+immediate entry names and safe metadata:
 
 1. no entries → `new/empty`;
 2. exactly one `.git` entry → `new/git-only`; or
 3. any other entry → `existing/reconciliation`.
 
 This includes source, documentation, configuration, `.gitignore`, hidden
-files, symlinks, `.env`, and secret-looking names. Never open or use secret
-contents to classify a target. Reconcile every non-empty target; incomplete
-structure is not a reason to reject it.
+files, symlinks, `.env`, and secret-looking names. Never open secret contents
+to classify a target. Mode detection is independent of Git state.
 
-Mode detection is independent of Git state. Inspect whether Git is absent,
-unborn, established, or unavailable using safe metadata only. Any `git init`
-remains a separate approval-gated operation.
-
-Use `scripts/inspect-project.sh` before proposing writes. It reports the
-canonical target, enclosing worktree, mode, immediate names, safe Git state,
-and a no-write proposal. It must not create the target, read file contents,
-inspect `.env` values, or mutate Git.
-
-For an existing target, use `scripts/inventory-project.sh`. It records safe
-filenames up to its configured depth, classifies likely instruction, planning,
-architecture, flow, schema, source, validation, manifest, and configuration
-evidence, prunes common dependency/generated paths, and reports symlinks
-without following them. Categories are evidence, not authority.
+Use `scripts/inspect-project.sh` before proposing writes. For an existing
+target, use `scripts/inventory-project.sh`. These scripts report safe metadata
+and filenames only; they do not authorize or perform the write.
 
 ## Reconcile from evidence
 
-Use [`source-of-truth.md`](source-of-truth.md) to group candidates and preserve
-established names and locations. Existing `MASTER_PLAN.md`, `DB_SCHEMA.md`,
-`USER_FLOW.md`, `PROJECT_ARCHITECTURE.md`, `docs/plans/`, `docs/reviews/`, root
-rules, or equivalent artifacts may remain authoritative; project-init must not
-create a duplicate layout merely because a bundled template uses another name.
-Use [`project-profiles.md`](project-profiles.md) only when project-shape or
-concern questions are needed to scope the reconciliation proposal.
+Group evidence by control purpose:
+
+- instructions and routing;
+- session handoff;
+- SPEC location;
+- agent/runtime memory;
+- source/configuration and executable truth; and
+- current rules, architecture, flow, schema, or decision documents when they
+  already exist.
 
 For every relevant path, record one of:
 
 - `keep unchanged` — no content change;
-- `create missing` — a new path with its own approval;
-- `revise after approval` — an existing path with an exact proposed diff;
+- `create missing` — a new minimal control with its own approval;
+- `revise after approval` — an exact proposed diff;
 - `preserve` — an existing source of truth remains authoritative; or
 - `conflict` — multiple plausible owners need a user decision.
 
-Use [`reconciliation-report.md`](reconciliation-report.md) for the per-file
-proposal and [`reconciliation-population.md`](reconciliation-population.md) for
-safe evidence-to-field handling. Unknown ownership stays open. Generated files
-are changed through their generator, not directly.
-
-When an existing project uses different control-file paths, preserve those
-paths and validate them through an explicit mapping. Do not create duplicate
-canonical files merely to satisfy a bundled template.
+Unknown ownership stays open. Generated files are changed through their
+documented generator, not directly.
 
 ## Minimal default bootstrap
 
-The default new-project proposal contains only:
+The default proposal contains only:
 
 ```text
 AGENTS.md
@@ -89,121 +120,56 @@ SESSION_STATE.md
 docs/specs/
 ```
 
-If `.gitignore` is missing, propose the bundled template separately as a
-missing-file copy. The template ignores real environment files and local
-runtime state while keeping `.ai/` trackable.
+Copy `.gitignore.template` only when `.gitignore` is missing and that scope is
+approved separately. Do not generate speculative README, rules, architecture,
+decision, flow, schema, plan, review, prompt, or application documents.
+If an existing project already has `specifications/`, `specs/`, or
+`docs/specifications/` as its SPEC source of truth, preserve that location and
+use an explicitly approved `--spec-dir` mapping rather than creating a second
+SPEC directory. The helper refuses to guess this mapping.
 
-Do not create `README.md`, `MASTER_PLAN.md`, `docs/DB_SCHEMA.md`,
-`docs/USER_FLOW.md`, `docs/PROJECT_ARCHITECTURE.md`, `docs/plans/`,
-`docs/reviews/`, rules, prompts, architecture books, schema copies, or feature
-plans by default. These remain explicit outputs only when current evidence and
-user approval justify them. A template slot is not justification.
+When a project gains a frontend, persistence, authentication, public API,
+monorepo, deployment, background jobs, multiple deployables, or AI, ask:
 
-When the project evolves—frontend, persistence, auth, public API, monorepo,
-deployment, workers, multiple deployables, or AI—ask whether durable
-repository-wide knowledge is missing. Update the smallest appropriate control,
-or do nothing when source/configuration already explains it. Report an
-inapplicable optional document as skipped rather than creating it speculatively.
+> Does this introduce durable repository-wide knowledge or routing that is not
+> already represented clearly?
+
+If yes, update the smallest appropriate artifact. If no, do nothing.
 
 ## Inspect, propose, approve, write, validate, hand off
 
-Use the following state sequence for each operation:
+Use this state sequence for each operation:
 
 `Detected → Proposed → Awaiting review → Approved → Writing → Validated → Handoff`
 
-If the user changes or rejects the proposal, return to `Proposed`. If a
-required capability or approval is unavailable, stop in `Blocked` with no
-partial write.
-
-1. **Detected:** resolve the exact target, inspect safe metadata, and identify
-   applicable instructions and source-of-truth candidates.
+1. **Detected:** resolve the target, inspect safe metadata, and identify
+   applicable instructions and control sources.
 2. **Proposed:** list every path to create, preserve, revise, skip, or flag;
-   include evidence, owner, compatibility impact, assumptions, validation, and
-   the exact next review action.
+   include evidence, owner, assumptions, validation, and approval scope.
 3. **Awaiting review:** obtain separate approval for missing-file creation,
-   existing-file revision, optional legacy output, and local `git init`.
-4. **Approved:** preserve existing structure and apply only approved scopes.
-5. **Writing:** use copy-if-missing and exact `--only` selections. The
-   initializer refuses target or parent symlinks and does not claim atomic
-   protection from hostile concurrent replacement. An unchanged recognized
-   scaffold is an explicit no-op.
-6. **Validated:** run `scripts/validate-foundation.sh`, inspect the resulting
-   diff, and distinguish structural evidence from live runtime or harness proof.
+   existing-file revision, and local `git init`.
+4. **Approved:** apply only the approved copy-if-missing or exact revision.
+5. **Writing:** refuse target or parent symlinks and report concurrent-change
+   limitations; do not claim atomic protection.
+6. **Validated:** run `scripts/validate-foundation.sh`, inspect the diff, and
+   distinguish structural evidence from runtime or harness proof.
 7. **Handoff:** report created, changed, preserved, skipped, blocked, and
    unresolved items. Recommend a fresh session after instruction changes.
 
-Do not bundle commits, branches, remotes, pushes, issues, deployment, or
-publishing with local documentation bootstrap.
+Do not bundle commits, branches, remotes, pushes, issues, projects, deployment,
+or publishing with local bootstrap.
 
-## Risk-based escalation and approval acknowledgement
-
-Escalate the review scope when a request involves a public API/shared contract,
-authentication, authorization, persisted data, migrations, or a source-of-truth
-revision. High-impact writes must identify the exact target, operation, and
-forbidden side effects in an `Approving:` acknowledgement before writing.
-Project-init still owns only repository-control changes; substantive behavior
-goes to `spec-workflow`.
-
-## Capability and native-init fallback
-
-Use [`capability-matrix.md`](capability-matrix.md) before relying on approval,
-filesystem, shell, Git, validation, routing, session-state, memory, or current
-research capabilities. A missing capability blocks only the dependent
-operation. It never authorizes a partial write or an unverified completion
-claim.
-
-When a harness provides native `/init`, follow
-[`init-compatibility.md`](init-compatibility.md). Inspect native output first,
-preserve existing instructions, and do not run two initializers against the
-same target without an intervening reconciliation proposal.
-
-After an approved `AGENTS.md` change, show the exact diff and recommend a
-harness reload or fresh session before relying on the new rules. Continue under
-the rules already active until then.
-
-## Handoff for substantive work
+## Substantive work handoff
 
 Project-init does not derive a feature map, create a SPEC, create a task list,
-or create a normal-work PLAN. A feature, bug, improvement, refactor,
+or create an execution document. A feature, bug, improvement, refactor,
 performance, security, migration, maintenance, or technical-debt request
-hands off to `spec-workflow`. If that companion is unavailable, record the
-dependency and stop rather than routing normal work back into project-init.
-
-Technical, persistence, product-discovery, and implementation decisions belong
-to their named companion workflows when available. The project-init prompt
-library is only a tracked routing aid.
-
-## Explicit legacy compatibility
-
-When the user explicitly requests a legacy roadmap, user-flow, schema,
-architecture, plan index, review directory, or PLAN, use the selected bundled
-template only after a separate approval. Preserve existing paths, keep the
-legacy lifecycle isolated from default bootstrap, and do not imply that the
-artifact is required for new work. `--with-schema` is accepted only with the
-exact `--only docs/DB_SCHEMA.md --with-schema` selection.
-
-The retained [`feature-lifecycle.md`](feature-lifecycle.md) and
-[`traceability.md`](traceability.md) references describe this opt-in legacy
-path only. Normal feature-work routing remains `spec-workflow`.
+hands off to `spec-workflow`. Technical, persistence, product-discovery, and
+implementation decisions belong to their named companion workflows.
 
 ## Git and ignore handling
 
 If `.gitignore` is absent, a missing-file proposal may copy
-`.gitignore.template`. If it exists, preserve it byte-for-byte and report
-missing recommended rules without editing. Never add an `.ai/` ignore rule.
-
-If Git is absent or local initialization is not approved, approved control
-writes may continue without Git; report that history and Git-state validation
-are unavailable. If `--init-git` was selected but Git is unavailable, stop
-before creating the target or scaffold files.
-
-## Session continuity and stop condition
-
-`SESSION_STATE.md` records active SPEC and active SPEC task when those exist,
-plus current status, blockers, validation, untested paths, and next action. It
-does not become the permanent requirements source. Update it only under its
-existing project policy and separate approval.
-
-Stop after the requested bootstrap or reconciliation handoff. Do not implement
-application code, create a normal-work PLAN, commit, push, deploy, publish, or
-start another workflow task.
+`.gitignore.template`. If it exists, preserve it and report recommended
+additions without editing unless revision is separately approved. `--init-git`
+is a separate, exact-target approval and creates no commit or remote.

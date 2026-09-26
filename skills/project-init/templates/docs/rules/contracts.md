@@ -1,9 +1,9 @@
-# Shared Contracts Rules
+# Shared Contract Rules
 
 Applies to the repository's designated shared client/server API contract
 package, when one exists.
 
-`API.md` owns HTTP response-envelope and status-code semantics. This document
+`api.md` owns HTTP response-envelope and status-code semantics. This document
 owns reusable shared transport shapes; keep their field names and optionality
 aligned with the API rules.
 
@@ -12,7 +12,7 @@ aligned with the API rules.
 Each shared request, response, event, or error contract must identify the
 relevant user-flow journey/state and approved schema entities when it carries
 persistent data. Record schema impact and route changes through the relevant
-SPEC, PLAN, API, frontend, and schema-impact reviews. Keep transport contracts
+SPEC, API, frontend, and schema-impact reviews. Keep transport contracts
 separate from database models.
 
 ## 1. Purpose

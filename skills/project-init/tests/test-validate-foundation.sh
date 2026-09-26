@@ -18,31 +18,6 @@ base_output="$(bash "$validator" "$base_target")"
 grep -Fxq 'foundation: consistent' <<<"$base_output" ||
   fail 'base scaffold failed foundation validation'
 
-bash "$initializer" --only docs/USER_FLOW.md "$base_target" >/dev/null
-flow_output="$(bash "$validator" --user-flow docs/USER_FLOW.md "$base_target")"
-grep -Fxq 'foundation: consistent' <<<"$flow_output" ||
-  fail 'selected user-flow scaffold failed foundation validation'
-
-bash "$initializer" --only docs/DB_SCHEMA.md --with-schema "$base_target" >/dev/null
-schema_output="$(bash "$validator" \
-  --user-flow docs/USER_FLOW.md \
-  --schema docs/DB_SCHEMA.md \
-  "$base_target")"
-grep -Fxq 'foundation: consistent' <<<"$schema_output" ||
-  fail 'selected schema scaffold failed foundation validation'
-
-custom_target="$temp_root/custom-layout"
-bash "$initializer" "$custom_target" >/dev/null
-mv "$custom_target/AGENTS.md" "$custom_target/INSTRUCTIONS.md"
-mv "$custom_target/SESSION_STATE.md" "$custom_target/state.md"
-sed -i 's/SESSION_STATE\.md/state.md/g' "$custom_target/INSTRUCTIONS.md"
-custom_output="$(bash "$validator" \
-  --agents INSTRUCTIONS.md \
-  --session-state state.md \
-  "$custom_target")"
-grep -Fxq 'foundation: consistent' <<<"$custom_output" ||
-  fail 'validator rejected an explicitly mapped existing-project layout'
-
 broken_target="$temp_root/broken"
 bash "$initializer" "$broken_target" >/dev/null
 rm -f "$broken_target/SESSION_STATE.md"
@@ -58,6 +33,19 @@ grep -Fq 'missing required project-control document: SESSION_STATE.md' <<<"$brok
   fail 'validator omitted actionable missing-control finding'
 if grep -Fq 'do-not-print-this-secret' <<<"$broken_output"; then
   fail 'validator printed .env contents'
+fi
+
+if bash "$validator" --agents AGENTS.md "$base_target" >/dev/null 2>&1; then
+  fail 'validator accepted removed path-mapping options'
+fi
+
+mapped_target="$temp_root/mapped"
+mkdir -p "$mapped_target/specifications"
+bash "$initializer" --spec-dir specifications "$mapped_target" >/dev/null
+bash "$validator" --spec-dir specifications "$mapped_target" >/dev/null ||
+  fail 'validator rejected an explicitly mapped SPEC source'
+if bash "$validator" "$mapped_target" >/dev/null 2>&1; then
+  fail 'validator accepted an alternate SPEC source without mapping'
 fi
 
 printf 'ok: project-init foundation validator\n'

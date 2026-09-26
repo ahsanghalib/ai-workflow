@@ -7,7 +7,7 @@ Use `spec-workflow` for a substantive feature, bug, improvement, refactor,
 performance, security, migration, maintenance, or technical-debt request.
 Read only the project context and current behavior needed to define its
 contract. Persistence and architecture details are conditional; do not require
-`USER_FLOW.md`, `DB_SCHEMA.md`, a master plan, or a plan index.
+`docs/user-flows.md`, `docs/schema/`, a master plan, or a plan index.
 If persistence is not approved, record that no persistence behavior is in scope
 and do not invent entities; leave an unresolved persistence decision open.
 

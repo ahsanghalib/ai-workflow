@@ -1,4 +1,4 @@
-# Database Engineering Rules
+# Database Rules
 
 Applies to relational schema design, ORM schemas, migrations, queries, and
 database access. Apply PostgreSQL-specific guidance only when PostgreSQL is in

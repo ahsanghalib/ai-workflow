@@ -1,4 +1,4 @@
-# Shared UI and Design-System Rules
+# Shared UI Rules
 
 Applies to the repository's designated shared UI package, shared visual
 primitives, and cross-application design-system code, when present.

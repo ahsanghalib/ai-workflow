@@ -2,7 +2,7 @@
 
 Use this reference after source-of-truth detection and before proposing a
 missing project-control document. Population is a documentation operation; it
-does not implement application behavior, create a feature plan, or rewrite an
+does not implement application behavior, create a work contract, or rewrite an
 existing source by default.
 
 ## Evidence levels
@@ -67,17 +67,15 @@ decision and preserve the existing output.
 5. If a missing document depends on an unresolved decision, create a clearly
    labelled draft only after approval; do not fabricate the decision.
 6. Report evidence-to-field mappings and stop for review of the affected
-   project control. Do not infer that a populated control authorizes a SPEC,
-   PLAN, migration, API, frontend, or application implementation. Substantive
+  project control. Do not infer that a populated control authorizes a SPEC,
+  migration, API, frontend, or application implementation. Substantive
   work hands off to `spec-workflow`.
 
 ## Document-specific boundaries
 
-- `MASTER_PLAN.md`, `docs/USER_FLOW.md`, `docs/DB_SCHEMA.md`, and
-  `docs/PROJECT_ARCHITECTURE.md`: legacy or explicitly requested documents;
-  preserve them when user-owned, and never create them by default. Do not turn
-  filename or framework detection into approval of product, schema, or future
-  architecture decisions.
+- Project-wide architecture, flow, schema, and rule documents are conditional
+  outputs owned by the workflow that justifies them. Do not create them from a
+  filename or framework convention alone.
 - `AGENTS.md`: operational commands, validation, source layout, security,
   generated-file ownership, and routing. Never place secrets or invent
   commands that were not confirmed or verified.

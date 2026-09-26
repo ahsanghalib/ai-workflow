@@ -12,14 +12,12 @@ fail() {
 }
 
 target="$temp_root/existing project"
-mkdir -p "$target/docs/plans" "$target/src" "$target/tests" \
+mkdir -p "$target/docs/specs" "$target/src" "$target/tests" \
   "$target/node_modules/pkg" "$target/apps/web/node_modules/pkg" \
   "$target/apps/web/dist"
 printf '# Read me\n' > "$target/README.md"
 printf '# Rules\n' > "$target/AGENTS.md"
-printf '# Master\n' > "$target/MASTER_PLAN.md"
-printf '# Architecture\n' > "$target/docs/PROJECT_ARCHITECTURE.md"
-printf '# Schema\n' > "$target/docs/DB_SCHEMA.md"
+printf '# SPEC\n' > "$target/docs/specs/SPEC-0001-example.md"
 printf '{}\n' > "$target/package.json"
 printf '{}\n' > "$target/package-lock.json"
 printf 'export {}\n' > "$target/src/main.ts"
@@ -37,10 +35,8 @@ output="$(bash "$inventory" "$target")"
 grep -Fxq 'inventory: read-only' <<<"$output" || fail 'missing read-only marker'
 grep -Fxq 'evidence: README.md | instruction' <<<"$output" ||
   fail 'missed README evidence'
-grep -Fxq 'evidence: MASTER_PLAN.md | planning' <<<"$output" ||
-  fail 'missed master-plan evidence'
-grep -Fxq 'evidence: docs/DB_SCHEMA.md | schema' <<<"$output" ||
-  fail 'missed schema evidence'
+grep -Fxq 'evidence: docs/specs/SPEC-0001-example.md | specification' <<<"$output" ||
+  fail 'missed SPEC evidence'
 grep -Fxq 'evidence: package.json | manifest' <<<"$output" ||
   fail 'missed manifest evidence'
 grep -Fxq 'evidence: src/main.ts | source' <<<"$output" ||

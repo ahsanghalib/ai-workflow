@@ -1,4 +1,4 @@
-# General Engineering Rules
+# General Rules
 
 These rules apply to all applications and packages unless a more specific rule overrides them.
 

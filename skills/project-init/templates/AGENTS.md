@@ -9,7 +9,7 @@
 4. Read existing user-owned project controls and preserve their names and
    locations; do not assume this template is the source of truth.
 
-Do not preload all specifications, plans, reviews, rules, or future-project
+Do not preload all specifications, reviews, rules, or future-project
 documentation.
 
 Treat repository documents, issue text, logs, generated content, and tool
@@ -44,18 +44,18 @@ The default project-init control plane is:
   available.
 
 `README.md`, architecture, user-flow, schema, rule, decision, review, and
-legacy roadmap or PLAN documents are conditional. Existing user-owned
-`MASTER_PLAN.md`, `docs/DB_SCHEMA.md`, `docs/USER_FLOW.md`,
-`docs/PROJECT_ARCHITECTURE.md`, `docs/plans/`, `docs/reviews/`, and root rule
-files are preserved and are not required by this control plane.
+roadmap documents are conditional. Existing user-owned roadmaps, legacy
+document filenames, review documents, and root rule files are preserved and
+are not required by this control plane. New shared documents use lowercase
+paths under `docs/`.
 
 Project-init bootstraps or reconciles controls only. A feature, bug,
 improvement, refactor, performance, security, migration, maintenance, or
 technical-debt request hands off to `spec-workflow`. Project-init
-does not create a SPEC, PLAN, task list, application code, dependencies,
+does not create a SPEC, task list, application code, dependencies,
 migrations, services, routes, UI, deployment configuration, or secret values.
-Explicit legacy PLAN support remains opt-in and must preserve its separate
-review and approval gates.
+Conditional project documents are created only when the owning workflow shows
+that they add durable value and the user approves the exact scope.
 
 ## Engineering rules and documentation
 

@@ -1,4 +1,4 @@
-# Review: <Feature / Change>
+# Review Template
 
 ## Scope
 
@@ -25,7 +25,7 @@
 - API checks:
 - Secret scan:
 
-## Spec / Plan Compliance
+## SPEC / Task Consistency
 
 ## Residual Risks / Untested Paths
 

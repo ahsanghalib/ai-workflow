@@ -1,59 +1,64 @@
 # Project-Init Template Manifest
 
-The manifest describes what the project-init helper may create. It is a policy
-contract for the agent and helper script; it is not copied into a target unless
-the user explicitly asks for it.
+The manifest describes the only files the project-init helper may create. It
+is policy for the skill and is not copied into a target.
 
 ## Default outputs when missing
 
-The normal new-project scaffold creates only the minimal control plane:
+The normal new-project scaffold creates only:
 
 - `AGENTS.md`;
 - `SESSION_STATE.md`;
 - `.ai/memory/`; and
 - `docs/specs/`.
 
-`.gitignore.template` is also copied to `.gitignore` when the target has no
-existing `.gitignore`. The template protects real environment files and local
+For an existing project with an already-authoritative `specifications/`,
+`specs/`, or `docs/specifications/` directory, an explicitly approved
+`--spec-dir` mapping may preserve and use that source instead.
+
+When `.gitignore` is absent, the helper may copy `.gitignore.template` after
+the missing-file approval. The template protects environment files and local
 runtime state without ignoring `.ai/`.
 
-The default scaffold does not create `README.md`, `MASTER_PLAN.md`,
-`docs/DB_SCHEMA.md`, `docs/USER_FLOW.md`, `docs/PROJECT_ARCHITECTURE.md`,
-`docs/plans/`, `docs/reviews/`, rules, helper prompts, or application files.
+No roadmap, schema, user-flow, architecture, decision, plan, review, rule,
+prompt, application, framework, package, or deployment files are default
+outputs.
 
-## Explicit outputs after review and approval
+## Conditional resources retained for later use
 
-Use repeatable `--only RELPATH` selections for any output outside the minimal
-control plane. This includes:
+The skill bundle still includes optional starting points under
+`templates/docs/`:
 
-- `README.md`, legacy roadmap, architecture, user-flow, and schema documents;
-- `docs/rules/*.md` and `docs/templates/*.md`;
-- `.ai/prompts/` and its routing index;
-- `docs/plans/` or `docs/reviews/`; and
-- any other bundled file whose exact purpose, owner, and compatibility impact
-  are recorded.
+- `architecture.md` for durable cross-feature architecture, or as a source to
+  adapt to `docs/architecture.md`;
+- `decisions/adr.md` for one consequential architecture decision, or as a
+  source to adapt to `docs/decisions/<adr>.md`;
+- `user-flows.md` for shared, non-trivial user lifecycles, or as a source to
+  adapt to `docs/user-flows.md`;
+- `schema/context.md` for durable schema context that executable schema cannot
+  make clear, or as a source to adapt under `docs/schema/`; and
+- `rules/*.md` for justified cross-feature engineering rules.
 
-`docs/DB_SCHEMA.md` remains available only as explicit legacy compatibility
-support with `--only docs/DB_SCHEMA.md --with-schema`. It is not a prerequisite
-for a SPEC or ordinary implementation. PLAN templates and indexes are likewise
-opt-in compatibility outputs, not the default work lifecycle.
+These resources are referenced only after source-of-truth detection and an
+explicit approval for the exact target. They are deliberately excluded from
+the initializer's default file list.
 
-All explicit outputs are copy-if-missing and never overwrite an existing file.
+## Reconciliation outputs
 
-## Preserve and propose separately
+Existing projects are inspected first. A reconciliation may propose an exact
+revision to `AGENTS.md`, `SESSION_STATE.md`, or another already-authoritative
+control when the user approves that scope. A capability can also justify a
+small routing update under `docs/` or the root `AGENTS.md`, but the owning
+workflow creates the durable domain document rather than a generic bootstrap
+template.
 
-Any existing target file, directory, symlink, legacy document, planning layout,
-architecture source, schema source, `.gitignore`, `AGENTS.md`, or `.ai/` content
-is preserved by default. A revision or migration needs its own proposal, exact
-diff, compatibility impact, and explicit approval. Uncertain ownership is left
-in place.
+Every write is copy-if-missing or an exact approved revision. Existing files,
+directories, symlinks, source/configuration, Git metadata, and `.ai/` content
+are not overwritten.
 
 ## Never create or inspect
 
-The manifest never includes `.env`, secret-bearing configuration, credentials,
-private keys, browser state, application source, framework files, package
-manifests, migrations, models, services, routes, UI, deployment files,
-commits, remotes, branches, or pushes.
-
-For the complete created-versus-forbidden output contract, use
-[`output-boundary.md`](output-boundary.md).
+The helper never creates, copies, installs, or mutates application source,
+framework files, package manifests, dependencies, migrations, models,
+services, routes, UI, deployment files, `.env` contents, credentials, keys,
+commits, branches, remotes, pushes, issues, projects, or production state.

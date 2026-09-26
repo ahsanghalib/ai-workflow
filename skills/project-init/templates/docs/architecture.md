@@ -1,13 +1,14 @@
-# Project Architecture
+# Architecture
 
-> Keep this file only when the system needs more architectural detail than README + AGENTS can carry without duplication.
+> Keep this file only when the system needs more architectural detail than
+> README + AGENTS can carry without duplication.
 
 ## System Overview
 
 ## Project Overview
 
-<!-- Keep product scope in MASTER_PLAN.md; record only the technical context
-     needed to understand this system. -->
+<!-- Keep feature behavior in SPECs and record only the durable technical
+     context needed to understand this system. -->
 
 ## Architecture Diagram
 
@@ -34,6 +35,10 @@
 ## Data Architecture
 
 ### Data Model
+
+<!-- Describe only durable cross-feature ownership, boundaries, flows, and
+     invariants. Link executable schema, migrations, ORM sources, or the
+     optional schema context; do not duplicate tables, fields, or constraints. -->
 
 ## API Architecture
 
@@ -77,10 +82,9 @@
 
 ## Documentation
 
-Product direction is owned by `MASTER_PLAN.md`; repository operating rules are
-owned by `AGENTS.md`. When actor journeys apply, add `docs/USER_FLOW.md` and
-keep it aligned with this architecture. When persistence is approved, add
-`docs/DB_SCHEMA.md` after reviewing the user flow.
+Feature behavior is owned by SPECs; repository operating rules are owned by
+`AGENTS.md`. Add shared flow or schema-context documents only when several
+features depend on them and the source-of-truth review justifies them.
 
 ## Important Current Decisions
 
@@ -91,3 +95,6 @@ keep it aligned with this architecture. When persistence is approved, add
 ## Open Questions
 
 ## Architecture Decisions
+
+<!-- Keep the current-state summary concise. Record a consequential, durable
+     decision in docs/decisions/<adr>.md and link it from this section. -->

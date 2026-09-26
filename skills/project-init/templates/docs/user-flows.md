@@ -1,12 +1,14 @@
-# User Flow: `<Project Name>`
+# Shared User Flows: `<Project Name>`
 
-> The technology-neutral description of how people and other actors use the
-> product. Keep product direction in `MASTER_PLAN.md` and persisted-data design
-> in `docs/DB_SCHEMA.md`.
+> Optional technology-neutral context for how people and other actors use the
+> product. Feature-specific behavior belongs in the relevant SPEC.
 
 **Status:** Draft | Proposed | Approved | Superseded
 **Last reviewed:** YYYY-MM-DD
-**Source of truth:** `docs/USER_FLOW.md` or the existing project-selected path
+**Source of truth:** `docs/user-flows.md` or the existing project-selected path
+
+Status here describes this context document only; it does not approve feature
+scope or implementation. Feature approval remains in the relevant SPEC.
 
 ## Purpose and Scope
 
@@ -95,8 +97,9 @@ not-found, conflict, offline, and unexpected-error behavior when relevant.
 - Schema reference: `<approved schema link | not applicable | unresolved>`
 - API/contract references: `<add links here>`
 
-`docs/DB_SCHEMA.md` is optional. Do not create or link it until persistence is
-approved and this user-flow document has been reviewed.
+An executable schema or approved schema-context document may be linked after
+persistence is justified. This flow document is not a prerequisite for SPEC
+creation or implementation.
 
 ## Assumptions, Recommendations, and Unresolved Decisions
 
@@ -108,7 +111,7 @@ approved and this user-flow document has been reviewed.
 
 -
 
-### Unresolved Decisions and Approval Gates
+### Unresolved Decisions and Review Notes
 
 -
 
@@ -126,10 +129,14 @@ approved and this user-flow document has been reviewed.
 - Creating API contracts, migrations, models, services, or UI code.
 - Treating proposed behavior as approved product scope.
 
-## Approval Gates
+## Review and Linkage
 
-- [ ] User reviewed the proposed journeys and open decisions.
-- [ ] Relevant permissions and failure behavior are approved.
-- [ ] Dependent SPECs may reference this flow after review.
+This review records whether the shared context is useful and linked. It does
+not approve feature scope or implementation.
 
-Verdict: ready for feature planning | needs clarification
+- [ ] Project owner reviewed the proposed journeys and open decisions.
+- [ ] Relevant permissions and failure behavior are reflected in the relevant
+      SPECs or decision records.
+- [ ] Dependent SPECs link this flow after review.
+
+Verdict: useful shared context | needs clarification

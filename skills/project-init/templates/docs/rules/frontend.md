@@ -1,4 +1,4 @@
-# Frontend Engineering Rules
+# Frontend Rules
 
 Applies to web clients, admin clients, desktop clients, and frontend-specific
 packages. Apply framework-specific guidance only when that framework is in use.

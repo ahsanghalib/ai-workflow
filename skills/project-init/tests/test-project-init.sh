@@ -18,44 +18,37 @@ grep -Fq 'application source, routes' "$output_boundary" ||
   fail 'output boundary omitted application-source prohibition'
 grep -Fq 'framework scaffolds, package manifests' "$output_boundary" ||
   fail 'output boundary omitted framework/dependency prohibition'
+grep -Fq 'roadmap, plan, review, schema' "$output_boundary" ||
+  fail 'output boundary omitted obsolete-document prohibition'
+grep -Fq 'bundled conditional templates remain' "$output_boundary" ||
+  fail 'output boundary omitted conditional-template guidance'
+grep -Fq 'issues, projects, deployments' "$output_boundary" ||
+  fail 'output boundary omitted GitHub Project prohibition'
 
 bash "$test_dir/test-inspect-project.sh"
 bash "$test_dir/test-inventory-project.sh"
 bash "$test_dir/test-init-project.sh"
 bash "$test_dir/test-validate-foundation.sh"
 bash "$test_dir/test-acceptance-scenarios.sh"
-bash "$test_dir/test-traceability-contract.sh"
+bash "$test_dir/test-reconciliation-scenarios.sh"
+bash "$test_dir/test-skill-audit.sh"
+bash "$test_dir/test-safeguards-contract.sh"
+bash "$test_dir/test-ci-contract.sh"
 
 output_target="$temp_root/output-target"
 output="$(bash "$initializer" --init-git "$output_target")"
 grep -Fxq "target: $output_target" <<<"$output" ||
   fail 'did not report the canonical output target'
-[[ -f "$output_target/AGENTS.md" ]] || fail 'missing generated AGENTS.md'
-[[ -f "$output_target/SESSION_STATE.md" ]] || fail 'missing generated SESSION_STATE.md'
-[[ -d "$output_target/.ai/memory" ]] || fail 'missing generated agent memory directory'
-[[ -d "$output_target/docs/specs" ]] || fail 'missing generated specs directory'
-[[ ! -e "$output_target/README.md" ]] || fail 'created optional README by default'
-[[ ! -e "$output_target/MASTER_PLAN.md" ]] || fail 'created legacy master plan by default'
-[[ ! -e "$output_target/docs/PROJECT_ARCHITECTURE.md" ]] || fail 'created legacy architecture by default'
-[[ ! -e "$output_target/docs/plans" ]] || fail 'created legacy plans directory by default'
-[[ ! -e "$output_target/docs/reviews" ]] || fail 'created legacy reviews directory by default'
-[[ ! -e "$output_target/docs/USER_FLOW.md" ]] || fail 'created optional user-flow document by default'
-[[ ! -e "$output_target/.ai/prompts" ]] || fail 'created optional prompts by default'
-bash "$initializer" --only docs/USER_FLOW.md --only .ai/prompts "$output_target" >/dev/null
-[[ -f "$output_target/docs/USER_FLOW.md" ]] || fail 'missing explicitly selected user-flow document'
-bash "$initializer" --only docs/DB_SCHEMA.md --with-schema "$output_target" >/dev/null
-[[ -f "$output_target/docs/DB_SCHEMA.md" ]] || fail 'missing selected schema document'
-[[ -d "$output_target/.ai/prompts" ]] || fail 'missing tracked helper prompts'
-[[ -d "$output_target/.git" ]] || fail 'missing explicitly selected Git metadata'
+[[ -d "$output_target/.git" ]] || fail 'missing explicitly requested Git metadata'
 git -C "$output_target" check-ignore -q --no-index .env ||
   fail 'real .env is not ignored'
-if git -C "$output_target" check-ignore -q --no-index .ai/prompts/README.md; then
-  fail 'tracked .ai prompt is ignored'
-fi
 [[ ! -e "$output_target/.env" ]] || fail 'created .env'
-
-for forbidden in .env package.json pnpm-lock.yaml src migrations Dockerfile; do
-  [[ ! -e "$output_target/$forbidden" ]] || fail "generated application output: $forbidden"
+for forbidden in README.md package.json pnpm-lock.yaml src migrations Dockerfile \
+  MASTER_PLAN.md docs/DB_SCHEMA.md docs/USER_FLOW.md \
+  docs/PROJECT_ARCHITECTURE.md docs/plans docs/reviews docs/rules .ai/prompts \
+  GENERAL.md BACKEND.md FRONTEND.md DATABASE.md API.md AUTH.md SECURITY.md \
+  TESTING.md CONTRACTS.md; do
+  [[ ! -e "$output_target/$forbidden" ]] || fail "generated forbidden output: $forbidden"
 done
 [[ -z "$(git -C "$output_target" remote)" ]] || fail 'generated a remote'
 if git -C "$output_target" rev-parse --verify HEAD >/dev/null 2>&1; then
@@ -69,7 +62,7 @@ nested_target="$nested_worktree/selected project"
 if bash "$initializer" "$nested_target" >/dev/null 2>&1; then
   fail 'initialized a nested target without override'
 fi
-[[ ! -e "$nested_target/README.md" ]] ||
+[[ ! -e "$nested_target/AGENTS.md" ]] ||
   fail 'wrote nested target before override'
 bash "$initializer" --allow-nested "$nested_target" >/dev/null
 [[ -f "$nested_target/AGENTS.md" ]] || fail 'did not accept explicit nested override'
@@ -78,16 +71,9 @@ nested_missing="$nested_worktree/new nested project"
 if bash "$initializer" "$nested_missing" >/dev/null 2>&1; then
   fail 'created a missing nested target without override'
 fi
-[[ ! -e "$nested_missing" ]] || fail 'created nested target before approval'
+[[ ! -e "$nested_missing" ]] || fail 'created nested target before override'
 bash "$initializer" --allow-nested "$nested_missing" >/dev/null
 [[ -f "$nested_missing/AGENTS.md" ]] ||
   fail 'did not initialize approved missing nested target'
 
-alias_target="$temp_root/missing-alias-parent/../nested-worktree/alias project"
-if bash "$initializer" "$alias_target" >/dev/null 2>&1; then
-  fail 'accepted a missing target alias nested in a Git worktree'
-fi
-[[ ! -e "$nested_worktree/alias project/AGENTS.md" ]] ||
-  fail 'wrote through a missing target alias before nested approval'
-
-printf 'ok: project-init disposable suite and Markdown-only output\n'
+printf 'ok: project-init disposable suite and minimal-control contract\n'

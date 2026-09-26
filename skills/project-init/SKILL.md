@@ -1,81 +1,71 @@
 ---
 name: project-init
-description: Bootstrap or reconcile the minimal project-control structure for an explicitly selected repository, preserving user-owned files and legacy layouts. Use for new-project initialization, existing-project reconciliation, or later control-structure updates; route feature, bug, and other substantive work requests to spec-workflow instead of planning them here.
+description: Bootstrap or reconcile the minimal project-control structure for an explicitly selected repository. Use for new-project initialization, existing-project reconciliation, or later control updates; route substantive work requests to spec-workflow.
 license: MIT
 ---
 
 # Project Init
 
-Own repository-control bootstrap and reconciliation without inventing the
-product, architecture, application code, or feature plan.
+Own repository-control bootstrap and reconciliation. Do not invent product
+behavior, application architecture, code, dependencies, or implementation
+tasks.
 
 ## Entry point
 
-Use project-init when the user asks to initialize, bootstrap, reconcile, or
+Use this skill when the user asks to initialize, bootstrap, reconcile, or
 refresh project controls for an explicitly selected repository. Resolve the
-current directory or supplied target, inspect it safely, and classify it as:
+exact target and classify it using safe metadata:
 
 - `new/empty` — no entries;
 - `new/git-only` — only `.git`; or
-- `existing/reconciliation` — every other target, including incomplete
-  projects, hidden files, symlinks, `.env`, and secret-looking names.
+- `existing/reconciliation` — any other target, including incomplete projects,
+  hidden files, symlinks, `.env`, and secret-looking names.
 
 Empty and `.git`-only targets receive the same minimal bootstrap proposal.
-Existing targets receive a preserve-first reconciliation proposal. Re-running
-the skill is expected: reconcile only the controls affected by actual project
-evolution and do not create documentation merely because a template has a slot.
+Existing targets receive a reconciliation proposal based on inspected evidence.
+Rerunning the skill is supported; reconcile only controls affected by actual
+project evolution.
 
 The bundled inspector and inventory are evidence only. They never authorize a
-write, Git mutation, feature decision, or application change.
+write, Git mutation, product decision, or application change.
 
-## Trigger and handoff boundaries
+## Responsibility and handoff
 
-Use this skill for requests such as:
+Project-init owns:
 
-- “Use project-init to bootstrap the controls for this empty repository.”
-- “Reconcile this existing repository's instructions and project-control
-  structure without overwriting its documents.”
-- “The project gained a frontend; reconcile only the durable controls that now
-  need to change.”
+- safe target classification and repository inspection;
+- the minimal project-control bootstrap; and
+- progressive reconciliation of repository-wide routing and rules when the
+  project actually gains a capability.
 
-Do not use it as the primary workflow for:
+It does not own feature planning. For a feature, bug, improvement, refactor,
+performance, security, migration, maintenance, or technical-debt request,
+bootstrap or reconcile the controls first, then hand the work request to
+`spec-workflow`. Do not create a SPEC, task list, implementation, or separate
+execution document from project-init.
 
-- feature, bug, improvement, refactor, performance, security, migration,
-  maintenance, or technical-debt planning;
-- product discovery or open-ended ideation (`product-discovery` or
-  `brainstorming`);
-- technical or persistence design (`technical-design` or `schema-design`);
-- implementation of an approved task (`implement-next` plus the relevant
-  implementation skill).
+Use `product-discovery` or `brainstorming` for unresolved product direction,
+`technical-design` for architecture/interface decisions,
+`schema-design` for justified non-trivial persistence design, and
+`implement-next` for an already selected SPEC task.
 
-If a project-init request also contains a work request, complete or propose
-only the repository-control bootstrap/reconciliation, then hand the work
-request to `spec-workflow`. Do not create a second feature-planning
-implementation inside project-init. If that companion is unavailable, report
-the dependency rather than pretending it ran.
+## Modes and approval
 
-## Modes and escalation
+- **Light** — explain the relevant control changes without writing.
+- **Standard** — reconcile selected controls in an existing project after
+  inspection and approval for each write scope.
+- **Strict** — bootstrap a new project or handle higher-risk reconciliation;
+  show the exact target, proposal, approval scopes, and validation before
+  writing.
 
-- **Light** is the default for ordinary iteration: clarify the repository
-  control need in chat and write nothing.
-- **Standard** reconciles selected controls in an existing project after
-  inspection and separate approval for each write scope.
-- **Strict** is for new-project bootstrap or higher-risk reconciliation: show
-  the exact target, proposal, approval scopes, and validation before writing.
-- Ambiguity resolves to Light. Escalate the review scope for persistence,
-  migrations, a public API/shared contract, authentication, authorization,
-  permissions, or an existing source-of-truth revision.
-- A high-impact write requires an `Approving:` acknowledgement naming the
-  target, operation, and forbidden side effects.
-
-Explicit requests for an existing legacy roadmap, document, plan index, or
-PLAN may use the bundled templates and references as opt-in compatibility
-support. That path is isolated from the default bootstrap and never makes the
-legacy artifact mandatory.
+Ambiguity resolves to Light. Escalate review for persistence, migrations,
+public APIs, authentication, authorization, permissions, or source-of-truth
+revisions. High-impact writes require an `Approving:` acknowledgement naming
+the exact target, operation, and forbidden side effects.
 
 ## Default output contract
 
-The default new-project control plane is intentionally small:
+The minimal new-project control plane is:
 
 ```text
 AGENTS.md
@@ -84,118 +74,119 @@ SESSION_STATE.md
 docs/specs/
 ```
 
-When the target has no `.gitignore`, the initializer may also copy the bundled
-`.gitignore.template` after the normal approval. It protects real environment
-files and ignored session/memory runtime state; `.ai/` remains trackable.
+If `.gitignore` is missing, the helper may copy the bundled template after
+approval. It protects environment files and local runtime state while keeping
+`.ai/` trackable.
 
-The initializer does not create `README.md`, `MASTER_PLAN.md`,
-`docs/DB_SCHEMA.md`, `docs/USER_FLOW.md`, `docs/PROJECT_ARCHITECTURE.md`,
-`docs/plans/`, `docs/reviews/`, rules, helper prompts, application files, or
-framework files by default. Any bundled output outside the minimal control
-plane is eligible only through an explicit `--only` selection and approval.
-This includes legacy documents and explicit PLAN support.
+Project-init does not create `README.md`, roadmap files, schema documents,
+user-flow documents, architecture documents, decision documents, plan
+directories, review directories, rules, helper prompts, application files, or
+framework files by default or through a compatibility shortcut. Conditional
+project knowledge is created later only when the owning workflow shows that it
+is justified.
 
-Existing user-owned legacy artifacts are preserved. Do not rename, delete,
-overwrite, or duplicate them merely to match the new default layout.
+Existing source, configuration, Git metadata, secrets, and useful project
+documents are inspected safely and never overwritten by bootstrap. A separate
+approved migration is required for any user-requested removal or revision.
+If an existing project already uses `specifications/`, `specs/`, or
+`docs/specifications/` as its SPEC source of truth, preserve that location and
+pass it as an explicitly approved `--spec-dir` mapping to the bundled helper;
+the helper refuses to guess an alternate source.
 
-## Safety and approval boundaries
+## Safety boundaries
 
 Read [`references/workflow.md`](references/workflow.md) for the full inspect →
-propose → approve → write → validate → handoff sequence. The non-negotiable
-contract is:
+propose → approve → write → validate → handoff sequence. Always:
 
 - resolve and show the exact canonical target before writing;
-- inspect only safe metadata until the relevant document is approved for review;
+- inspect only safe metadata until a relevant document is approved for review;
 - never read, copy, parse, print, or write `.env` contents, credentials, keys,
   browser state, or other secrets;
-- preserve source code, configuration, user-authored documents, symlinks, Git
-  metadata, `.ai/`, and existing source-of-truth layouts;
+- preserve source code, configuration, symlinks, Git metadata, and existing
+  project controls;
 - obtain separate approval for missing-file creation, existing-file revision,
-  and local `git init`;
-- never create commits, branches, remotes, pushes, deployments, or other
-  remote/external mutations; and
-- stop at a blocked capability or approval instead of partially widening scope.
+  and local `git init`; and
+- never create commits, branches, remotes, pushes, deployments, or external
+  mutations.
 
-For existing projects, use `references/source-of-truth.md` and
-`references/reconciliation-report.md` to record keep, create, revise,
-preserve, or conflict decisions. A missing control and a revision to an
-existing control are separate approval scopes.
+If a capability or approval is unavailable, stop without a partial write.
 
 ## Bundled helper boundaries
 
-`scripts/inspect-project.sh` is read-only target/mode inspection.
-`scripts/inventory-project.sh` is read-only safe filename evidence and
-classification. `scripts/init-project.sh` is deterministic copy-if-missing
-scaffolding from the bundled templates. It may report and preserve existing
-files and symlinks, but it does not infer a product, populate documents,
-choose a stack, create a feature SPEC/PLAN, install dependencies, create
-application files, inspect `.env` contents, or reconcile documents by itself.
-`scripts/validate-foundation.sh` validates the minimal control plane after an
-approved write; its historical name is retained for compatibility. It does
-not require the retired foundational document graph.
+`inspect-project.sh` is read-only target/mode inspection.
+`inventory-project.sh` is read-only safe filename evidence and classification.
+`init-project.sh` is deterministic copy-if-missing scaffolding for the minimal
+control plane. It may report and preserve existing files and symlinks, but it
+does not choose a stack, create application files, inspect `.env` contents,
+initialize a feature, install dependencies, or mutate remote state.
+`validate-foundation.sh` validates only the minimal control plane after an
+approved write. Use its matching `--spec-dir` mapping when an existing
+project's approved SPEC source is not `docs/specs/`.
 
 ## Workflow
 
 1. Resolve the exact target and run the read-only inspector. For an existing
    target, run the safe inventory as well.
-2. Read applicable instructions and only the relevant project-control sources.
-   Read `SESSION_STATE.md` when it exists. Do not preload speculative docs or
-   open secrets.
-3. Propose the smallest missing or affected controls. Treat new capabilities
-   such as frontend, persistence, authentication, public API, monorepo,
-   deployment, workers, or AI as reconciliation signals—not automatic reasons
-   to create a document.
-4. Show exact paths, ownership, evidence, compatibility impact, assumptions,
-   validation, and approval scope. Wait for approval before writing.
-5. Apply only the approved copy-if-missing or explicitly approved revision
-   operations. Use `--only` for every non-default output. Use `--init-git` only
-   after separate approval for the exact target; use `--allow-nested` only for
-   an explicitly approved nested target.
-6. Run `scripts/validate-foundation.sh` against the resulting control plane,
-   inspect the diff, and report created, preserved, skipped, blocked, and
-   unresolved items.
-7. For a feature or other substantive work request, hand off to
-   `spec-workflow`; do not create a SPEC, PLAN, task list, or implementation
-   from project-init. If an explicit legacy PLAN operation was requested,
-   preserve its separate approval and review gates and label that path as
-   opt-in compatibility support.
+2. Read applicable instructions, existing `SESSION_STATE.md`, and only the
+   project-control evidence needed for the proposal. Never preload speculative
+   documentation or open secrets.
+3. Propose the smallest missing or affected controls. Treat frontend,
+   persistence, authentication, public API, monorepo, deployment, background
+   jobs, multiple deployables, and AI as reconciliation signals, not automatic
+   reasons to create files. Ask whether each signal introduces durable
+   repository-wide knowledge or routing that is not already represented
+   clearly; if not, do nothing.
+4. Show exact paths, ownership, evidence, assumptions, validation, and the
+   approval scope. Wait for approval before writing.
+5. Apply only the approved copy-if-missing or explicitly approved revision.
+   Use `--init-git` only after separate approval for the exact target and
+   `--allow-nested` only for an explicitly approved nested target.
+6. Run `validate-foundation.sh`, inspect the diff, and report created,
+   preserved, skipped, blocked, and unresolved items.
+7. Hand substantive work to `spec-workflow`; do not create the work contract
+   or tasks inside project-init.
 
 ## References
 
 Load only the references needed by the active branch:
 
 - [`workflow.md`](references/workflow.md) — target classification, approval,
-  reconciliation, output, Git, and validation boundaries;
+  reconciliation, Git, validation, and handoff;
+- [`existing-repository-safety.md`](references/existing-repository-safety.md) —
+  preservation, legacy-artifact, secret, Git, and external-state boundaries;
 - [`template-manifest.md`](references/template-manifest.md) and
-  [`output-boundary.md`](references/output-boundary.md) — default, explicit,
-  preserved, and forbidden outputs;
+  [`output-boundary.md`](references/output-boundary.md) — minimal outputs and
+  forbidden application/external mutations;
 - [`source-of-truth.md`](references/source-of-truth.md),
   [`reconciliation-report.md`](references/reconciliation-report.md), and
   [`reconciliation-population.md`](references/reconciliation-population.md) —
-  existing-project evidence and safe document handling;
-- [`init-compatibility.md`](references/init-compatibility.md),
-  [`prompt-contract.md`](references/prompt-contract.md),
-  [`git-approval.md`](references/git-approval.md), and
-  [`capability-matrix.md`](references/capability-matrix.md) — harness, prompt,
-  Git, capability, and reload boundaries;
-- [`acceptance-scenarios.md`](references/acceptance-scenarios.md) — observable
-  bootstrap/reconciliation acceptance evidence; and
+  evidence and safe existing-project proposals;
+- [`conditional-documents.md`](references/conditional-documents.md) — optional
+  architecture, ADR, shared-flow, schema-context, and engineering-rule
+  templates;
+- [`feature-lifecycle.md`](references/feature-lifecycle.md),
+  [`traceability.md`](references/traceability.md), and
+  [`technical-questionnaire.md`](references/technical-questionnaire.md) —
+  SPEC lifecycle and conditional-document preparation;
 - [`project-profiles.md`](references/project-profiles.md),
-  [`technical-options.md`](references/technical-options.md),
-  [`technical-questionnaire.md`](references/technical-questionnaire.md),
-  [`feature-lifecycle.md`](references/feature-lifecycle.md), and
-  [`traceability.md`](references/traceability.md) — conditional or legacy
-  compatibility references only; they do not expand project-init ownership.
+  [`technical-options.md`](references/technical-options.md), and
+  [`prompt-contract.md`](references/prompt-contract.md) — optional concern,
+  technical-option, and existing-project prompt guidance;
+- [`init-compatibility.md`](references/init-compatibility.md),
+  [`git-approval.md`](references/git-approval.md), and
+  [`capability-matrix.md`](references/capability-matrix.md) — harness,
+  prompt, Git, capability, and reload boundaries; and
+- [`acceptance-scenarios.md`](references/acceptance-scenarios.md) — observable
+  bootstrap and reconciliation evidence.
 
 ## Validation and handoff
 
-Run the narrowest relevant shell and contract tests first, then the repository
-skill validator and final diff checks. Structural checks do not prove live
-harness reload, application runtime, browser, provider, deployment, or remote
-behavior. Never claim those paths were exercised unless they were.
+Run the narrowest project-init tests first, then the repository validator and
+diff checks. Structural checks do not prove live harness reload, application
+runtime, browser, provider, deployment, or remote behavior. Report those paths
+as untested unless they were actually exercised.
 
-After an approved `AGENTS.md` change, report the exact diff and recommend a
-harness reload or fresh session before relying on the new routing. Update
-`SESSION_STATE.md` only under its separate approval and existing project policy.
-Use `session-state` for an existing state update and `agent-memory` for a
-reviewed meaningful capsule when those capabilities are available.
+After an approved `AGENTS.md` change, show the exact diff and recommend a
+fresh session or harness reload before relying on the new routing. Update
+existing session state only through the `session-state` workflow and the
+repository's state policy.

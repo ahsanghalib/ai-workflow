@@ -5,7 +5,8 @@
 
 Use `schema-design` when an approved SPEC or current executable repository
 evidence shows that non-trivial persistence design is justified. Do not require
-`USER_FLOW.md`, a master plan, or a legacy `DB_SCHEMA.md` before the SPEC. If
+`docs/user-flows.md`, a master plan, or a legacy schema document before the
+SPEC. If
 persistence is not approved or the product has no persisted data, record
 `Schema: not applicable` and stop without creating a schema document.
 

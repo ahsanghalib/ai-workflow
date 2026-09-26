@@ -1,14 +1,14 @@
 # Project Technical Questionnaire
 
 Use this only when the user explicitly wants project-level technical decisions
-recorded during reconciliation or an optional legacy planning flow. Normal
+recorded during reconciliation or a conditional project document. Normal
 feature behavior belongs in an approved SPEC; route architecture and interface
 choices to `technical-design` and persistence design to `schema-design` when
 those decisions are justified.
 
-Use this questionnaire after the initial product-direction draft and before
-recording technical decisions. Ask only the groups that affect the requested
-project-control documents. The user may answer `unknown`, `not applicable`, or
+Use this questionnaire before recording a conditional project document. Ask
+only the groups that affect the requested project-control documents. The user
+may answer `unknown`, `not applicable`, or
 `recommend options`; those answers remain open rather than becoming guesses.
 
 ## Project shape and ownership
@@ -37,9 +37,9 @@ project-control documents. The user may answer `unknown`, `not applicable`, or
 - Are tenancy, organizations, ownership, audit history, money, time zones, or
   concurrency requirements already known?
 
-Do not create `docs/DB_SCHEMA.md` until persistence is approved. When it is
-approved, route the design to `schema-design` before API or frontend contracts
-depend on it.
+Do not create a schema-context document until persistence is justified. When
+needed, route the design to `schema-design` before API or frontend contracts
+depend on it, while keeping executable schema authoritative.
 
 ## Authentication, authorization, and sessions
 

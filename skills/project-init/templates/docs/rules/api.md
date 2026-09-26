@@ -1,4 +1,4 @@
-# API Engineering Rules
+# API Rules
 
 Applies to public/internal HTTP APIs and OpenAPI contracts.
 
@@ -7,7 +7,7 @@ Applies to public/internal HTTP APIs and OpenAPI contracts.
 Each endpoint, event, and shared transport contract must identify the relevant
 user-flow journey/state and approved schema entities when it reads or writes
 persistent data. Record the schema-impact classification and route changes to
-schema-impact review before implementation planning when fields, nullability,
+schema-impact review before implementation when fields, nullability,
 authorization scope, lifecycle, relationships, or persistence semantics
 change. Do not expose database models as transport contracts.
 

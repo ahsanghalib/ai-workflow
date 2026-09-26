@@ -6,16 +6,16 @@
 Use the `project-init` skill for an existing or non-empty target.
 
 1. Resolve the exact target and inspect safe project evidence only.
-2. Preserve the existing planning and architecture source of truth.
+2. Preserve existing project-control and documentation sources of truth.
 3. Classify each document as keep, create, revise, preserve, or conflict.
 4. Propose missing documents and per-file revisions separately.
 5. Never read `.env` or secret contents, overwrite existing files, or run Git
    mutations before the relevant approval.
 
-Enumerate all instruction, planning, architecture, user-flow, schema, and
-repository candidates first. Preserve established names and locations; if
-there are multiple plausible sources or generated files, report the conflict
-and generator ownership instead of creating a second source of truth.
+Enumerate instruction, architecture, user-flow, schema, rules, and repository
+control candidates first. Preserve established names and locations; if there
+are multiple plausible sources or generated files, report the conflict and
+generator ownership instead of creating a second source of truth.
 
 For missing Markdown, populate only confirmed safe evidence, label inferred,
 recommended, assumed, and unknown details separately, and show the
@@ -29,10 +29,9 @@ truth, compatibility impact, approval scope, validation, unresolved decisions,
 and the next review action before writing.
 
 Request separate approval for every existing-file revision, including
-`AGENTS.md`, README, master plan, architecture, user flow, schema, rules,
-plans, indexes, `.gitignore`, and equivalent source-of-truth files. Show each
-exact diff and compatibility impact; a missing-file approval does not cover a
-revision.
+`AGENTS.md`, README, architecture, user flow, schema, rules, `.gitignore`, and
+equivalent source-of-truth files. Show each exact diff and compatibility
+impact; a missing-file approval does not cover a revision.
 
 If Git is absent, propose local `git init` separately for the exact target; if
 `.git` exists, preserve it. If `.gitignore` is absent, propose a missing-file
