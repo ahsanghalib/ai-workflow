@@ -1,140 +1,86 @@
 # LinkedIn post output contract
 
-Use a user-selected runtime workspace. Do not write these artifacts into the
-public skill repository unless the user explicitly selects it as the workspace.
+## Source artifact and operational state
 
-## Flat folder layout
+The Markdown post file is the detailed source artifact. When the shared Google
+Sheet is available, `Content Library` is the operational index and contains an
+exact publishing snapshot of `Final Post Text` plus revision/hash/status fields.
+
+Do not make `posts.md` mandatory once the Sheet exists. It may remain as a local
+cache/export for compatibility with the existing corpus.
+
+## Local layout
+
+Preserve the current local layout when it already exists:
 
 ```text
 <linkedin-workspace>/posts/
-├── posts.md
+├── posts.md                         # optional local index/cache after migration
 ├── research-YYYY-MM-DD.md
 ├── post-<slug>-YYYY-MM-DD.md
 ├── post-<slug>-YYYY-MM-DD.pdf
-├── post-<slug>-YYYY-MM-DD.png
-└── post-<slug>-YYYY-MM-DD-1.png
+└── post-<slug>-YYYY-MM-DD.png
 ```
 
-`linkedin-post` creates or updates `posts.md`, `research-*.md`, and
-`post-*.md`. `linkedin-visual` owns PDF/PNG/JPG creation. Do not create a
-`<slug>/` subfolder.
-
-The date in a post or visual filename is the research-file date, even when the
-file is created later. Never overwrite a file silently. If a basename already
-exists, use an explicit numeric suffix or a user-approved rename and update
-every relative link. Same-day research appends a labeled `## Run HH:MM` section
-to the existing daily research file.
-
-## `posts.md`
-
-Keep one complete row for every post and preserve all existing rows. `No.` is a
-stable post identifier and must not be renumbered.
-
-<!-- markdownlint-disable MD013 -->
-
-```markdown
-| No. | Post topic | Primary angle / takeaway | Post summary | Approval | Posted | Visuals | Research file | Post file | Visual files | Notes |
-|---:|---|---|---|---|---|---|---|---|---|---|
-| 1 | ... | ... | ... | pending | pending | not_created | [research-YYYY-MM-DD.md](research-YYYY-MM-DD.md) | [post-slug-YYYY-MM-DD.md](post-slug-YYYY-MM-DD.md) | — | ... |
-```
-
-<!-- markdownlint-enable MD013 -->
-
-Controlled values:
-
-- `Approval`: `pending`, `approved`, or `declined`;
-- `Posted`: `yes`, `no`, or `pending`;
-- `Visuals`: `created`, `not_created`, or `not_needed`.
-
-Escape pipe characters and replace line breaks with spaces so each record is
-one valid Markdown table row. Keep links relative to the `posts/` folder.
-Post files mirror the row's topic, angle, summary, status, and file links.
-
-The skill never publishes or independently verifies external publication. New
-rows start with `Posted: pending`. Use `Posted: yes` only after explicit user
-confirmation or an approved publication record. Use `Posted: no` only after
-explicit confirmation that it was not posted. Preserve `pending` when unknown.
-
-## Research file
-
-Create `research-YYYY-MM-DD.md` before any post file. For each run, include:
-
-- run date/time, request, audience, objective, source-only setting, and count;
-- prior-content inventory: existing `posts.md` rows, research files, and post
-  files reviewed;
-- candidate number, topic, reader question, proposed angle, and takeaway;
-- prior files reviewed, overlap, previous angle/takeaway, new angle/takeaway,
-  material-difference rationale, and `distinct`/`revise`/`reject` decision;
-- search queries, filters, date windows, and research scope;
-- evidence ledger with URL, publisher, publication date, retrieval date, source
-  type, claim or insight, caveat, status, and supported post number;
-- trend signals, fact checks, conflicting evidence, and unresolved issues;
-- post-by-post hook direction, key claims, disclosure needs, and visual
-  candidacy;
-- a statement that `revise` and `reject` candidates were not silently drafted;
-- handoff links to each planned post file.
-
-Do not use an unrecorded research decision as the basis for a post file.
+Do not rename the user's existing imported files merely to adopt a new naming
+convention. Stable identity comes from `Content ID`, not the filename.
 
 ## Post file
 
-Each `post-<slug>-YYYY-MM-DD.md` contains:
+Keep, when available:
 
 ```markdown
 # LinkedIn post: <title>
 
-- Status: DRAFT
-- Post no.: <stable number>
+- Content ID: LI-0001
+- Status: DRAFT | APPROVED-UNPUBLISHED
+- Revision: 1
 - Research date: YYYY-MM-DD
-- Topic: <topic>
-- Primary angle: <angle>
-- Core takeaway: <takeaway>
-- Audience: <audience>
-- Objective: <objective>
-- Research: [research-YYYY-MM-DD.md](research-YYYY-MM-DD.md)
-- Index: [posts.md](posts.md#...)
+- Topic: ...
+- Primary angle: ...
+- Core takeaway: ...
+- Audience: ...
+- Objective: ...
+- Content intent: discovery | authority | conversion | relationship
+- Content pillar: ... (optional for a one-off post)
 
 ## Prior-content comparison
-
-- Files reviewed: ...
-- Overlap: ...
-- Material difference: ...
+...
 
 ## Final post text
 
-<exact unpublished LinkedIn post text>
+<exact LinkedIn text>
 
 ## Optional alternatives
-
-<hook or angle alternatives, outside the final post text>
+...
 
 ## Sources and caveats
-
-<claim mapping, links, uncertainty, and disclosure notes>
+...
 
 ## Visual-generation handoff
-
-- Visual status: not_created | created | not_needed
-- Approval required before rendering: yes
-- Requested page count: ...
-- Color scheme: selected scheme name and token reference ...
-- Slide outline: ...
-- Source-to-slide map: ...
-- Brand/layout reference: ...
+- Visual status: not_assessed | not_needed | planned | in_progress | ready | failed
+- Visual type: none | image | document
 - Output files: ...
-- QA receipt or unverified checks: ...
+- QA receipt: ...
 ```
 
-After per-post approval, change only the status to `APPROVED-UNPUBLISHED` and
-record the approval note. Do not erase the research comparison or caveats.
+For existing files, add missing operational metadata only when the user asks to
+update the corpus; do not destroy the old structure.
 
-## Batch sequence
+## Hash and revision
 
-1. Inventory the existing corpus.
-2. Create or append the daily research file.
-3. Research and record evidence.
-4. Record an originality decision for every candidate.
-5. Add one pending index row per `distinct` candidate.
-6. Create one `DRAFT` post file per row.
-7. Present the batch for per-post approval and update each row independently.
-8. Hand only approved posts to `linkedin-visual`.
+- `Content Hash` is SHA-256 of the exact `Final Post Text` publishing snapshot.
+- Increment `Revision` when the final body changes.
+- Cosmetic changes outside the post body do not require a content revision.
+- Sync the same revision/hash to `Content Library`.
+- If a different approved body exists in Sheet/Drive/local state and precedence
+  is unclear, set `Sync State=conflict` and do not overwrite silently.
+
+## Approval
+
+A draft/reviewed file is not publishable. Only explicit approval of the exact
+revision changes `Approval` to `approved` / file status to
+`APPROVED-UNPUBLISHED`.
+
+Do not infer publication from approval, visual generation, queue creation, or
+file upload. Publication is owned and verified by `linkedin-publish`.

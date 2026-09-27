@@ -1,8 +1,7 @@
 # Carousel brief
 
 Use this brief before changing an approved LinkedIn post into visual copy. The
-brief is a planning artifact, not permission to render; rendering still needs
-explicit approval.
+brief is a planning artifact. When the source post and the established visual system are already approved, it is sufficient to generate a draft asset; publication approval remains separate.
 
 ## Required preflight
 
@@ -18,9 +17,21 @@ explicit approval.
 
 - Audience: ...
 - Reader context: ...
+- Reader problem or decision: ...
 - Promise: ...
 - Primary takeaway: ...
 - Approved next action or CTA: ...
+
+## Copywriting plan
+
+- Primary reader and awareness hypothesis: ...
+- Chosen structure or framework: ... | direct explanation
+- Cover promise/problem: ...
+- Page-by-page progression: ...
+- Proof, example, mechanism, or limitation used: ...
+- Reader benefit or implication: ...
+- CTA/action and why it is proportionate: ...
+- Humanizer pass needed: yes | no | prose only
 
 ## Format and delivery
 
@@ -29,6 +40,8 @@ explicit approval.
 - Page dimensions: ...
 - Deliverable: PDF | PDF plus editable source
 - Preview files: none | PNG | JPG
+- Authoring tool: Canva | local renderer | other approved capability
+- Canva design/source URL or ID: ... | not available
 - Runtime workspace: ...
 
 ## Visual identity
@@ -43,10 +56,11 @@ explicit approval.
 
 ## QA and approvals
 
-- Renderer: available | unavailable
+- Authoring capability: available | unavailable
+- Canva editor review: verified | failed | unverified | not_applicable
 - Structural PDF inspection: available | unavailable
 - Rendered page inspection: available | unavailable
-- Visual approval: pending | approved
+- Asset approval for publication: pending | approved
 - Open decisions: ...
 ```
 
@@ -61,6 +75,4 @@ Stop at the brief and ask the smallest blocking question when:
   requested but not supplied;
 - the renderer or QA capability needed for the requested claim is unavailable.
 
-When a neutral visual proposal is useful, label it as temporary and request
-approval before rendering. Do not turn a sample page into a permanent brand
-rule.
+When a new or temporary visual system is proposed, label it as temporary and request approval before adopting that new system. Draft rendering under the already-approved Ahsan visual system does not require a separate pre-render approval.

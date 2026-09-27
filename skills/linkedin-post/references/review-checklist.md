@@ -7,13 +7,18 @@ status to `APPROVED-UNPUBLISHED`.
 
 - [ ] The audience, professional context, objective, and user relationship to
       the topic are explicit.
+- [ ] The primary reader, reader problem, and intended action are explicit;
+      audience specificity comes from supplied/evidenced context.
 - [ ] The post has one primary angle and one core takeaway.
+- [ ] If this belongs to a recurring series, its primary intent and content
+      pillar are explicit and supported by the user's real expertise or
+      evidence; no fixed ratio or cadence is being treated as a guarantee.
 - [ ] The format matches the evidence and requested outcome.
 
 ## Corpus and originality
 
-- [ ] `posts.md`, prior research files, and prior post files were inventoried.
-- [ ] The research file names the prior files compared for this post.
+- [ ] The shared Content Library (or local index fallback) was checked first.
+- [ ] Only likely overlapping prior posts/research were opened for full comparison, and the comparison is recorded.
 - [ ] The new hook, thesis, takeaway, mechanism, evidence, example, audience
       question, CTA, or format is materially different from overlapping work.
 - [ ] The difference is more than new wording or a changed title.
@@ -36,6 +41,8 @@ status to `APPROVED-UNPUBLISHED`.
       credential was invented.
 - [ ] The copy sounds like a specific person or project only where supplied;
       generic identity claims are removed.
+- [ ] The `copywriting` pass, when used, improved clarity or specificity without
+      adding a claim, certainty, identity, or sales pressure.
 - [ ] Promotion, affiliation, sponsorship, and uncertainty are disclosed when
       relevant.
 - [ ] No secrets, credentials, confidential details, or unnecessary personal
@@ -45,10 +52,9 @@ status to `APPROVED-UNPUBLISHED`.
 
 ## Artifact and approval
 
-- [ ] The research file exists before the post file.
-- [ ] The post filename uses the research date and the output contract.
+- [ ] Required research/evidence exists before unsupported factual claims are finalized.
+- [ ] New files follow the output contract; existing imported filenames were preserved unless the user explicitly approved a rename.
 - [ ] The post file is `DRAFT` until the user approves that specific post.
-- [ ] The index row mirrors the post file's topic, angle, summary, links, and
-      statuses.
+- [ ] The Content Library row (or local index fallback) mirrors the post file's topic, angle, revision/hash, links, and statuses.
 - [ ] The skill has not inferred external publication or created visual files.
 - [ ] An approved post is handed to `linkedin-visual` only after its approval.

@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import secrets
 import shutil
 import sys
 import subprocess
@@ -170,7 +169,7 @@ def parse_args() -> argparse.Namespace:
         help="PDF path, or output directory when --format svg is used",
     )
     parser.add_argument("--format", choices=("svg", "pdf", "both"), default="both")
-    parser.add_argument("--scheme", help="Scheme name, or random; default reuses metadata when present")
+    parser.add_argument("--scheme", help="Scheme name; default reuses metadata then falls back to Lime Signal")
     parser.add_argument("--page-count", type=int, choices=(5, 7), help="Override the brief page count")
     parser.add_argument(
         "--overwrite",
@@ -190,12 +189,14 @@ def load_brief(path: Path) -> dict[str, Any]:
 
 def choose_scheme(brief: dict[str, Any], requested: str | None, metadata_path: Path) -> str:
     candidate = requested or brief.get("color_scheme") or brief.get("scheme")
-    if (not candidate or str(candidate).lower() == "random") and metadata_path.exists():
+    if not candidate and metadata_path.exists():
         with metadata_path.open(encoding="utf-8") as handle:
             saved = json.load(handle)
         candidate = saved.get("color_scheme")
-    if not candidate or str(candidate).lower() == "random":
-        return secrets.choice(list(SCHEMES))
+    if not candidate:
+        return "Lime Signal"
+    if str(candidate).lower() == "random":
+        raise ValueError("Random color schemes are not supported; choose a named scheme.")
     if candidate not in SCHEMES:
         choices = ", ".join(SCHEMES)
         raise ValueError(f"Unknown color scheme {candidate!r}. Choose: {choices}")
@@ -301,7 +302,7 @@ def default_pages(page_count: int) -> list[dict[str, Any]]:
             "title": "Make the final slide useful on its own.",
             "takeaway": "One memorable sentence the reader can repeat.",
             "source": "Add the evidence link, caveat, or approved question that completes the post.",
-            "cta": "SAVE THIS  •  SHARE WITH YOUR TEAM  •  DISCUSS BELOW",
+            "cta": "REPLACE WITH ONE APPROVED NEXT ACTION",
         },
     }
     return [{"template": kind, **defaults[kind]} for kind in kinds]
@@ -445,10 +446,10 @@ def add_tabs(root: ET.Element, page_index: int, page_count: int, scheme: dict[st
         )
 
 
-def add_chrome(root: ET.Element, page_index: int, page_count: int, scheme: dict[str, str]) -> None:
-    add_text(root, "M. Ahsan Izhar", 26, 43, 430, 18, scheme["ink"], weight=600, identifier="generated-author")
-    add_text(root, "ahsanizhar.com", 1054, 43, 264, 18, scheme["primary"], weight=500, anchor="end", identifier="generated-domain")
-    add_text(root, "Senior Software Engineer", 26, 1296, 460, 16, scheme["muted"], weight=500, identifier="generated-role")
+def add_chrome(root: ET.Element, page_index: int, page_count: int, scheme: dict[str, str], brand: dict[str, str]) -> None:
+    add_text(root, brand["author"], 26, 43, 430, 18, scheme["ink"], weight=600, identifier="generated-author")
+    add_text(root, brand["domain"], 1054, 43, 264, 18, scheme["primary"], weight=500, anchor="end", identifier="generated-domain")
+    add_text(root, brand["role"], 26, 1296, 460, 16, scheme["muted"], weight=500, identifier="generated-role")
     add_text(root, f"{page_index + 1}/{page_count}", 1054, 1294, 134, 18, scheme["ink"], weight=600, anchor="end", identifier="generated-pagination")
     add_tabs(root, page_index, page_count, scheme)
 
@@ -535,12 +536,12 @@ def add_closing_content(root: ET.Element, page: dict[str, Any], scheme: dict[str
     add_text(root, page.get("cta", ""), 56, 944, 900, 14, scheme["primary"], weight=600, identifier="generated-closing-cta")
 
 
-def render_page(template_path: Path, page: dict[str, Any], page_index: int, page_count: int, scheme: dict[str, str]) -> str:
+def render_page(template_path: Path, page: dict[str, Any], page_index: int, page_count: int, scheme: dict[str, str], brand: dict[str, str]) -> str:
     raw = template_path.read_text(encoding="utf-8")
     root = ET.fromstring(replace_default_colors(raw, scheme))
     strip_dynamic_copy(root)
     strip_figma_tabs(root)
-    add_chrome(root, page_index, page_count, scheme)
+    add_chrome(root, page_index, page_count, scheme, brand)
 
     kind = page["template"]
     if kind == "cover":
@@ -615,10 +616,22 @@ def write_pdf(svg_pages: list[str], output: Path) -> None:
             temporary.unlink(missing_ok=True)
 
 
+def resolve_brand(brief: dict[str, Any]) -> dict[str, str]:
+    brand = brief.get("brand")
+    if not isinstance(brand, dict):
+        raise ValueError("The input JSON must include an approved brand object.")
+    required = ("author", "domain", "role")
+    missing = [key for key in required if not str(brand.get(key, "")).strip()]
+    if missing:
+        raise ValueError(f"The approved brand object is missing: {', '.join(missing)}")
+    return {key: str(brand[key]).strip() for key in required}
+
+
 def main() -> int:
     args = parse_args()
     brief = load_brief(args.input)
     page_count, pages = ensure_pages(brief, args.page_count)
+    brand = resolve_brand(brief)
     metadata_path = args.output.with_name(args.output.stem + ".meta.json")
     ensure_outputs_available(args.output, args.format, args.overwrite)
     scheme_name = choose_scheme(brief, args.scheme, metadata_path)
@@ -629,7 +642,7 @@ def main() -> int:
         template_path = templates / TEMPLATE_NAMES[page["template"]]
         if not template_path.exists():
             raise FileNotFoundError(f"Missing exported template: {template_path}")
-        svg_pages.append(render_page(template_path, page, index, page_count, scheme))
+        svg_pages.append(render_page(template_path, page, index, page_count, scheme, brand))
 
     if args.format in ("svg", "both"):
         svg_dir = args.output if args.format == "svg" else args.output.with_name(args.output.stem + "-pages")
@@ -644,6 +657,7 @@ def main() -> int:
     metadata = {
         "page_count": page_count,
         "color_scheme": scheme_name,
+        "brand": brand,
         "templates": [page["template"] for page in pages],
         "source": args.input.name,
     }

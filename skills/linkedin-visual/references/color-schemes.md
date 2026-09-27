@@ -7,7 +7,7 @@ five unrelated brands. Use one scheme for the complete carousel.
 ## Selection contract
 
 - If the approved brief names a scheme, use that scheme.
-- Otherwise choose one scheme randomly before layout begins.
+- Otherwise use `Lime Signal` as the deterministic default. Choose another scheme only deliberately from the approved brief or documented topic mapping.
 - Record the selected scheme name and token values in the post file's visual-
   generation section and in the QA receipt.
 - Keep the selected scheme unchanged across every page in one carousel.

@@ -109,3 +109,10 @@ observation. Call something a trend only when multiple relevant, independent
 signals support the claim or a primary source documents a meaningful change.
 Use recent evidence for fast-moving facts and stable primary sources for
 concepts whose origin or definition matters.
+
+## Client-acquisition relevance
+
+Topic choice should help the right professional audience recognize useful
+engineering judgment. Prefer concrete production problems, tradeoffs, failure
+modes, and implementation decisions over generic trend summaries. This does not
+mean every post should sell a service or include a lead-generation CTA.

@@ -4,6 +4,15 @@ Use this as a content and layout contract. Select exact geometry with the user
 or project rules; LinkedIn does not require the 5-page or 7-page editorial
 choices below.
 
+## Copy and design relationship
+
+Treat copy and design as one reader journey. The page headline should state the
+page's job, supporting text should answer the next reasonable question, and the
+focal visual should explain, compare, or demonstrate rather than decorate. Use
+hierarchy, spacing, contrast, and grouping to direct attention in the same order
+as the copywriting argument. Preserve caveats, sources, and disclosures where
+they affect interpretation; do not hide them in unreadable footers.
+
 ## Page contract
 
 Record these values in the carousel brief and post file:
@@ -32,6 +41,9 @@ Use a consistent hierarchy:
 
 Keep one dominant idea per page. Use whitespace to show grouping rather than
 adding panels, badges, or decorative elements without a communication purpose.
+Use a clear visual entry point, a readable path through the page, and a
+recognizable takeaway or next action. Do not use visual emphasis to turn a
+qualified statement into a guarantee or to make weak evidence look authoritative.
 
 ## Text and links
 

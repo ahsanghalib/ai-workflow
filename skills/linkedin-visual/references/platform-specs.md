@@ -5,7 +5,7 @@ linked official LinkedIn Help pages before each implementation that depends on
 platform limits, and record the retrieval date in the carousel brief or QA
 receipt.
 
-## Verified on 2026-09-25
+## Checked against official guidance on 2026-09-27
 
 LinkedIn's official guidance states that document uploads support PDF, PPT,
 PPTX, DOC, and DOCX formats; the file size cannot exceed 100 MB and the page

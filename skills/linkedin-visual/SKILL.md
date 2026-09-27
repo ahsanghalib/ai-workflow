@@ -1,127 +1,153 @@
 ---
 name: linkedin-visual
-description: Use when turning an approved LinkedIn post or content brief into a 5-page or 7-page document/carousel PDF with source mapping, brand/layout rules, and visual QA; do not use for drafting posts, comments, publishing, general presentations, or inventing a brand identity.
+description: >-
+  Use when assessing whether an approved LinkedIn post needs a visual and, when
+  useful, creating a source-grounded single image or document/carousel in Canva
+  or another approved design tool with a supplied visual system and QA. Apply
+  `copywriting` to the carousel narrative and `humanizer` to eligible prose
+  without changing approved claims. Does not publish or schedule LinkedIn
+  posts.
 license: MIT
 ---
 
 # LinkedIn visual
 
-Transform an approved LinkedIn post into a focused document/carousel artifact.
-Preserve the source claims, certainty, attribution, disclosures, and audience
-while adapting wording to readable pages. The skill may produce a PDF and
-optional image previews in a user-selected runtime workspace; it never uploads
-or publishes them.
+Create visuals only when they improve comprehension, credibility, or scanability.
+A visual is not mandatory for every post. Preserve the approved post's claims,
+certainty, attribution, disclosures, and audience.
 
 ## Boundaries
 
-- Require an `APPROVED-UNPUBLISHED` post, approved content brief, or explicit
-  user approval for the supplied source before preparing visual copy.
-- Do not invent claims, numbers, testimonials, personal results, visual
-  evidence, citations, or identity details while splitting content into pages.
-- Do not publish, upload, schedule, access an authenticated social account, or
-  claim LinkedIn acceptance from a local file check.
-- Do not become a general presentation, video, image-generation, or brand-
-  identity skill. Use conditional presentation/PDF/image capabilities only when
-  the active harness provides them.
-- Do not invent a permanent palette, logo, type system, header, footer, or
-  domain. Use supplied and approved project rules; label temporary neutral
-  defaults as campaign choices.
-- Keep the public skill harness-neutral. Renderer, PDF, presentation, and
-  image capabilities are optional adapters with a safe unverified fallback.
+- Start from an approved post/brief or an explicitly approved source.
+- Do not invent claims, metrics, testimonials, personal results, diagrams that
+  imply unsupported evidence, citations, or identity details.
+- Do not publish, upload to LinkedIn, schedule, or claim LinkedIn acceptance.
+- Do not change the approved post thesis merely to fit a template.
+- Use the supplied approved visual identity and identity fields. If no approved
+  brand system exists, propose a neutral temporary system and stop for approval
+  before treating it as a reusable rule.
+- Treat Canva editing, design creation, and export as conditional external
+  actions. Use the connected Canva capability when it is available, but never
+  assume that a Canva design was created, saved, shared, or exported without
+  explicit tool or UI evidence. Do not overwrite an existing Canva design
+  unless the user selected it and authorized that change.
+
+## Workspace integration
+
+When the shared workspace is available:
+
+- read the `Content Library` row and exact approved source/hash;
+- write asset metadata to `Visual Assets`;
+- upload completed assets to the appropriate Drive `Content/Visuals` folder;
+- update `Visual Status`, `Visual Type`, and `Primary Visual Link` only after the
+  output exists and its QA state is accurately recorded.
+
+Local files remain valid working outputs when Drive is unavailable. Mark them
+unsynced rather than blocking generation. Drive writes and asset uploads require
+an authorized capability and an explicitly selected target; a local render is
+not proof of a Drive upload.
 
 ## Read the references
 
-Read the references needed for the current branch:
-
-- [references/carousel-brief.md](references/carousel-brief.md) for input,
-  approval, and deliverable preflight.
-- [references/narrative-frameworks.md](references/narrative-frameworks.md) for
-  choosing and outlining 5-page or 7-page narratives.
-- [references/slide-spec.md](references/slide-spec.md) before writing page
-  copy, layout, headers, footers, or source maps.
+- [references/visual-selection.md](references/visual-selection.md)
+- [references/carousel-brief.md](references/carousel-brief.md)
+- [references/canva-workflow.md](references/canva-workflow.md) when Canva is
+  available or the user wants an editable Canva source
+- [references/narrative-frameworks.md](references/narrative-frameworks.md)
+- [references/slide-spec.md](references/slide-spec.md)
 - [references/brand-and-layout-guidelines.md](references/brand-and-layout-guidelines.md)
-  when supplied brand material or a visual system is involved.
-- [references/color-schemes.md](references/color-schemes.md) when selecting or
-  recording the campaign palette.
-- [references/layout-archetypes.md](references/layout-archetypes.md) when
-  choosing varied page structures such as chat, table, grids, steps, or
-  diagrams.
-- [references/templates/README.md](references/templates/README.md) when using
-  the saved one-time Figma exports and local renderer.
+- [references/color-schemes.md](references/color-schemes.md)
+- [references/layout-archetypes.md](references/layout-archetypes.md)
+- [references/templates/README.md](references/templates/README.md) for local
+  carousel rendering
 - [references/visual-system-and-accessibility.md](references/visual-system-and-accessibility.md)
-  before finalizing typography, contrast, or mobile readability.
-- [references/pdf-qa.md](references/pdf-qa.md) before rendering and before
-  reporting structural or visual QA.
-- [references/platform-specs.md](references/platform-specs.md) when checking
-  current LinkedIn document requirements. Recheck its official links at
-  implementation time.
+- [references/pdf-qa.md](references/pdf-qa.md)
+- [references/platform-specs.md](references/platform-specs.md) when current
+  LinkedIn requirements matter
+
+## Visual selection
+
+First decide one of:
+
+- `none` — text is stronger without an asset;
+- `image` — one diagram, system map, comparison, or focal concept can stand alone;
+- `document` — the idea benefits from a multi-page technical narrative.
+
+Do not create a carousel merely because the capability exists. For the imported
+post corpus, record the assessment before generating assets so effort goes to the
+strongest posts first.
 
 ## Workflow
 
-1. Resolve the user-selected runtime workspace and locate the approved post
-   file, evidence ledger, and any supplied visual brief. Read the post's
-   visual-generation section and preserve the existing flat `posts/` layout.
-   If approval or the source evidence is missing, create only a brief/proposal
-   and stop before creating visual assets.
+1. Resolve the exact approved Content ID/revision/hash and source artifact.
+2. Run the visual-selection assessment. If `none`, set `Visual Status=not_needed`
+   and stop without generating decorative filler.
+3. For `image`, create one source-grounded portrait asset with the approved
+   identity using an available image/design/rendering capability. Prefer diagrams
+   and information design over generic AI artwork. If no suitable capability is
+   available, mark the asset blocked rather than silently switching to decoration.
+4. For `document`, choose the smallest page count that preserves the argument;
+   use the existing 5/7-page templates only when they fit. Before rendering,
+   use `copywriting` to turn the approved post into a reader-first slide
+   sequence: one primary reader, one promise or problem, one job per page, a
+   clear mechanism or proof, and one proportionate next action. Choose one
+   suitable framework (such as AIDA, PAS, BAB, or the Four Cs as an editorial
+   gate) only when it makes the approved argument clearer; frameworks are not
+   reach or conversion guarantees. Create a page outline and source-to-slide
+   ledger before rendering.
+5. Use the approved visual system. Default to `Lime Signal`; choose another
+   documented scheme only deliberately based on the topic/brief. Never choose a
+   palette randomly. When Canva is available, follow
+   [references/canva-workflow.md](references/canva-workflow.md) and use Canva as
+   the preferred authoring path. Otherwise use the local renderer or another
+   explicitly approved design capability.
+6. Once the global brand system is already approved, **do not require a separate
+   pre-render approval for every post**. Generate a draft asset, run QA, and mark
+   it `Approved=pending`. Ask for approval before publication, not before every
+   render. Ask before rendering only when introducing a new brand/layout rule,
+   materially changing content, or incurring an external cost the user has not
+   authorized.
+7. After the narrative is stable, use `copywriting` for a final clarity,
+   specificity, benefit, and reader-momentum pass on eligible prose only. It
+   may shorten or clarify approved copy but must not change its claims,
+   certainty, attribution, thesis, or approved action. Use `humanizer` only for
+   prose that needs a natural-voice pass; do not humanize numeric labels,
+   citations, diagram text, or data automatically. If either skill is
+   unavailable, apply the equivalent bounded checks locally and report the
+   fallback; never claim that a separate skill ran. After either pass, rerun
+   the exact-claim and attribution diff. Keep every text/diagram element
+   traceable to the approved post/evidence.
+8. Apply the same copywriting logic to the design: establish a clear visual
+   hierarchy, make the focal element carry the page job, use contrast and
+   grouping to direct attention, show mechanisms or comparisons rather than
+   decoration, and make the final action easy to recognize. Design must improve
+   comprehension and trust, not manufacture urgency, imply proof, or overpower
+   the caveat/source treatment.
+9. Run structural and visual QA. Inspect the Canva design in its editor and the
+   exported pages when the active environment supports it. Inspect local
+   renders when Canva is unavailable. Do not claim checks that were not
+   performed.
+10. Save outputs without silent overwrite. Record Content ID, revision, source
+   hash, scheme, authoring tool, Canva design/source URL when returned, export
+   format, QA state, and Drive/local path.
+11. After user approval of the asset, set `Visual Assets.Approved=yes` and
+   `Content Library.Visual Status=ready`.
 
-2. Complete the preflight in [references/carousel-brief.md](references/carousel-brief.md):
-   audience, promise, source, objective, page count, orientation, dimensions,
-   brand inputs, footer identity, citations, deliverables, renderer, and QA
-   capability. Treat 5 and 7 pages as editorial choices, not LinkedIn
-   requirements.
+## Batch visual mode
 
-3. Read [references/narrative-frameworks.md](references/narrative-frameworks.md)
-   and select the smallest page count that preserves the argument. Create a
-   page-by-page outline and source-to-slide ledger. Do not add filler pages to
-   reach seven.
+For a large approved corpus:
 
-4. Read [references/slide-spec.md](references/slide-spec.md) and
-   [references/brand-and-layout-guidelines.md](references/brand-and-layout-guidelines.md),
-   [references/color-schemes.md](references/color-schemes.md), and
-   [references/layout-archetypes.md](references/layout-archetypes.md).
-   Separate approved project rules from temporary campaign choices. If a brand
-   rule is missing, use a neutral default only when the user requests it and
-   label the choice for approval. Select one approved color scheme before
-   layout, randomly when the brief does not specify one, and record the choice
-   so rerenders do not silently change it. Map each page to an archetype that
-   serves the approved outline; do not repeat one shell merely to reach seven
-   pages.
-
-5. Present the outline, visual system, page geometry, citation treatment,
-   deliverables, and rendering plan for explicit visual approval. Do not render
-   a PDF, image, or editable source before this approval.
-
-6. Create the visual source and requested output with the available conditional
-   capability. Prefer the saved Figma-exported templates and
-   `scripts/render_carousel.py` when they are present; this local path does not
-   require a Figma MCP connection. Keep every page traceable to the approved
-   post or evidence ledger. If no suitable renderer is available, preserve the
-   approved source and proposal, mark rendering and visual QA as unverified,
-   and do not claim a completed PDF. The local renderer refuses existing
-   outputs by default; use its explicit overwrite option only after the user
-   requests regeneration.
-
-7. Read [references/pdf-qa.md](references/pdf-qa.md). Run structural checks,
-   render pages when possible, inspect the rendered pages, fix issues, and
-   re-run the relevant checks. Separate verified structural checks from
-   unverified or unavailable human visual review.
-
-8. Read [references/visual-system-and-accessibility.md](references/visual-system-and-accessibility.md)
-   and check contrast, non-color cues, mobile legibility, overflow, clipping,
-   links, source traceability, disclosures, and consistent page geometry.
-
-9. Save same-base outputs beside the approved post, using its research date:
-   `post-<slug>-YYYY-MM-DD.pdf`, `.png`, or `.jpg`, with an explicit numeric
-   suffix for additional same-type files. Never overwrite an existing file.
-   Update the post file's visual-generation section with the outline, source
-   map, brand reference, outputs, approval note, and QA receipt. Update the
-   matching `posts.md` row to `Visuals: created` only when the requested visual
-   file exists and its QA state is accurately recorded.
+- assess all candidate posts first;
+- generate assets in manageable batches;
+- reuse the approved visual identity consistently;
+- do not regenerate unchanged assets when their `Source Hash` matches the
+  current approved content hash;
+- if the post body changes, mark the old asset stale and generate a new revision
+  rather than silently reusing it.
 
 ## Completion report
 
-Report the source post, runtime workspace, selected page count, output files,
-source-map coverage, structural checks, rendered visual review, unresolved
-brand or citation decisions, and any blocked renderer or approval. Distinguish
-verified local QA from LinkedIn upload or publication, which this skill never
-performs.
+Report Content IDs assessed, `none/image/document` decisions, generated files,
+Canva design/source links when available, Drive links, QA state,
+stale/conflicting assets, approval state, and blocked capabilities. Distinguish
+Canva/editor or local asset QA from LinkedIn publication.

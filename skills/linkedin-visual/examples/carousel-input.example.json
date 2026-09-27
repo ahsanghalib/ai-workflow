@@ -1,6 +1,11 @@
 {
   "page_count": 7,
-  "color_scheme": "random",
+  "color_scheme": "Lime Signal",
+  "brand": {
+    "author": "M. Ahsan Izhar",
+    "domain": "ahsanizhar.com",
+    "role": "Senior Software Engineer"
+  },
   "pages": [
     {
       "template": "cover",
@@ -76,7 +81,7 @@
       "title": "Make the final slide useful on its own.",
       "takeaway": "One bounded conclusion the reader can repeat.",
       "source": "Add the evidence link, limitation, or approved question.",
-      "cta": "SAVE THIS  •  SHARE WITH YOUR TEAM  •  DISCUSS BELOW"
+      "cta": "REPLACE WITH ONE APPROVED NEXT ACTION"
     }
   ]
 }
