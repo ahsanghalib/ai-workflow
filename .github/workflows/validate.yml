@@ -18,10 +18,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate skills
-        run: bash validate-skills.sh
+        run: bash scripts/validate-skills.sh
 
       - name: Check shell syntax
-        run: bash -n script.sh bin/* skills/project-init/scripts/*.sh skills/project-init/tests/*.sh skills/spec-workflow/tests/*.sh
+        run: bash -n scripts/*.sh bin/* skills/project-init/scripts/*.sh skills/project-init/tests/*.sh skills/spec-workflow/tests/*.sh
 
       - name: Test project-init helpers and contracts
         run: bash skills/project-init/tests/test-project-init.sh

@@ -9,7 +9,7 @@ Usage: script.sh [repository]
 Link runtime-specific agents and global instructions from this repository, and
 shared skills into ~/.agents/skills.
 
-The repository defaults to the directory containing this script. When the
+The repository defaults to the parent directory of this script. When the
 script is stored elsewhere, pass the repository path or set AI_WORKFLOW_REPO.
 EOF
 }
@@ -30,7 +30,7 @@ if (($# > 1)); then
 fi
 
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
-repository=${AI_WORKFLOW_REPO:-${1:-$script_dir}}
+repository=${AI_WORKFLOW_REPO:-${1:-$script_dir/..}}
 repository=$(cd -- "$repository" 2>/dev/null && pwd -P) || die "Repository does not exist: $repository"
 
 home_dir=${HOME:?HOME must be set}

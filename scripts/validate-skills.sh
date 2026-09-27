@@ -2,15 +2,10 @@
 set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-repo_root="$(git -C "$script_dir" rev-parse --show-toplevel 2>/dev/null)" || {
+repo_root="$(git -C "$script_dir/.." rev-parse --show-toplevel 2>/dev/null)" || {
   printf '%s\n' 'validate-skills: script must be inside a Git worktree' >&2
   exit 1
 }
-
-if [[ "$repo_root" != "$script_dir" ]]; then
-  printf '%s\n' 'validate-skills: script must be at the repository root' >&2
-  exit 1
-fi
 
 skills_root="$repo_root/skills"
 if [[ ! -d "$skills_root" ]]; then

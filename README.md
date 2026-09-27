@@ -33,10 +33,10 @@ git clone https://github.com/ahsanghalib/ai-workflow.git
 cd ai-workflow
 
 # Check that the shared skills are structurally valid.
-bash validate-skills.sh
+bash scripts/validate-skills.sh
 
 # Optional: link shared skills, agents, and global instructions.
-./script.sh
+./scripts/script.sh
 ```
 
 Then open one of your own project directories in your chosen AI runtime and
@@ -99,6 +99,7 @@ that matter for your project.
   - [Global instructions](#global-instructions)
   - [Agent profiles](#agent-profiles)
   - [Skills](#skills)
+  - [ChatGPT web skill bundle](#chatgpt-web-skill-bundle)
   - [Runtime configuration](#runtime-configuration)
   - [Helper scripts](#helper-scripts)
   - [Memory and session continuity](#memory-and-session-continuity)
@@ -209,7 +210,7 @@ folder and continue with the validation step.
 
 ### Optionally link shared skills
 
-Most people can skip this section. The root `script.sh` is only a convenience
+Most people can skip this section. `scripts/script.sh` is only a convenience
 linker: it makes the shared skills, agent profiles, and global instructions
 available from their usual user-level locations. It does not install OpenCode,
 Codex, models, plugins, or project dependencies.
@@ -217,15 +218,15 @@ Codex, models, plugins, or project dependencies.
 First, check the repository without changing your home directory:
 
 ```bash
-bash validate-skills.sh
-bash -n script.sh bin/*
+bash scripts/validate-skills.sh
+bash -n scripts/*.sh bin/*
 ```
 
 If those commands pass and you want the shared setup available to every project,
 run:
 
 ```bash
-./script.sh
+./scripts/script.sh
 ```
 
 It refuses to replace an existing ordinary file or directory. If you prefer
@@ -927,19 +928,63 @@ refer to when asking an assistant to use one explicitly.
 
 #### Writing, memory, and skill maintenance
 
+- `copywriting` — research-led editorial strategy and conversion copy for
+  social posts, blogs, landing pages, email, product copy, and advertising.
 - `humanizer` — remove AI-writing patterns from prose without changing facts or
   the author's intent.
 - `social-content` — draft truthful content for a specified social or editorial
-  channel from supplied sources.
+  channel from supplied sources and plan approved visuals, preferring Canva
+  when the connected capability is available.
 - `agent-memory` — maintain concise project-local episodic memory and handoff
   capsules.
 - `find-skills` — discover a suitable installable skill when the repository does
   not already provide the needed workflow.
 - `skill-creator` — create, modify, audit, or improve a `SKILL.md` skill.
 
+#### LinkedIn skills
+
+- `linkedin-post` — draft or revise unpublished, source-grounded LinkedIn
+  posts and keep them distinct from published content.
+- `linkedin-visual` — decide whether an approved post needs a visual, then
+  structure a source-grounded image or carousel. Copywriting shapes the
+  narrative before design; Canva is the preferred authoring adapter when it is
+  available, with a local renderer as fallback.
+- `linkedin-publish` — publish or schedule only approved LinkedIn content and
+  verify the resulting state.
+- `linkedin-engagement` — find relevant posts or people and prepare selective,
+  individually approved comments or initial connection requests.
+- `linkedin-lead-followup` — review warm prospects and draft the next
+  relationship or commercial follow-up action.
+- `linkedin-workspace` — maintain the shared LinkedIn workspace across local
+  Markdown and connected Drive or Sheets state.
+
 Skills do not grant permission by themselves. The active runtime still decides
 which tools are available, and the user still controls approvals and external
 actions.
+
+### ChatGPT web skill bundle
+
+The repository contains more skills than can or should be uploaded to a web
+chat workspace. The packaging helper creates one ZIP per skill for the curated
+web-compatible set:
+
+```bash
+scripts/package-skills.sh --clean
+```
+
+Archives are written to the ignored `zip/` directory. The current bundle
+contains:
+
+`brainstorming`, `brand-guidelines`, `copywriting`, `founder-decision`,
+`humanizer`, `linkedin-engagement`, `linkedin-lead-followup`, `linkedin-post`,
+`linkedin-publish`, `linkedin-visual`, `linkedin-workspace`,
+`product-discovery`, `research-brief`, and `social-content`.
+
+Repository-control, terminal, Codex-runtime, and local-browser workflows are
+deliberately excluded from this bundle. The script packages each selected
+skill's `SKILL.md` and routed local references, removes stale ZIPs with
+`--clean`, and does not include the temporary research material used while
+authoring the skills.
 
 ### Runtime configuration
 
@@ -983,10 +1028,12 @@ repository. Use the runtime's login flow or credential store.
 
 ### Helper scripts
 
-- `script.sh` — an optional root linker for shared agents, instructions, and
+- `scripts/script.sh` — an optional linker for shared agents, instructions, and
   skills. It does not copy runtime configuration files or install a runtime.
+- `scripts/package-skills.sh` — creates the curated, individually packaged web
+  skill archives under the ignored `zip/` directory.
 
-#### `validate-skills.sh`
+#### `scripts/validate-skills.sh`
 
 The root validator checks that every skill has:
 
@@ -1297,7 +1344,7 @@ state. Do not commit the ignored root `SESSION_STATE.md`.
 ### Check shared skills
 
 ```bash
-bash validate-skills.sh
+bash scripts/validate-skills.sh
 ```
 
 This is the main repository check for skill structure and references.
@@ -1305,7 +1352,7 @@ This is the main repository check for skill structure and references.
 ### Check shell scripts
 
 ```bash
-bash -n script.sh bin/*
+bash -n scripts/*.sh bin/*
 ```
 
 For the project documentation initializer, also run:
@@ -1370,7 +1417,7 @@ tests in another project.
 If you chose the optional global linker, run it again from this repository:
 
 ```bash
-./script.sh
+./scripts/script.sh
 ```
 
 Then check that a skill link exists:
@@ -1463,10 +1510,12 @@ target is the one you intended.
 
 ### I only want the skills, not the full runtime setup
 
-That is supported. Clone the repository, run `bash validate-skills.sh`, and use
-the skills through your runtime's discovery rules. Run the optional `script.sh`
-linker only if you want them available globally. Skip copying `opencode/` and
-`codex/` configuration files.
+That is supported. Clone the repository, run
+`bash scripts/validate-skills.sh`, and use the skills through your runtime's
+discovery rules. Run the optional `scripts/script.sh` linker only if you want
+them available globally. Skip copying `opencode/` and `codex/` configuration
+files. If the target is a web chat workspace, build the individual archives
+with `scripts/package-skills.sh --clean` and upload only the skills you need.
 
 ## Glossary
 

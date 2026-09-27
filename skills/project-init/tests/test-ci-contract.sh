@@ -33,8 +33,8 @@ for child in \
 done
 
 required_steps=(
-  'bash validate-skills.sh'
-  'bash -n script.sh bin/* skills/project-init/scripts/*.sh skills/project-init/tests/*.sh skills/spec-workflow/tests/*.sh'
+  'bash scripts/validate-skills.sh'
+  'bash -n scripts/*.sh bin/* skills/project-init/scripts/*.sh skills/project-init/tests/*.sh skills/spec-workflow/tests/*.sh'
   'bash skills/project-init/tests/test-project-init.sh'
   'bash skills/project-init/tests/test-traceability-contract.sh'
   'bash skills/spec-workflow/tests/test-contract.sh'

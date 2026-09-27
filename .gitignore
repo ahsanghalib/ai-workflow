@@ -146,6 +146,7 @@ Carthage/Build/
 # Common build output and compiled artifacts
 dist/
 build/
+zip/
 target/
 out/
 # bin/
