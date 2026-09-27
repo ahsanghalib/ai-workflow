@@ -84,6 +84,20 @@ One row per planned publication attempt.
 | Company | Current company |
 | Company URL | Company/profile/site URL when known |
 | Role | Current role |
+| Location | Public professional location when available |
+| Website | Official person or company website when relevant |
+| Company LinkedIn URL | Official company LinkedIn page when available |
+| Industry | Publicly stated company/market industry |
+| Company Size | Published employee range |
+| Employee Count | Exact public count only when explicitly published |
+| Company Location | Public headquarters or operating location |
+| Public Business Email | Explicitly published professional contact email only |
+| Public Business Phone | Explicitly published business phone only |
+| Authenticated-Visible Professional Email | Professional email visible in the authorized LinkedIn session; record visibility and source |
+| Authenticated-Visible Professional Phone | Professional phone visible in the authorized LinkedIn session; record visibility and source |
+| Contact Routes | Verified available routes such as comment, connection, message, email, phone, website, or contact form |
+| Contactability Status | `multiple`, `linkedin_only`, `email_available`, `phone_available`, `company_route`, `no_verified_route`, or `blocked` |
+| Last Contactability Checked | Timestamp/date of the latest route check |
 | Prospect Type | `buyer`, `referrer`, `partner`, `peer`, `other` |
 | Why Relevant | Concrete reason |
 | First Seen | Timestamp/date |
@@ -93,7 +107,29 @@ One row per planned publication attempt.
 | Next Action | Concrete next action |
 | Next Action Date | Optional date |
 | Source | Where the person was discovered |
+| Enrichment Status | `not_started`, `partial`, `complete`, `blocked`, `stale` |
+| Last Enriched | Timestamp/date of the latest bounded public-source pass |
+| Enrichment Summary | Concise verified findings and unresolved conflicts |
 | Notes | Free text |
+
+## Prospect Evidence
+
+One row per material public fact used to enrich a prospect. Keep the prospect
+row concise and retain field-level provenance here.
+
+| Column | Purpose |
+|---|---|
+| Evidence ID | Stable evidence ID |
+| Prospect ID | Related prospect |
+| Field | Prospect field supported by the evidence |
+| Value or Summary | Observed value or concise factual summary |
+| Source URL | Public source URL |
+| Source Type | `linkedin_profile`, `linkedin_company`, `linkedin_contact_info`, `official_website`, `registry`, `public_business_source`, or `other` |
+| Visibility | `public` or `authenticated_visible`; record the actual visibility |
+| Retrieved At | Retrieval timestamp/date |
+| Confidence | `high`, `medium`, or `low` |
+| Status | `observed`, `conflicting`, or `not_found` |
+| Notes | Scope, caveat, or reason a value was not used |
 
 ## Interactions
 
@@ -105,6 +141,7 @@ One row per planned publication attempt.
 | Topic | Relevant topic |
 | Type | `comment`, `comment_reply`, `connection_request`, `connection_accept`, `dm_sent`, `dm_received`, `meeting`, `other` |
 | Post URL | Related post when applicable |
+| External Action URL | Verified comment, message, or other LinkedIn action URL when available |
 | Post Summary | Short factual summary |
 | Our Text | Exact comment/message |
 | Their Text | Relevant reply text or summary |

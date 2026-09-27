@@ -21,6 +21,12 @@ Prefer the shared `Prospects`, `Interactions`, and `Pipeline` tabs defined by
 `linkedin-workspace`, plus the live LinkedIn thread/profile when an external
 action is being considered.
 
+When a shared Sheet is selected, persist the exact follow-up draft in an
+`Interactions` row with `Status=pending_approval` and re-read it before asking
+for approval. If that write fails or is ambiguous, do not ask for approval or
+send the message; retain the local draft for reconciliation by stable IDs.
+Use a session-only workflow only when the user explicitly chooses it.
+
 Read:
 
 - [references/qualification.md](references/qualification.md)
@@ -60,12 +66,21 @@ Read:
    loaded, apply the equivalent checks locally and report the fallback; never
    claim that a separate skill ran. Neither may add facts, experience,
    confidence, or relationship claims.
-8. Show the exact message and ask for approval.
-9. If approved, re-check the live thread/profile immediately before sending,
-   submit through the visible UI, verify the result, and append/update the
-   interaction record. If the result is ambiguous, mark the interaction
-   `pending_verification` and do not retry automatically.
-10. Re-evaluate lead stage only when new commercial evidence exists.
+8. Create or update the `Interaction` row before asking for approval with the
+   Prospect ID, date/time, topic, correct interaction type, relevant thread or
+   post URL, factual context, exact `Our Text`, `Status=pending_approval`, and
+   the proposed next action. Re-read the row and verify the exact draft.
+9. Show the exact persisted message and Interaction ID, then ask for approval.
+   If declined, update the Interaction to `declined` or `skipped` and do not
+   send it.
+10. If approved, re-check the live thread/profile and persisted draft
+    immediately before sending, submit through the visible UI, and verify the
+    result. Update the Interaction and Prospect only after the result is known,
+    including `External Action URL` when available.
+    If the result is ambiguous, mark the Interaction `pending_verification` and
+    do not retry automatically. If the final Sheet update fails, report the
+    verified UI result and unsynchronized state for stable-ID reconciliation.
+11. Re-evaluate lead stage only when new commercial evidence exists.
 
 ## Qualification
 

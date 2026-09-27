@@ -27,6 +27,12 @@ Before touching LinkedIn, confirm:
 - any required asset has `Visual Status=ready` and an approved asset record;
 - the exact target account/profile is visible in the authenticated LinkedIn UI.
 
+Before asking for the external publish/schedule approval, create or update the
+`Publishing Queue` row with the exact Content ID, Caption Snapshot, Content
+Hash, asset link, mode, date/time/timezone, and `Status=pending_approval`.
+Re-read the row and verify the snapshot/hash and target action. A queue row
+that is not persisted and verified is not eligible for external approval.
+
 If the browser session, queue, approved snapshot, or required asset cannot be
 verified, stop and report the blocker. Do not repair approval or synchronization
 state inside this execution skill.
@@ -55,25 +61,32 @@ asset, date/time, and action is shown in the batch plan. Do not treat a vague
 
 ## Workflow
 
-1. Read the next eligible queue item.
+1. Read the next eligible queue item and re-read the persisted approval,
+   snapshot, hash, asset, and target action.
 2. Reconfirm the approved revision/hash and asset link.
-3. Open LinkedIn's post composer in the authenticated browser session.
-4. Enter the exact approved caption. Do not rewrite it to fit the UI. If the UI
+3. Show the Content ID/title, exact caption, asset, action, and persisted Queue
+   ID. Ask for approval only after the queue row is verified.
+4. After approval, open LinkedIn's post composer in the authenticated browser
+   session.
+5. Enter the exact approved caption. Do not rewrite it to fit the UI. If the UI
    rejects or truncates it, stop and return it to `linkedin-post`.
-5. Attach the exact approved image/document when required. For document posts,
+6. Attach the exact approved image/document when required. For document posts,
    use the available local/Drive picker and verify the selected filename/title.
-6. Configure audience/comment controls only when specified by the user or an
+7. Configure audience/comment controls only when specified by the user or an
    existing workspace rule. Do not invent new restrictions.
-7. After the explicit approval described above, submit the exact action; do not
+8. Submit the exact action; do not
    ask for a broader or duplicate approval. For `publish_now`, submit. For
    `schedule`, set the exact approved local date/time and use LinkedIn's current
    scheduling UI.
-8. Wait for visible completion and verify the resulting state:
+9. Wait for visible completion and verify the resulting state:
    - published: capture the live post URL and visible content identity;
    - scheduled: confirm the post appears in LinkedIn's scheduled-post state with
      the expected time/content.
-9. Only after verification update `Publishing Queue` and `Content Library`.
-10. If the outcome is ambiguous, leave the queue record `pending_verification`,
+10. Only after verification update `Publishing Queue` and `Content Library`.
+    Capture the live post URL or verified schedule details when available. If
+    this final write fails, report the verified LinkedIn result and
+    unsynchronized queue/content state; do not retry the external action.
+11. If the outcome is ambiguous, leave the queue record `pending_verification`,
     record the ambiguity, and do not automatically retry. Use `failed` only
     when LinkedIn visibly reports failure.
 

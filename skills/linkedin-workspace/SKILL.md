@@ -23,6 +23,33 @@ The workspace exists to measure and support this funnel:
 
 Do not optimize the system around likes, comments, or follower counts alone.
 
+## Durable workflow order
+
+For an owned LinkedIn post, use this order:
+
+`research/evidence -> draft -> Content Library persistence -> content approval ->`
+`optional visual persistence -> Publishing Queue persistence -> external-action`
+` approval -> publish/schedule -> live UI verification -> Sheet state update`
+
+For comments, connection requests, and warm follow-up messages, use:
+
+`discovery/context -> exact draft -> Interaction persistence -> action approval ->`
+`live re-check -> submit -> live UI verification -> Interaction/Prospect update`
+
+The exact draft and its identifiers must exist in the Sheet before the relevant
+approval request. A successful LinkedIn action is never a substitute for the
+final verified Sheet update; if that update fails, reconcile by stable ID and do
+not retry the external action automatically.
+
+Public prospect enrichment is additive and provenance-led. Preserve existing
+user-entered values, write only professional public data or professional
+contact data visible in the user's authorized LinkedIn session, store
+field-level source and visibility evidence in `Prospect Evidence`, and represent
+missing or conflicting values explicitly instead of guessing or overwriting
+them. Authenticated-visible contact details are operationally sensitive: do not
+copy them into public comments, posts, or shared artifacts without a separate
+purpose and approval.
+
 ## Authority hierarchy
 
 Use these sources in this order for their respective facts:
@@ -64,9 +91,13 @@ Read:
    deleting user data.
 5. Record the workbook and root Drive folder as the workspace targets for the
    current run.
-6. If Google access is unavailable, continue with local/session state where the
-   requested task permits it and clearly mark unsynchronized changes. Do not
-   treat a local row as proof of an external LinkedIn action.
+6. If Google access is unavailable, continue with local/session state for
+   read-only discovery and drafting where the requested task permits it, and
+   clearly mark unsynchronized changes. Do not ask for approval or take an
+   external comment/connection action from `linkedin-engagement` until the
+   required draft row is persisted and verified, unless the user explicitly
+   selects a session-only workflow. Do not treat a local row as proof of an
+   external LinkedIn action.
 
 ## Migration workflow
 

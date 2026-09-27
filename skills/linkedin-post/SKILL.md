@@ -43,9 +43,17 @@ When `linkedin-workspace` and its shared Sheet are available:
   most likely overlapping posts;
 - sync revision, exact `Final Post Text`, hash, approval, and links after changes.
 
+For a new or revised post, persist the exact draft in the selected workspace
+before asking for content approval. The verified `Content Library` row is the
+handoff contract for visual production and publishing; do not hand off a post
+whose Sheet write failed or has an ambiguous result.
+
 Remote Sheet/Drive writes require an authorized capability and a user-selected
 workspace target. If those writes are unavailable or not authorized, preserve
-the draft locally and report the unsynchronized state.
+the draft locally and report the unsynchronized state. Do not request approval
+for publication or hand the post to an external-action skill until the required
+workspace row is persisted and verified, unless the user explicitly selects a
+local/session-only workflow.
 
 When cloud state is unavailable, use the selected local workspace and the legacy
 `posts.md`/post-file structure. Do not block drafting solely because Google Drive
@@ -116,10 +124,19 @@ timing rules, or algorithm claims from a template or creator case study.
 9. Run the review checklist and compare the final body with the source and
    evidence ledger. Remove generic AI rhetoric, unsupported persuasion,
    unnecessary hashtags/CTAs, and repeated ideas from prior posts.
-10. Save/update the source artifact and operational row as `needs_review`/draft.
-11. After explicit approval of that exact revision, mark `Approval=approved`,
-    update the revision/hash, and hand off to `linkedin-visual` or
-    `linkedin-publish` as appropriate.
+10. Save/update the source artifact and `Content Library` row as
+    `Approval=needs_review` with the exact final body, revision, content hash,
+    source/evidence links, intent/pillar, and `Sync State=synced` when a shared
+    Sheet is selected. Re-read the row and verify those values before continuing.
+    If the write is failed or ambiguous, stop and report the unsynchronized
+    draft; do not create a competing row or request approval.
+11. Show the exact draft, Content ID, revision, hash, sources, and unresolved
+    claims. Ask for approval of that exact revision. If declined, persist
+    `Approval=declined` and do not hand off the post.
+12. After explicit approval, update and verify `Approval=approved` for the same
+    revision/hash. Then hand off to `linkedin-visual` or `linkedin-publish` as
+    appropriate. Each downstream skill owns its own asset or external-action
+    persistence checkpoint.
 
 ## Existing-corpus review mode
 

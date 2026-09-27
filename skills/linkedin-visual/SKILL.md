@@ -42,6 +42,12 @@ When the shared workspace is available:
 - update `Visual Status`, `Visual Type`, and `Primary Visual Link` only after the
   output exists and its QA state is accurately recorded.
 
+Before asking for asset approval or handing the post to `linkedin-publish`,
+persist and re-read the `Visual Assets` row and the linked `Content Library`
+visual fields. If the selected Drive/Sheet write fails or is ambiguous, keep
+the local/Canva output as an unsynchronized draft and block the publishing
+handoff until the state is reconciled.
+
 Local files remain valid working outputs when Drive is unavailable. Mark them
 unsynced rather than blocking generation. Drive writes and asset uploads require
 an authorized capability and an explicitly selected target; a local render is
@@ -128,10 +134,14 @@ strongest posts first.
    renders when Canva is unavailable. Do not claim checks that were not
    performed.
 10. Save outputs without silent overwrite. Record Content ID, revision, source
-   hash, scheme, authoring tool, Canva design/source URL when returned, export
-   format, QA state, and Drive/local path.
-11. After user approval of the asset, set `Visual Assets.Approved=yes` and
-   `Content Library.Visual Status=ready`.
+    hash, scheme, authoring tool, Canva design/source URL when returned, export
+    format, QA state, and Drive/local path. Persist the `Visual Assets` row and
+    linked `Content Library` visual fields, then re-read them to verify the
+    exact source hash, asset link, and QA state.
+11. Show the asset, its source/hash, QA receipt, and persisted asset ID. After
+    user approval of the asset, set `Visual Assets.Approved=yes` and
+    `Content Library.Visual Status=ready`; verify those updates before handing
+    the post to `linkedin-publish`.
 
 ## Batch visual mode
 

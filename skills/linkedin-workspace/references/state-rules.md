@@ -15,6 +15,19 @@ publish status describes LinkedIn publication.
 Stages may be skipped only when the actual interaction supports it. Do not call
 someone `engaged` merely because the user commented on their post.
 
+## Prospect enrichment and contactability
+
+- `public` means accessible without the user's authenticated LinkedIn session.
+- `authenticated_visible` means visible to the authorized user in LinkedIn's
+  logged-in UI; it is not public and must remain operationally restricted.
+- Store professional contact details only when their source and purpose are
+  clear. Never infer or guess an email, phone number, employee count, or
+  private identity detail.
+- Every enriched field and contact route requires a source URL, visibility,
+  retrieval date, and confidence in `Prospect Evidence`.
+- `Contactability Status` describes observed routes; it does not authorize a
+  message, email, call, connection request, or other external action.
+
 ## Lead
 
 `none -> lead -> qualified -> opportunity -> proposal -> won/lost`
@@ -24,6 +37,14 @@ Record the concrete commercial signal that justifies each transition.
 
 ## External action verification
 
+- For comments and initial connection requests, `pending_approval` means the
+  exact draft and its prospect/post context are persisted in the `Interactions`
+  row and the user approval is still pending. It does not mean approved,
+  submitted, or verified.
+- For post publication and scheduling, `pending_approval` means the exact
+  caption snapshot, content hash, target action, and required asset state are
+  persisted in the `Publishing Queue` row and the external-action approval is
+  still pending.
 - `submitted` means an action was attempted.
 - `verified` means the live LinkedIn UI visibly confirms the exact action.
 - `pending_verification` means an action was attempted but the result is
