@@ -1,14 +1,42 @@
 # Social-content visual branch
 
 Use only when the user explicitly requests visual assets and approves the
-required tools, files, and commands.
+required tools, files, and commands. When a connected Canva capability is
+available, use Canva as the preferred authoring path; use the local SVG/HTML
+workflow below only as a fallback.
 
 ## Proposal
 
 Before creating anything, propose the exact deliverables, project-local paths,
-source-to-claim mapping, visual system, and QA method. Reuse project brand
-assets, tokens, fonts, and rendering tools. Do not install dependencies, call
-image-generation APIs, or load remote assets without separate approval.
+source-to-claim mapping, visual system, authoring path, and QA method. Reuse
+project brand assets, tokens, fonts, and rendering tools. Do not install
+dependencies, call image-generation APIs, or load remote assets without
+separate approval.
+
+## Canva authoring path
+
+When Canva is available through an authorized connected capability:
+
+1. Confirm the approved source, channel, audience, visual type, dimensions,
+   brand system, and requested export format before creating a design.
+2. Create a new Canva design or use an explicitly selected existing design.
+   Never overwrite an existing design based only on a matching title or
+   filename.
+3. Keep every headline, number, citation, disclosure, and call to action
+   traceable to the approved copy and source ledger. Use Canva for layout and
+   visual communication, not for inventing proof or claims.
+4. Inspect the design in Canva for hierarchy, legibility, overflow, contrast,
+   spacing, mobile-scale readability, and source/disclosure visibility.
+5. Export only the approved formats. Verify that each export exists, has the
+   expected dimensions/page count, and belongs to the intended design.
+6. Record the Canva design URL or ID when returned, export path, format,
+   dimensions, page count, authoring status, and QA status. A design URL is not
+   proof that an export or publication succeeded.
+
+If Canva is unavailable, do not claim Canva was used. Use the local SVG/HTML
+workflow below or another explicitly approved design capability. Mark Canva
+authoring as `not_available` and visual review as `unverified` when the
+fallback cannot be inspected.
 
 ## Evidence and formats
 

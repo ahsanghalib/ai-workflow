@@ -1,6 +1,6 @@
 ---
 name: social-content
-description: Use when drafting truthful, channel-specific social or editorial content for X, LinkedIn, Reddit, Hacker News, Product Hunt, blogs, or newsletters from supplied source material, or planning approved data visuals. Use for blog posts from existing social content. Do not use for publishing, outreach, engagement, fabricated testimonials, or unsourced promotional claims.
+description: Use when drafting truthful, channel-specific social or editorial content for X, Reddit, Hacker News, Product Hunt, blogs, or newsletters from supplied source material, or planning approved data visuals for those channels. Prefer a connected Canva capability for visual authoring when available, with local rendering as fallback. Use for blog posts from existing social content. Do not use for LinkedIn-specific workflows, publishing, outreach, engagement, fabricated testimonials, or unsourced promotional claims.
 ---
 
 # Social content
@@ -22,6 +22,9 @@ publication decisions to the user.
   scarcity, outrage bait, undisclosed sponsorship, or instructions to evade
   platform or community rules.
 - Do not turn a goal, forecast, plan, or aspiration into a reported result.
+- Do not own LinkedIn-specific post drafting, carousel production, publishing,
+  engagement, lead follow-up, or workspace state; hand those requests to the
+  corresponding `linkedin-*` skill.
 - Do not use unrelated private or internal communications as source material;
   this workflow is for user-provided or approved public-content drafts.
 - Before presenting or saving a public draft, check supplied material for
@@ -59,7 +62,6 @@ visual assets, also read [references/visuals.md](references/visuals.md).
 | Channel         | Shape                                                             |
 | --------------- | ----------------------------------------------------------------- |
 | X               | Concise post/question; 3-6 hashtags; URL counts as 23 characters. |
-| LinkedIn        | 150-300 words; short paragraphs; lesson, sources, 3-6 hashtags.   |
 | Reddit          | Relevant context, useful contribution, transparent affiliation.   |
 | Hacker News     | Factual/technical; lead with what was made and why.               |
 | Product Hunt    | Maker context, solution, limits; no manufactured proof.           |
@@ -74,7 +76,10 @@ mechanism, and end with a concrete implication rather than a generic CTA.
 For a blog from existing social content, expand the core insight into a thesis,
 evidence-backed sections, implications, and sources. Save `blog.md` only after
 approval. For visual assets, read [references/visuals.md](references/visuals.md)
-before proposing deliverables and wait for approval before rendering.
+before proposing deliverables. When a connected Canva capability is available,
+also read [references/canva-workflow.md](references/canva-workflow.md) and use
+Canva as the preferred authoring path. Wait for approval before creating or
+exporting any visual.
 
 Every handoff includes sources, claims needing approval, required disclosures,
 and wording that must not be presented as fact.
