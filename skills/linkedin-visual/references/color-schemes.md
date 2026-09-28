@@ -106,8 +106,8 @@ practice topics.
 
 ## Application rules
 
-The header, footer, typography, spacing, tab treatment, and page geometry do
-not change when a scheme changes. Swap semantic tokens only. Use the accent
-for one focal statement or one selected module per page; use the primary for
+Within one carousel, keep the selected scheme and identity anchors stable. Other
+typography, spacing, tab treatment, and geometry choices remain brief-driven.
+Swap semantic tokens only. Use the accent for one focal statement or one selected module per page; use the primary for
 links, labels, markers, and rare action cues. Keep body copy on the text/surface
 pairing, not on the accent, unless the contrast check passes.

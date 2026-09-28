@@ -1,23 +1,20 @@
 # LinkedIn carousel layout archetypes
 
-Use these editable structures to vary content while keeping the Ahsan master
-identity stable. The archetype is selected per page from the approved post
-outline; it is not a reason to add filler or unsupported claims.
+Use these conceptual structures to vary content while keeping the Ahsan master
+identity stable. They are planning patterns for Canva or another approved
+design capability, not bundled design templates. Select an archetype per page
+from the approved post outline; it is not a reason to add filler or unsupported
+claims.
 
 ## Shared shell
 
 Every archetype inherits:
 
-- 4:5 portrait geometry, normally `1080 × 1350` design units;
-- the user's fixed header and footer contract;
-- the same outer margin, page-count-matched tab strip, border, type hierarchy,
-  and selected color scheme;
+- the three identity anchors: name top left, website top right, and role bottom
+  right;
+- the selected orientation, dimensions, margins, type hierarchy, and color
+  scheme from the approved brief;
 - one dominant idea and a source or disclosure treatment where needed.
-
-The five-page carousel uses five heading/tab slots. The seven-page carousel
-uses seven heading/tab slots so each page can have its own section marker. Its
-pagination changes to `1/7` through `7/7`; the outer shell and identity remain
-unchanged.
 
 ## Archetypes
 
@@ -37,11 +34,11 @@ unchanged.
 
 Optional structures include a quote/callout, two-column comparison, code
 fragment, or source card. Use them only when the approved content benefits from
-them and keep the shell unchanged.
+them and keep the identity anchors consistent.
 
-## Page-count recipes
+## Optional sequencing examples
 
-For five pages, use the smallest useful set, commonly:
+For a five-page argument, a useful sequence may be:
 
 1. `cover`
 2. `chat`, `table`, or `grid-4`
@@ -49,7 +46,7 @@ For five pages, use the smallest useful set, commonly:
 4. the remaining evidence or practice structure
 5. `closing`
 
-For seven pages, use the full varied set when the argument needs it:
+For a seven-page argument, a useful sequence may be:
 
 1. `cover`
 2. `chat`
@@ -59,6 +56,6 @@ For seven pages, use the full varied set when the argument needs it:
 6. `diagram`
 7. `closing`
 
-Reorder or omit an archetype when the source outline calls for it. Seven pages
-is not a target by itself; every page still needs source-map coverage or a
-clearly labeled framing/transition role.
+Reorder, omit, or add an archetype when the source outline calls for it. No
+page count is a target by itself; every page still needs source-map coverage or
+a clearly labeled framing/transition role.

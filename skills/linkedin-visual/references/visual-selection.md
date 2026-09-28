@@ -14,7 +14,7 @@ Prefer text-only when the post is:
 
 ## Choose `image`
 
-Use one portrait image when one visual model is enough, for example:
+Use one focal image when one visual model is enough, for example:
 
 - a system/architecture diagram;
 - one comparison or decision framework;
@@ -35,4 +35,4 @@ from stepping through, such as:
 - 4-6 checks or steps that need space;
 - evidence/caveats that should remain visible rather than compressed.
 
-Do not create filler pages to reach a template page count.
+Do not create filler pages to satisfy a preset page count.

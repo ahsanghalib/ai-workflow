@@ -20,30 +20,33 @@ unexpected. Use a quiet paper field, near-black ink, thin structural rules,
 one high-energy highlight, and small utility labels. The visual should feel
 like a well-designed engineering note rather than a generic AI poster.
 
-### Composition grammar from the reference
+### Optional composition language from the reference
 
 The reference site's strongest design signal is its page system, not only its
-colors. Translate that system into a carousel as follows:
+colors. These are optional composition cues, not required components or a
+bundled template. Use them only when they improve the approved argument:
 
-- **Announcement strip:** a thin near-black band for the series or topic label.
+- **Optional announcement strip:** a thin near-black band for the series or
+  topic label.
   Keep it informational, not promotional.
-- **Utility header:** a quiet identity row with the supplied name and domain.
-- **Information rail:** a narrow left rail for topic, section, post number, or
-  a small “why?” prompt. It should orient the reader without competing with the
+- **Optional utility header:** a quiet identity row around the required identity
+  anchors.
+- **Optional information rail:** a narrow left rail for topic, section, or a
+  small “why?” prompt. It should orient the reader without competing with the
   main content.
-- **Framed canvas:** place the main argument in a white or near-white bordered
-  panel over the paper field. Use corner marks and fine rules as structural
-  cues.
-- **Tab strip:** use a small set of section labels to show the document's
+- **Optional framed canvas:** place the main argument in a white or near-white
+  bordered panel over the paper field. Use corner marks and fine rules as
+  structural cues.
+- **Optional tab strip:** use a small set of section labels to show the document's
   progression, with one dark selected tab per page. Do not pretend the tabs are
   interactive in a static PDF.
-- **Module rhythm:** alternate a hero statement with ruled data panels,
+- **Optional module rhythm:** alternate a hero statement with ruled data panels,
   outlined cards, integration-style grids, diagrams, proof rows, CTA blocks, or
   FAQ rows. Keep the modules useful to the argument.
-- **Technical background:** use faint diagonal rules, pale geometry, and
+- **Optional technical background:** use faint diagonal rules, pale geometry, and
   blueprint-like traces as atmosphere. Never use decorative geometry as proof.
-- **Footer:** keep the exact professional identity and pagination in a stable,
-  quiet baseline.
+- **Identity anchors:** keep the approved name, website, and role in their
+  fixed corners while allowing the page composition between them to vary.
 
 Do not reproduce Langfuse's logo, copy, navigation labels, product claims,
 customer proof, exact layout dimensions, or proprietary assets. The reference
@@ -72,9 +75,9 @@ navigation or annotation cue, not a second dominant brand color. Do not add
 gradients, glowing effects, or a rainbow palette without a new approval.
 
 The five selectable campaign schemes are documented in
-[color-schemes.md](color-schemes.md). They preserve this identity's geometry,
-typography, header, footer, and semantic roles while allowing the skill to pick
-one palette per carousel. Do not mix schemes within a single carousel.
+[color-schemes.md](color-schemes.md). They provide palette and semantic-role
+options; identity placement remains fixed, while typography and composition may
+follow the approved brief. Do not mix schemes within a single carousel.
 
 ### Typography
 
@@ -90,28 +93,29 @@ one palette per carousel. Do not mix schemes within a single carousel.
 
 ### Layout and geometry
 
-- Sample/default campaign geometry: portrait 4:5, `1080 × 1350` design units;
-  the exact PDF page size must be recorded in the brief and approved.
-- Use a generous outer margin, a visible but quiet frame, and a simple two-
-  column option for evidence or comparison pages.
-- Align headlines, body copy, diagrams, and source notes to one shared grid.
-- Use asymmetry deliberately: a large highlighted headline can sit against
-  open paper space, while supporting details remain quiet and ordered.
-- Keep one dominant idea per page. Prefer whitespace over extra cards,
-  gradients, or decorative dashboard chrome.
+- There is no default aspect ratio, orientation, pixel size, page count, or
+  design template. Select geometry from the approved brief and intended
+  channel, then record the exact output dimensions.
+- Recommended starting points are a generous outer margin, a visible but quiet
+  frame, and a simple two-column option for evidence or comparison pages; adapt
+  them to the approved brief.
+- Align headlines, body copy, diagrams, and source notes to a coherent grid
+  selected for the chosen geometry.
+- Use asymmetry deliberately when it improves the reader's path.
+- Keep one dominant idea per page and avoid decorative dashboard chrome that
+  does not improve comprehension.
 
-### Header and footer contract
+### Identity placement contract
 
 Apply this exact identity to every page unless the user approves a variant:
 
-- Header, left: `M. Ahsan Izhar`
-- Header, right: `ahsanizhar.com`
-- Footer, left: `Senior Software Engineer`
-- Footer, right: page pagination in the form `1/5` ... `5/5` or `1/7` ... `7/7`
+- Top left: `M. Ahsan Izhar`
+- Top right: `ahsanizhar.com`
+- Bottom right: `Senior Software Engineer`
 
 Use the same placement, casing, and punctuation across the document. Keep the
-identity small and subordinate to the page message. Pagination must reflect the
-actual approved page count; never leave `1/5` or `1/7` on every page.
+identity small and subordinate to the page message. No pagination, bottom-left
+identity, logo, or additional identity element is required by this contract.
 
 Do not add a logo, employer, client, sponsor, title variation, social handle,
 or additional domain without explicit approval. The supplied domain is exactly
@@ -120,8 +124,9 @@ or additional domain without explicit approval. The supplied domain is exactly
 ### Branch and variant rules
 
 The base identity is the default branch. A topic or campaign may select one of
-the five named color schemes or vary the highlight label, diagram accent, or
-section marker, but must retain the typography and header/footer contract.
+the five named color schemes or vary the highlight label, diagram accent,
+typography, or section marker. The identity-placement contract remains fixed;
+other design choices follow the approved brief.
 Record any variant with:
 
 - branch name and purpose;
@@ -182,29 +187,30 @@ Use a restrained hierarchy for:
 - page headline;
 - supporting text;
 - code, data, or quotation treatment;
-- footer, page number, and source note.
+- identity anchors, source note, and disclosure when needed.
 
 Hierarchy should survive grayscale, zoom, and mobile viewing.
 
-## Headers
+## Identity anchors
 
-Headers are optional. If used, document:
+The three identity anchors are required on every page unless the user approves
+a variant:
 
-- exact text, logo, mark, or section label;
-- whether it appears on every page or only section pages;
-- alignment, safe area, and contrast;
-- whether it is a campaign label or a permanent brand rule.
+- top left: `M. Ahsan Izhar`;
+- top right: `ahsanizhar.com`;
+- bottom right: `Senior Software Engineer`.
 
-Do not put an unapproved personal name, company name, claim, or logo in a
-header.
+Keep these placements stable, readable, and subordinate to the page message.
+Do not add an unapproved personal name, company name, claim, logo, page number,
+or additional domain.
 
-## Footers
+## Optional supporting footer content
 
-Footers may contain page number, approved identity, domain, source note,
-copyright, disclosure, or a short next action. Confirm each item explicitly.
-Never guess the user's name, title, domain, repository URL, sponsor, or legal
-notice. Keep the footer subordinate to the page argument and readable at the
-selected geometry.
+Source notes, disclosures, copyright, or a short next action may be placed
+where the selected composition keeps them readable. Confirm each item
+explicitly. Never guess the user's name, title, domain, repository URL,
+sponsor, or legal notice. Do not treat optional supporting content as another
+identity requirement.
 
 ## Layout variants and branches
 

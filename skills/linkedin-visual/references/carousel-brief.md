@@ -35,12 +35,12 @@ brief is a planning artifact. When the source post and the established visual sy
 
 ## Format and delivery
 
-- Page count: 5 | 7 | other approved count
+- Page count: user/project-selected
 - Orientation: ...
 - Page dimensions: ...
 - Deliverable: PDF | PDF plus editable source
 - Preview files: none | PNG | JPG
-- Authoring tool: Canva | local renderer | other approved capability
+- Authoring tool: Canva | other approved capability
 - Canva design/source URL or ID: ... | not available
 - Runtime workspace: ...
 
@@ -50,8 +50,7 @@ brief is a planning artifact. When the source post and the established visual sy
 - Color tokens or palette: ...
 - Typography: ...
 - Logo and usage constraints: ...
-- Header: ...
-- Footer and identity/domain: ...
+- Identity anchors: top-left name; top-right website; bottom-right role
 - Legal or disclosure notice: ...
 
 ## QA and approvals
@@ -71,8 +70,9 @@ Stop at the brief and ask the smallest blocking question when:
 - the source is not approved and no explicit transformation approval exists;
 - the audience, page count, or intended deliverable materially changes the
   narrative;
-- a required logo, footer identity, legal notice, or citation treatment is
-  requested but not supplied;
-- the renderer or QA capability needed for the requested claim is unavailable.
+- a required identity anchor, legal notice, or citation treatment is requested
+  but not supplied;
+- the selected authoring or QA capability needed for the requested
+  deliverable is unavailable.
 
 When a new or temporary visual system is proposed, label it as temporary and request approval before adopting that new system. Draft rendering under the already-approved Ahsan visual system does not require a separate pre-render approval.

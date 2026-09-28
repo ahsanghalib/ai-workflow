@@ -26,7 +26,8 @@ page for:
 - clipping, overflow, overlap, broken line wraps, and orphaned text;
 - headline/supporting-text hierarchy and mobile readability;
 - contrast, grayscale meaning, and non-color cues;
-- consistent margins, headers, footers, page numbers, and geometry;
+- consistent margins, identity anchors, optional source/disclosure treatment,
+  and selected geometry;
 - image or diagram provenance, clarity, and claim scope;
 - source notes, disclosures, and approved identity treatment;
 - visual continuity without decorative filler.

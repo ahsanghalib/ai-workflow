@@ -22,7 +22,8 @@ certainty, attribution, disclosures, and audience.
 - Do not invent claims, metrics, testimonials, personal results, diagrams that
   imply unsupported evidence, citations, or identity details.
 - Do not publish, upload to LinkedIn, schedule, or claim LinkedIn acceptance.
-- Do not change the approved post thesis merely to fit a template.
+- Do not change the approved post thesis merely to fit a fixed template or
+  aspect ratio.
 - Use the supplied approved visual identity and identity fields. If no approved
   brand system exists, propose a neutral temporary system and stop for approval
   before treating it as a reusable rule.
@@ -42,11 +43,12 @@ When the shared workspace is available:
 - update `Visual Status`, `Visual Type`, and `Primary Visual Link` only after the
   output exists and its QA state is accurately recorded.
 
-Before asking for asset approval or handing the post to `linkedin-publish`,
+Before asking for asset approval or marking the post ready for manual
+publication,
 persist and re-read the `Visual Assets` row and the linked `Content Library`
 visual fields. If the selected Drive/Sheet write fails or is ambiguous, keep
-the local/Canva output as an unsynchronized draft and block the publishing
-handoff until the state is reconciled.
+the local/Canva output as an unsynchronized draft and block the manual-
+publication handoff until the state is reconciled.
 
 Local files remain valid working outputs when Drive is unavailable. Mark them
 unsynced rather than blocking generation. Drive writes and asset uploads require
@@ -64,8 +66,6 @@ not proof of a Drive upload.
 - [references/brand-and-layout-guidelines.md](references/brand-and-layout-guidelines.md)
 - [references/color-schemes.md](references/color-schemes.md)
 - [references/layout-archetypes.md](references/layout-archetypes.md)
-- [references/templates/README.md](references/templates/README.md) for local
-  carousel rendering
 - [references/visual-system-and-accessibility.md](references/visual-system-and-accessibility.md)
 - [references/pdf-qa.md](references/pdf-qa.md)
 - [references/platform-specs.md](references/platform-specs.md) when current
@@ -88,12 +88,13 @@ strongest posts first.
 1. Resolve the exact approved Content ID/revision/hash and source artifact.
 2. Run the visual-selection assessment. If `none`, set `Visual Status=not_needed`
    and stop without generating decorative filler.
-3. For `image`, create one source-grounded portrait asset with the approved
+3. For `image`, create one source-grounded single-image asset with the approved
    identity using an available image/design/rendering capability. Prefer diagrams
    and information design over generic AI artwork. If no suitable capability is
    available, mark the asset blocked rather than silently switching to decoration.
-4. For `document`, choose the smallest page count that preserves the argument;
-   use the existing 5/7-page templates only when they fit. Before rendering,
+4. For `document`, choose the smallest page count and geometry that preserve
+   the argument. Do not impose a default aspect ratio, pixel size, page count,
+   pagination scheme, or design template. Before authoring,
    use `copywriting` to turn the approved post into a reader-first slide
    sequence: one primary reader, one promise or problem, one job per page, a
    clear mechanism or proof, and one proportionate next action. Choose one
@@ -105,12 +106,13 @@ strongest posts first.
    documented scheme only deliberately based on the topic/brief. Never choose a
    palette randomly. When Canva is available, follow
    [references/canva-workflow.md](references/canva-workflow.md) and use Canva as
-   the preferred authoring path. Otherwise use the local renderer or another
-   explicitly approved design capability.
+   the preferred authoring path. Otherwise use another explicitly approved
+   design capability; if none is available, preserve the outline and report
+   rendering as blocked or unverified.
 6. Once the global brand system is already approved, **do not require a separate
    pre-render approval for every post**. Generate a draft asset, run QA, and mark
-   it `Approved=pending`. Ask for approval before publication, not before every
-   render. Ask before rendering only when introducing a new brand/layout rule,
+   it `Approved=pending`. Ask for approval before marking the asset ready for
+   manual publication, not before every render. Ask before rendering only when introducing a new brand/layout rule,
    materially changing content, or incurring an external cost the user has not
    authorized.
 7. After the narrative is stable, use `copywriting` for a final clarity,
@@ -130,8 +132,9 @@ strongest posts first.
    comprehension and trust, not manufacture urgency, imply proof, or overpower
    the caveat/source treatment.
 9. Run structural and visual QA. Inspect the Canva design in its editor and the
-   exported pages when the active environment supports it. Inspect local
-   renders when Canva is unavailable. Do not claim checks that were not
+   exported pages when the active environment supports it. When Canva is
+   unavailable, inspect the output from the selected approved design capability
+   if it provides a reviewable artifact. Do not claim checks that were not
    performed.
 10. Save outputs without silent overwrite. Record Content ID, revision, source
     hash, scheme, authoring tool, Canva design/source URL when returned, export
@@ -140,8 +143,12 @@ strongest posts first.
     exact source hash, asset link, and QA state.
 11. Show the asset, its source/hash, QA receipt, and persisted asset ID. After
     user approval of the asset, set `Visual Assets.Approved=yes` and
-    `Content Library.Visual Status=ready`; verify those updates before handing
-    the post to `linkedin-publish`.
+    `Content Library.Visual Status=ready`. When
+    `Content Library.Approval=approved` and the required visual state is
+    complete, set `Publish Status=ready_for_manual_post`; verify those updates.
+    Do not publish or schedule. The user publishes or schedules manually and can
+    later confirm the outcome or provide the exact LinkedIn URL to
+    `linkedin-workspace`.
 
 ## Batch visual mode
 
@@ -160,4 +167,5 @@ For a large approved corpus:
 Report Content IDs assessed, `none/image/document` decisions, generated files,
 Canva design/source links when available, Drive links, QA state,
 stale/conflicting assets, approval state, and blocked capabilities. Distinguish
-Canva/editor or local asset QA from LinkedIn publication.
+Canva/editor or approved-capability asset QA from the user's manual LinkedIn
+publication.

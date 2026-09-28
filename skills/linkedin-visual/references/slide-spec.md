@@ -1,8 +1,8 @@
 # Slide specification
 
-Use this as a content and layout contract. Select exact geometry with the user
-or project rules; LinkedIn does not require the 5-page or 7-page editorial
-choices below.
+Use this as content and layout guidance, not a bundled template. Select exact
+geometry with the user or project rules; LinkedIn does not require the 5-page or
+7-page editorial choices below.
 
 ## Copy and design relationship
 
@@ -17,14 +17,14 @@ they affect interpretation; do not hide them in unreadable footers.
 
 Record these values in the carousel brief and post file:
 
-- page count and page numbering;
+- page count;
 - orientation and exact width/height with units;
 - consistent page size across the document;
 - safe margins and content grid;
 - background, text, accent, and status colors with source or token names;
 - typeface, fallback, hierarchy, and minimum readable size;
-- header treatment, if any;
-- footer treatment, page number, identity, domain, disclosure, or source note;
+- identity anchors: name top left, website top right, role bottom right;
+- optional source note, disclosure, or supporting footer content;
 - image, icon, diagram, and asset provenance;
 - source-map ID for each non-obvious claim;
 - alt/description text or an equivalent accessibility note.

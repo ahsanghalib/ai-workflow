@@ -10,8 +10,9 @@ adapter; it does not require a particular plugin name, API, or harness.
   approved brand system.
 - Create a new Canva design or open a user-selected existing design. Never
   overwrite an existing design merely because its filename or title matches.
-- Use the approved page dimensions and one consistent page geometry. Record the
-  Canva design URL or ID only when the connected capability returns it.
+- Use the dimensions and one consistent page geometry selected in the approved
+  brief. Record the Canva design URL or ID only when the connected capability
+  returns it.
 - Use the `copywriting` pass for the narrative before layout and the
   `humanizer` pass only for eligible prose after the claims are stable.
 - Preserve claims, certainty, attribution, citations, disclosures, identity,
@@ -25,8 +26,8 @@ adapter; it does not require a particular plugin name, API, or harness.
 - Use a clear reading order: one focal statement, supporting detail, then
   source or caveat treatment. Do not let decorative elements compete with the
   argument.
-- Apply the approved typography, color scheme, header, footer, spacing, and
-  identity contract. Use `Lime Signal` unless the brief deliberately selects a
+- Apply the approved typography, color scheme, identity anchors, spacing, and
+  optional source/disclosure treatment. Use `Lime Signal` unless the brief deliberately selects a
   different documented scheme.
 - Prefer diagrams, comparisons, steps, and proof structures that make the
   approved idea easier to understand. Do not add stock imagery, icons, or
@@ -51,8 +52,6 @@ adapter; it does not require a particular plugin name, API, or harness.
 
 ## Capability fallback
 
-If Canva is unavailable, do not claim that Canva was used. Use the local
-renderer or another approved design capability when it can satisfy the brief;
-otherwise preserve the outline and mark rendering or visual review as
-unverified. A local render is a valid fallback artifact but is not evidence of
-Canva editing or LinkedIn publication.
+If Canva is unavailable, do not claim that Canva was used. Use another
+approved design capability when it can satisfy the brief; otherwise preserve
+the outline and mark rendering or visual review as blocked or unverified.

@@ -9,7 +9,8 @@
   choosing a vector store.
 - Audience: AI engineers building retrieval-augmented applications
 - Objective: teach a practical mental model for evaluating RAG systems
-- Format: 5-page portrait document
+- Format: multi-page LinkedIn document; orientation and dimensions selected in
+  the approved brief
 - Brand: Ahsan LinkedIn identity in
   [brand-and-layout-guidelines.md](../references/brand-and-layout-guidelines.md)
 
@@ -53,11 +54,11 @@ Sources are in the final slide.
 ## Visual-generation handoff
 
 - Visual status: `created`
-- Requested page count: `5`
+- Chosen page count: `5` for this argument
 - Color scheme: `Lime Signal` (persisted for rerenders)
 - Layout archetypes: `cover`, `chat`, `diagram`, `closing`
-- Header: `M. Ahsan Izhar` | `ahsanizhar.com`
-- Footer: `Senior Software Engineer` | `n/5`
+- Identity anchors: top left `M. Ahsan Izhar`; top right `ahsanizhar.com`;
+  bottom right `Senior Software Engineer`
 - Output: `post-rag-context-contract-2026-09-25.pdf`
 - QA receipt: recorded after PDF rendering and inspection
 
