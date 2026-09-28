@@ -1,5 +1,9 @@
 # Sample LinkedIn carousel: RAG is a context contract
 
+> Historical fixture: the visual-generation handoff below predates the current
+> local editable design system. Do not reuse its older palette or identity
+> placement as a current brand rule.
+
 - Status: `APPROVED-UNPUBLISHED` sample
 - Post no.: `SAMPLE-001`
 - Research date: `2026-09-25`

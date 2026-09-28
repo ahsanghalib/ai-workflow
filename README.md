@@ -933,8 +933,8 @@ refer to when asking an assistant to use one explicitly.
 - `humanizer` — remove AI-writing patterns from prose without changing facts or
   the author's intent.
 - `social-content` — draft truthful content for a specified social or editorial
-  channel from supplied sources and plan approved visuals, preferring Canva
-  when the connected capability is available.
+  channel from supplied sources and plan approved visuals, preferring local
+  editable presentation assets when visual work is needed.
 - `agent-memory` — maintain concise project-local episodic memory and handoff
   capsules.
 - `find-skills` — discover a suitable installable skill when the repository does
@@ -947,8 +947,8 @@ refer to when asking an assistant to use one explicitly.
   posts and keep them distinct from published content.
 - `linkedin-visual` — decide whether an approved post needs a visual, then
   structure a source-grounded image or carousel. Copywriting shapes the
-  narrative before design; Canva is the preferred authoring adapter when it is
-  available, with another approved design capability as fallback.
+  narrative before design; use a local editable presentation source for visual
+  authoring.
 - `linkedin-comments` — find strong, non-hiring posts and prepare individually
   approved comments.
 - `linkedin-hiring` — find hiring/recruiting posts from the previous 48 hours,

@@ -1,61 +1,61 @@
 # LinkedIn carousel layout archetypes
 
-Use these conceptual structures to vary content while keeping the Ahsan master
-identity stable. They are planning patterns for Canva or another approved
-design capability, not bundled design templates. Select an archetype per page
-from the approved post outline; it is not a reason to add filler or unsupported
-claims.
+For the Ahsan visual system, **do not invent standalone generic archetypes**.
+Use the ten canonical templates in `ahsan-local-design-system.md` and their PNG
+references in `../examples/design/carousel-slides/slides/`.
 
-## Shared shell
+This file maps common content jobs to those canonical templates so the model can
+vary the narrative without drifting into a different design system.
 
-Every archetype inherits:
-
-- the three identity anchors: name top left, website top right, and role bottom
-  right;
-- the selected orientation, dimensions, margins, type hierarchy, and color
-  scheme from the approved brief;
-- one dominant idea and a source or disclosure treatment where needed.
-
-## Archetypes
+## Content-job mapping
 
 <!-- markdownlint-disable MD013 MD060 -->
 
-| Archetype | Best for | Required structure |
+| Content job | Preferred canonical template | Notes |
 |---|---|---|
-| `cover` | promise and topic framing | eyebrow, large headline, short promise, optional thesis card |
-| `chat` | contrasting viewpoints or a conversational explanation | two or more labeled message bubbles, clear speaker/order cues, takeaway |
-| `table` | comparisons, decisions, or before/after evidence | table label, column headings, two or more rows, readable cell text |
-| `grid-4` | four principles, failure modes, or checks | four clearly numbered or labeled boxes, consistent card anatomy |
-| `steps-5` | a process, checklist, or implementation sequence | five ordered steps with verbs and short explanations |
-| `diagram` | a mechanism, architecture, or flow | nodes, connectors, direction labels, and a short interpretation |
-| `closing` | bounded takeaway and next action | highlighted conclusion, source/limitation, approved CTA or question |
+| Topic/promise | `01 Cover` | Preserve cover silhouette; do not substitute a generic centered title. |
+| Single numbered lesson/check | `02 Numbered insight` | Use giant numeral + underline + heading. |
+| Definition / concept / mechanism / takeaway | `03 Technical explanation` | Use the three-row structure. |
+| Ordered process / architecture / request flow | `04 Flow diagram` | Use stacked native boxes and the canonical accent-path behavior. |
+| Before/after / option A vs B / tradeoff | `05 Comparison` | Use two columns and concise verdict/guidance. |
+| Strong thesis / quote-like takeaway | `06 Key statement` | Use oversized statement + one cobalt phrase. |
+| Metric / benchmark / distribution | `07 Data` | Use one large number and up to three bars. |
+| Code / JSON / tool contract | `08 Code` | Use panel + short code + takeaway. |
+| Screenshot / trace / generated image with analysis | `09 Image + commentary` | Use large image frame + caption + observation. |
+| Final takeaway / CTA / author close | `10 Closing` | Preserve author block and final counter. |
 
 <!-- markdownlint-enable MD013 MD060 -->
 
-Optional structures include a quote/callout, two-column comparison, code
-fragment, or source card. Use them only when the approved content benefits from
-them and keep the identity anchors consistent.
+## How to handle content that looks like another archetype
 
-## Optional sequencing examples
+If the narrative naturally suggests one of these structures, map it into the
+closest canonical template instead of creating a new style:
 
-For a five-page argument, a useful sequence may be:
+- conversational contrast → `05 Comparison` or `03 Technical explanation`;
+- four principles/failure modes → multiple `02 Numbered insight` pages or one
+  `03 Technical explanation` if the points are short;
+- five steps/checklist → `04 Flow diagram` when sequence matters, or a short
+  series of `02 Numbered insight` pages when each step needs explanation;
+- architecture/system map → `04 Flow diagram`;
+- quote/callout → `06 Key statement`;
+- compact source/caveat card → fit within the selected canonical page without
+  changing the shell.
 
-1. `cover`
-2. `chat`, `table`, or `grid-4`
-3. `diagram` or `steps-5`
-4. the remaining evidence or practice structure
-5. `closing`
+Do not add card grids, chat bubbles, icon matrices, centered diagrams, or other
+layouts simply because they are common carousel patterns. The goal is
+recognizable continuity with the supplied canonical design set.
 
-For a seven-page argument, a useful sequence may be:
+## Shared shell
 
-1. `cover`
-2. `chat`
-3. `table`
-4. `grid-4`
-5. `steps-5`
-6. `diagram`
-7. `closing`
+Every portrait canonical template inherits:
 
-Reorder, omit, or add an archetype when the source outline calls for it. No
-page count is a target by itself; every page still needs source-map coverage or
-a clearly labeled framing/transition role.
+- top-left category label and top-right context tag;
+- exact Ahsan tokens and typography;
+- left-aligned editorial hierarchy;
+- lower-right engineering motif and right utility rail at the reference scale;
+- bottom-left `M. Ahsan Izhar - ahsanizhar.com`;
+- bottom-right sequential `NN / NN` counter;
+- one cobalt focal idea per page.
+
+See `visual-fidelity.md` for the actual silhouette contracts and drift-rejection
+rules.

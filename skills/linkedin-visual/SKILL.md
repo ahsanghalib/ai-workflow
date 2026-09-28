@@ -1,66 +1,306 @@
 ---
 name: linkedin-visual
 description: >-
-  Use when assessing whether an approved LinkedIn post needs a visual and, when
-  useful, creating a source-grounded single image or document/carousel in Canva
-  or another approved design tool with a supplied visual system and QA. Apply
-  `copywriting` to the carousel narrative and `humanizer` to eligible prose
-  without changing approved claims. Does not publish or schedule LinkedIn
-  posts.
+  Use when deciding whether an approved LinkedIn post needs a visual and, when
+  useful, creating an Ahsan-style editable PPTX carousel or standalone visual.
+  For M Ahsan Izhar, reproduce the canonical designs in examples/design as the
+  visual target; do not improvise a generic tech-carousel style. Preserve
+  approved claims and do not publish or schedule posts.
 license: MIT
 ---
 
 # LinkedIn visual
 
-Create visuals only when they improve comprehension, credibility, or scanability.
-A visual is not mandatory for every post. Preserve the approved post's claims,
-certainty, attribution, disclosures, and audience.
+Create a visual only when it improves comprehension, credibility, or
+scanability. Preserve the approved source's claims, certainty, attribution,
+disclosures, and audience.
+
+For M Ahsan Izhar, **visual fidelity to the supplied design references is a
+non-negotiable requirement**. The goal is not merely to use the same colors and
+fonts. The generated pages must preserve the reference layouts, proportions,
+negative space, utility chrome, engineering motif, and single-cobalt focal
+language.
+
+## Ahsan visual source of truth
+
+When the visual is for M Ahsan Izhar, read these in this order before
+rendering:
+
+1. [references/ahsan-local-design-system.md](references/ahsan-local-design-system.md)
+2. [references/visual-selection.md](references/visual-selection.md)
+3. [references/design-selection.md](references/design-selection.md)
+4. [references/visual-fidelity.md](references/visual-fidelity.md)
+5. the exact canonical PNG(s) in `examples/design/` for the selected template(s)
+6. [references/presentation-execution.md](references/presentation-execution.md)
+7. [references/pptx-workflow.md](references/pptx-workflow.md)
+8. [references/text-fit-and-collision.md](references/text-fit-and-collision.md)
+
+Then read the remaining references only as needed for narrative, selection,
+accessibility, platform constraints, or QA.
+
+**Canonical visual-reference directory:** `examples/design/`
+
+The directory also contains three approved alternate design systems under
+`examples/design/carousel-options/`: `evidence-ledger`, `dark-signal`, and
+`modular-index`. The baseline templates remain the default. When the user asks
+to compare or use an alternate option, apply
+[references/design-selection.md](references/design-selection.md), then read
+that option's README and rendered `slides/` PNGs. Choose one complete option
+and keep the carousel consistent; do not mix options or invent a fourth visual
+system.
+
+Do not use the old/nonexistent path `examples/designs/`.
+
+## Conditional capability routing
+
+This skill is harness-neutral. Use the following neighboring capabilities only
+when the active harness exposes them; their absence must not block the local
+editable PPTX workflow. Do not treat an installed skill file as evidence that
+its runtime capability is available.
+
+- `brand-guidelines`: apply and audit the approved identity tokens, fonts,
+  assets, provenance, accessibility constraints, and usage restrictions before
+  authoring. It does not authorize asset generation or publishing.
+- `ui-design-system`: use only when creating or auditing the reusable Ahsan
+  visual system itself. Do not invoke it for every post-specific page, and do
+  not let neutral system advice override the approved Ahsan references.
+- `diagram-design`: use when a page contains a flow, architecture diagram,
+  chart, or other technical schematic. Load only the relevant diagram type and
+  semantic guidance, then translate the result into native editable PPTX or
+  Inkscape objects; do not substitute an HTML/SVG deliverable unless requested.
+- `apple-design`: use when the user requests an Apple-inspired direction,
+  interactive preview, swipe/transition behavior, or motion study. For static
+  carousels, apply only its transferable principles of clarity, restraint,
+  progressive disclosure, continuity, and directness; never import Apple
+  branding, colors, materials, or typography, and never let motion guidance
+  override the Ahsan tokens, static composition, or editability contract.
+- `presentations`: when available, use it for native PPTX authoring,
+  structural inspection, and application-aware checks. If unavailable, use the
+  local editable presentation path and mark application-specific checks as
+  unverified.
+- `pdf:pdf`: when available, use it to render and inspect the matching PDF.
+  The PDF is an export and QA artifact, never a replacement for the editable
+  PPTX source.
+- `verification-before-completion`: before reporting completion, map each
+  claim to fresh evidence and report verified, partial, blocked, and
+  unverified checks separately.
+
+The existing `copywriting` and `humanizer` routing remains conditional and
+limited to eligible prose. Do not route this workflow to external design
+editors; the local editable PPTX remains the canonical authoring path.
+
+## Priority when instructions conflict
+
+Use this order:
+
+1. user-approved source content and factual constraints;
+2. canonical PNG composition for the selected template;
+3. `visual-fidelity.md`;
+4. exact token/type rules in `ahsan-local-design-system.md`;
+5. generic guidance elsewhere in this skill.
+
+The PNG decides visual composition. The written design system decides exact
+colors, fonts, dimensions, editability, and QA requirements.
+
+## Non-negotiable visual contract
+
+For the Ahsan system:
+
+- portrait pages: exactly `1080 × 1350 px` / 4:5;
+- square standalone cards: exactly `1080 × 1080 px`;
+- `paper #F7F7F4`, `ink #16181D`, `accent-cobalt #2540D9`,
+  `gray #5F6472`, `line #D9DAD4`, `panel #ECECE8` only;
+- `DM Sans 700/400`; `JetBrains Mono`, with `Space Mono` only as fallback;
+- left-aligned editorial composition by default;
+- one dominant idea per page;
+- at most one cobalt focal idea per page;
+- reproduce the canonical lower-right engineering motif and utility rail at the
+  reference scale;
+- portrait footer identity: `M. Ahsan Izhar - ahsanizhar.com`;
+- portrait page counter: `NN / NN`;
+- no generic full-width footer divider on ordinary pages;
+- no gradients, glow, neon, robots, brains, circuit-board art, glassmorphism,
+  stock illustrations, arbitrary icons, or drop shadows;
+- do not use the reference PNG as a slide background or flatten authored slide
+  content into one image.
 
 ## Boundaries
 
-- Start from an approved post/brief or an explicitly approved source.
-- Do not invent claims, metrics, testimonials, personal results, diagrams that
-  imply unsupported evidence, citations, or identity details.
-- Do not publish, upload to LinkedIn, schedule, or claim LinkedIn acceptance.
-- Do not change the approved post thesis merely to fit a fixed template or
-  aspect ratio.
-- Use the supplied approved visual identity and identity fields. If no approved
-  brand system exists, propose a neutral temporary system and stop for approval
-  before treating it as a reusable rule.
-- Treat Canva editing, design creation, and export as conditional external
-  actions. Use the connected Canva capability when it is available, but never
-  assume that a Canva design was created, saved, shared, or exported without
-  explicit tool or UI evidence. Do not overwrite an existing Canva design
-  unless the user selected it and authorized that change.
+- Start from an approved post/brief or explicitly approved source.
+- Do not invent claims, metrics, testimonials, personal results, evidence,
+  citations, screenshots, or identity details.
+- Do not change the post thesis simply to fit a template.
+- Do not publish, schedule, or claim LinkedIn acceptance.
+- Use the local editable presentation path for the final source.
+- Keep authored text, rules, shapes, connectors, diagram nodes, bars, and panels
+  native/editable whenever the presentation capability supports it.
+- A supplied screenshot/photo may remain raster content inside a designated
+  image frame; a complete slide may not.
+
+## Visual selection
+
+Choose one result:
+
+- `none` — text is stronger without a visual;
+- `image` — one standalone technical visual is enough;
+- `document` — the reader benefits from a multi-page sequence.
+
+Do not create a carousel merely because the skill can. Do not add filler pages
+to reach a preferred count.
+
+## Workflow
+
+### 1. Resolve source
+
+Resolve the exact approved source, revision/hash when available, audience,
+claim boundaries, evidence/caveats, and approved CTA.
+
+### 2. Select visual form
+
+Use [references/visual-selection.md](references/visual-selection.md). If the
+result is `none`, record that decision and stop.
+
+For an Ahsan carousel, then use
+[references/design-selection.md](references/design-selection.md) to choose the
+baseline or one alternate design system. Record the selection receipt before
+opening reference PNGs. Content-fit selection is the default; random selection
+requires an explicit exploration request.
+
+### 3. Build the page sequence
+
+For a document, turn the approved source into the smallest useful sequence.
+Every page gets one reader job. Use
+[references/narrative-frameworks.md](references/narrative-frameworks.md) only
+when it makes the argument clearer; do not force a framework.
+
+Create a source-to-slide ledger before rendering factual or attributed content.
+If `copywriting` is available, use it only to tighten eligible prose without
+changing claims. Use `humanizer` only on prose that benefits from it; do not
+apply it to numeric labels, code, citations, or diagram text.
+
+### 4. Map pages to the selected design system and templates
+
+Choose the closest canonical template for each page. The mapping is defined in
+[references/visual-fidelity.md](references/visual-fidelity.md).
+
+If the user selected one of the alternate systems in
+`examples/design/carousel-options/`, use that system's rendered page PNGs as
+the composition target for the whole carousel. The alternate option changes
+composition and motif language, but does not relax the approved Ahsan tokens,
+native editability, text-fit, collision, or export requirements.
+
+**Open the exact PNG for every selected template before authoring it.** Do not
+reconstruct the style from memory. If the active environment cannot inspect the
+PNG, preserve the page outline and source-to-slide ledger, then mark rendering
+and canonical-template fidelity as blocked or unverified. Do not finalize the
+visual as reference-verified.
+
+For a reusable template-system request, create templates 1–4 first and stop for
+user review before extending the system. For a post-specific request, use only
+the templates the post needs.
+
+### 5. Author against the reference
+
+Follow
+[references/presentation-execution.md](references/presentation-execution.md).
+Treat the chosen PNG as a composition target:
+
+- keep major anchor positions and negative-space pattern;
+- preserve the reference hierarchy and relative scale;
+- reproduce shared chrome and engineering motif;
+- replace example copy with approved copy rather than redesigning the template;
+- shorten or split copy before shrinking it below readable reference scale.
+
+If the environment can code PPTX directly, use the deterministic `100 px = 1
+inch` mapping defined in `visual-fidelity.md`.
+
+### 6. Render and compare incrementally
+
+After each page is authored, render it and compare it side-by-side with the
+canonical PNG at the same thumbnail size. Fix composition drift immediately.
+Do not wait until the whole carousel is finished.
+
+If rendering or image inspection is unavailable, do not claim visual or
+canonical-fidelity checks passed. Preserve the local source and record those
+checks as blocked or unverified.
+
+Reject and rework pages with any of these problems:
+
+- template silhouette is no longer recognizable;
+- missing or oversized engineering motif;
+- missing right-side utility rail where the reference has it;
+- centered generic composition;
+- excess panels/cards;
+- multiple cobalt focal elements;
+- wrong footer identity or missing counter;
+- generic full-width footer rule on ordinary pages;
+- text shrunk to rescue an overloaded page;
+- decorative AI imagery not present in the canonical system.
+
+### 7. QA editable source and export
+
+Run the verify → fix → re-verify loop in
+[references/pptx-workflow.md](references/pptx-workflow.md),
+[references/text-fit-and-collision.md](references/text-fit-and-collision.md),
+and [references/pdf-qa.md](references/pdf-qa.md).
+
+Check at minimum:
+
+- dimensions/orientation;
+- exact six-token palette;
+- font/fallback disclosure;
+- mobile readability;
+- text bounds, clipping, overflow, and reserved-region collisions;
+- text-to-text and label-to-detail collision checks;
+- one-accent rule;
+- template/reference fidelity;
+- shared chrome;
+- native editability of authored elements;
+- page count and PDF structure when exported.
+
+Do not export or claim readiness while any text-fit or collision check is
+failed or unverified. Do not claim checks that were not performed.
+
+### 8. Save final files
+
+Save a new editable PPTX revision and export the matching PDF. Do not silently
+overwrite an existing source. Record the source path, export path, selected
+canonical references, page count, dimensions, font fallbacks, QA state, and any
+remaining deviation.
 
 ## Workspace integration
 
-When the shared workspace is available:
+When the shared Content Library / Visual Assets workflow is actually available:
 
-- read the `Content Library` row and exact approved source/hash;
-- write asset metadata to `Visual Assets`;
-- upload completed assets to the appropriate Drive `Content/Visuals` folder;
-- update `Visual Status`, `Visual Type`, and `Primary Visual Link` only after the
-  output exists and its QA state is accurately recorded.
+- read the exact approved Content Library source/hash;
+- generate and QA the local PPTX + PDF first;
+- before any Drive or Sheet mutation, identify the exact selected folder,
+  workbook, and intended asset-row changes, then confirm that the user has
+  authorized that target and operation;
+- upload both files to the selected Drive visual folder;
+- create separate Visual Assets entries for `editable-source` and
+  `linkedin-pdf`;
+- use the verified PDF Drive link as `Primary Visual Link`;
+- re-read Drive metadata and Sheet rows before marking the visual ready.
 
-Before asking for asset approval or marking the post ready for manual
-publication,
-persist and re-read the `Visual Assets` row and the linked `Content Library`
-visual fields. If the selected Drive/Sheet write fails or is ambiguous, keep
-the local/Canva output as an unsynchronized draft and block the manual-
-publication handoff until the state is reconciled.
+If Drive/Sheet access is unavailable, keep the local files as valid unsynced
+outputs. Do not block local generation and do not claim an upload occurred.
 
-Local files remain valid working outputs when Drive is unavailable. Mark them
-unsynced rather than blocking generation. Drive writes and asset uploads require
-an authorized capability and an explicitly selected target; a local render is
-not proof of a Drive upload.
+## References
 
-## Read the references
+Core visual references:
+
+- [references/ahsan-local-design-system.md](references/ahsan-local-design-system.md)
+- [references/visual-fidelity.md](references/visual-fidelity.md)
+- [references/presentation-execution.md](references/presentation-execution.md)
+- [references/pptx-workflow.md](references/pptx-workflow.md)
+- `examples/design/README.md`
+
+Supporting references:
 
 - [references/visual-selection.md](references/visual-selection.md)
+- [references/design-selection.md](references/design-selection.md)
 - [references/carousel-brief.md](references/carousel-brief.md)
-- [references/canva-workflow.md](references/canva-workflow.md) when Canva is
-  available or the user wants an editable Canva source
 - [references/narrative-frameworks.md](references/narrative-frameworks.md)
 - [references/slide-spec.md](references/slide-spec.md)
 - [references/brand-and-layout-guidelines.md](references/brand-and-layout-guidelines.md)
@@ -68,104 +308,13 @@ not proof of a Drive upload.
 - [references/layout-archetypes.md](references/layout-archetypes.md)
 - [references/visual-system-and-accessibility.md](references/visual-system-and-accessibility.md)
 - [references/pdf-qa.md](references/pdf-qa.md)
+- [references/text-fit-and-collision.md](references/text-fit-and-collision.md)
 - [references/platform-specs.md](references/platform-specs.md) when current
-  LinkedIn requirements matter
-
-## Visual selection
-
-First decide one of:
-
-- `none` — text is stronger without an asset;
-- `image` — one diagram, system map, comparison, or focal concept can stand alone;
-- `document` — the idea benefits from a multi-page technical narrative.
-
-Do not create a carousel merely because the capability exists. For the imported
-post corpus, record the assessment before generating assets so effort goes to the
-strongest posts first.
-
-## Workflow
-
-1. Resolve the exact approved Content ID/revision/hash and source artifact.
-2. Run the visual-selection assessment. If `none`, set `Visual Status=not_needed`
-   and stop without generating decorative filler.
-3. For `image`, create one source-grounded single-image asset with the approved
-   identity using an available image/design/rendering capability. Prefer diagrams
-   and information design over generic AI artwork. If no suitable capability is
-   available, mark the asset blocked rather than silently switching to decoration.
-4. For `document`, choose the smallest page count and geometry that preserve
-   the argument. Do not impose a default aspect ratio, pixel size, page count,
-   pagination scheme, or design template. Before authoring,
-   use `copywriting` to turn the approved post into a reader-first slide
-   sequence: one primary reader, one promise or problem, one job per page, a
-   clear mechanism or proof, and one proportionate next action. Choose one
-   suitable framework (such as AIDA, PAS, BAB, or the Four Cs as an editorial
-   gate) only when it makes the approved argument clearer; frameworks are not
-   reach or conversion guarantees. Create a page outline and source-to-slide
-   ledger before rendering.
-5. Use the approved visual system. Default to `Lime Signal`; choose another
-   documented scheme only deliberately based on the topic/brief. Never choose a
-   palette randomly. When Canva is available, follow
-   [references/canva-workflow.md](references/canva-workflow.md) and use Canva as
-   the preferred authoring path. Otherwise use another explicitly approved
-   design capability; if none is available, preserve the outline and report
-   rendering as blocked or unverified.
-6. Once the global brand system is already approved, **do not require a separate
-   pre-render approval for every post**. Generate a draft asset, run QA, and mark
-   it `Approved=pending`. Ask for approval before marking the asset ready for
-   manual publication, not before every render. Ask before rendering only when introducing a new brand/layout rule,
-   materially changing content, or incurring an external cost the user has not
-   authorized.
-7. After the narrative is stable, use `copywriting` for a final clarity,
-   specificity, benefit, and reader-momentum pass on eligible prose only. It
-   may shorten or clarify approved copy but must not change its claims,
-   certainty, attribution, thesis, or approved action. Use `humanizer` only for
-   prose that needs a natural-voice pass; do not humanize numeric labels,
-   citations, diagram text, or data automatically. If either skill is
-   unavailable, apply the equivalent bounded checks locally and report the
-   fallback; never claim that a separate skill ran. After either pass, rerun
-   the exact-claim and attribution diff. Keep every text/diagram element
-   traceable to the approved post/evidence.
-8. Apply the same copywriting logic to the design: establish a clear visual
-   hierarchy, make the focal element carry the page job, use contrast and
-   grouping to direct attention, show mechanisms or comparisons rather than
-   decoration, and make the final action easy to recognize. Design must improve
-   comprehension and trust, not manufacture urgency, imply proof, or overpower
-   the caveat/source treatment.
-9. Run structural and visual QA. Inspect the Canva design in its editor and the
-   exported pages when the active environment supports it. When Canva is
-   unavailable, inspect the output from the selected approved design capability
-   if it provides a reviewable artifact. Do not claim checks that were not
-   performed.
-10. Save outputs without silent overwrite. Record Content ID, revision, source
-    hash, scheme, authoring tool, Canva design/source URL when returned, export
-    format, QA state, and Drive/local path. Persist the `Visual Assets` row and
-    linked `Content Library` visual fields, then re-read them to verify the
-    exact source hash, asset link, and QA state.
-11. Show the asset, its source/hash, QA receipt, and persisted asset ID. After
-    user approval of the asset, set `Visual Assets.Approved=yes` and
-    `Content Library.Visual Status=ready`. When
-    `Content Library.Approval=approved` and the required visual state is
-    complete, set `Publish Status=ready_for_manual_post`; verify those updates.
-    Do not publish or schedule. The user publishes or schedules manually and can
-    later confirm the outcome or provide the exact LinkedIn URL to
-    `linkedin-workspace`.
-
-## Batch visual mode
-
-For a large approved corpus:
-
-- assess all candidate posts first;
-- generate assets in manageable batches;
-- reuse the approved visual identity consistently;
-- do not regenerate unchanged assets when their `Source Hash` matches the
-  current approved content hash;
-- if the post body changes, mark the old asset stale and generate a new revision
-  rather than silently reusing it.
+  LinkedIn limits matter.
 
 ## Completion report
 
-Report Content IDs assessed, `none/image/document` decisions, generated files,
-Canva design/source links when available, Drive links, QA state,
-stale/conflicting assets, approval state, and blocked capabilities. Distinguish
-Canva/editor or approved-capability asset QA from the user's manual LinkedIn
-publication.
+Report the source used, `none/image/document` decision, selected canonical
+reference files, final PPTX/PDF paths, QA state, any unverified checks, and
+sync/approval state when workspace integration was used. Do not publish or
+schedule.

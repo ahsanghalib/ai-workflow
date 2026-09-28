@@ -24,12 +24,16 @@ When a renderer and image inspection capability are available, inspect every
 page for:
 
 - clipping, overflow, overlap, broken line wraps, and orphaned text;
+- text bounding boxes within the page safe area and every reserved content
+  region;
+- no unintended text-to-text or label-to-detail collision;
 - headline/supporting-text hierarchy and mobile readability;
 - contrast, grayscale meaning, and non-color cues;
-- consistent margins, identity anchors, optional source/disclosure treatment,
-  and selected geometry;
+- consistent margins, shared chrome, engineering motif, optional
+  source/disclosure treatment, and selected geometry;
+- side-by-side fidelity to the selected canonical template PNG at thumbnail size;
 - image or diagram provenance, clarity, and claim scope;
-- source notes, disclosures, and approved identity treatment;
+- source notes, disclosures, and approved chrome/identity treatment;
 - visual continuity without decorative filler.
 
 If rendering or inspection is unavailable, do not claim these checks passed.
@@ -44,13 +48,18 @@ QA file was explicitly requested and created:
 ### QA receipt
 
 - Checked: YYYY-MM-DD HH:MM, workspace timezone
-- Output: [post-<slug>-YYYY-MM-DD.pdf](...)
+- Editable source: [post-<slug>-YYYY-MM-DD.pptx](...)
+- Output PDF: [post-<slug>-YYYY-MM-DD.pdf](...)
+- Drive PPTX link: ... | not uploaded
+- Drive PDF link: ... | not uploaded
 - Structural checks: verified | failed | unverified
 - Rendered visual review: verified | failed | unverified
 - Page count/dimensions: ...
 - File size/format: ...
 - Links/text extraction: ...
 - Overflow/clipping/contrast: ...
+- Text bounds/collisions: ...
+- Canonical-template fidelity: ...
 - Sources/disclosures/identity: ...
 - Fixes and remaining risks: ...
 ```

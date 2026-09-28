@@ -21,6 +21,11 @@ Use one focal image when one visual model is enough, for example:
 - one flow with a few nodes;
 - one technical checklist that remains readable on a phone.
 
+For the Ahsan local system, this may be one editable `1080 × 1080` standalone
+card instead of a portrait carousel. A single useful image is a complete
+visual deliverable; do not expand it into pages merely to use the template
+library.
+
 Avoid generic futuristic AI imagery, decorative robots, fake dashboards, and
 stock-like illustrations that add no information.
 

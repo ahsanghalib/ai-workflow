@@ -1,8 +1,9 @@
 # Slide specification
 
-Use this as content and layout guidance, not a bundled template. Select exact
-geometry with the user or project rules; LinkedIn does not require the 5-page or
-7-page editorial choices below.
+Use this as content and layout guidance for the approved Ahsan local system,
+not as a mandatory page sequence. Portrait carousel pages are `1080 × 1350 px`
+and standalone cards are `1080 × 1080 px`. A post-specific visual may use five,
+seven, eight, ten, another content-justified count, or one image.
 
 ## Copy and design relationship
 
@@ -18,12 +19,15 @@ they affect interpretation; do not hide them in unreadable footers.
 Record these values in the carousel brief and post file:
 
 - page count;
+- canonical template/reference PNG for each page;
 - orientation and exact width/height with units;
 - consistent page size across the document;
-- safe margins and content grid;
-- background, text, accent, and status colors with source or token names;
-- typeface, fallback, hierarchy, and minimum readable size;
-- identity anchors: name top left, website top right, role bottom right;
+- `88 px` side margins, `170 px` top/bottom clearance, and the 8 px base grid;
+- `paper`, `ink`, `accent-cobalt`, `gray`, `line`, and `panel` tokens only;
+- `DM Sans 700/400`, `JetBrains Mono` or `Space Mono` fallback, and the
+  approved type scale;
+- shared chrome: category/context labels, lower-right engineering motif and
+  utility rail, footer identity, and sequential counter;
 - optional source note, disclosure, or supporting footer content;
 - image, icon, diagram, and asset provenance;
 - source-map ID for each non-obvious claim;

@@ -7,51 +7,26 @@ be labeled separately.
 
 ## Approved Ahsan LinkedIn identity
 
-This profile is an explicit user-approved identity for the user's LinkedIn
-visuals. It is inspired by the inspected Langfuse reference's editorial
-engineering feel, warm paper surface, restrained grid, and bright highlight,
-but it does not copy Langfuse's logo, name, assets, exact font files, or brand
-claims.
+This profile has an explicit user-approved local editable design system. The
+complete source of truth is
+[ahsan-local-design-system.md](ahsan-local-design-system.md), and the
+rendered references in `../examples/design/` show its intended direction.
+Those renders are not assets to paste into the source presentation. Do not
+infer additional brand rules from an external reference, screenshot, or
+example.
 
 ### Direction
 
 **Editorial engineering notes**: calm, technical, open, precise, and slightly
 unexpected. Use a quiet paper field, near-black ink, thin structural rules,
-one high-energy highlight, and small utility labels. The visual should feel
-like a well-designed engineering note rather than a generic AI poster.
+one cobalt focal highlight, and small monospace utility labels. The visual
+should feel like a well-designed engineering note rather than a generic AI
+poster.
 
-### Optional composition language from the reference
-
-The reference site's strongest design signal is its page system, not only its
-colors. These are optional composition cues, not required components or a
-bundled template. Use them only when they improve the approved argument:
-
-- **Optional announcement strip:** a thin near-black band for the series or
-  topic label.
-  Keep it informational, not promotional.
-- **Optional utility header:** a quiet identity row around the required identity
-  anchors.
-- **Optional information rail:** a narrow left rail for topic, section, or a
-  small “why?” prompt. It should orient the reader without competing with the
-  main content.
-- **Optional framed canvas:** place the main argument in a white or near-white
-  bordered panel over the paper field. Use corner marks and fine rules as
-  structural cues.
-- **Optional tab strip:** use a small set of section labels to show the document's
-  progression, with one dark selected tab per page. Do not pretend the tabs are
-  interactive in a static PDF.
-- **Optional module rhythm:** alternate a hero statement with ruled data panels,
-  outlined cards, integration-style grids, diagrams, proof rows, CTA blocks, or
-  FAQ rows. Keep the modules useful to the argument.
-- **Optional technical background:** use faint diagonal rules, pale geometry, and
-  blueprint-like traces as atmosphere. Never use decorative geometry as proof.
-- **Identity anchors:** keep the approved name, website, and role in their
-  fixed corners while allowing the page composition between them to vary.
-
-Do not reproduce Langfuse's logo, copy, navigation labels, product claims,
-customer proof, exact layout dimensions, or proprietary assets. The reference
-provides a composition language; Ahsan's content, identity, and evidence remain
-the source of truth.
+The system is deliberately restrained: one focal idea per page, left-aligned
+content by default, useful diagrams and rules, and enough paper space for
+mobile reading. Do not introduce decorative composition rules that compete
+with the approved argument.
 
 ### Semantic tokens
 
@@ -59,74 +34,61 @@ the source of truth.
 
 | Token | Value | Role |
 |---|---|---|
-| `paper` | `#F4F4EE` | warm off-white page background |
-| `paper-deep` | `#EAEAE3` | secondary surface or side panel |
-| `ink` | `#161A1D` | headline and primary text |
-| `ink-soft` | `#4B555C` | body copy and secondary text |
-| `grid` | `#D6DAD5` | rules, frames, and quiet separators |
-| `lime` | `#F1F36D` | headline highlight and key emphasis |
-| `signal-blue` | `#2A60D4` | links, markers, and rare action cues |
-| `white` | `#FEFEFA` | contrast surface and selected text |
+| `paper` | `#F7F7F4` | page field |
+| `ink` | `#16181D` | primary text |
+| `accent-cobalt` | `#2540D9` | one focal idea |
+| `gray` | `#5F6472` | secondary text |
+| `line` | `#D9DAD4` | rules and dividers |
+| `panel` | `#ECECE8` | grouped surfaces and code panels |
 
 <!-- markdownlint-enable MD060 -->
 
-Use `lime` for one idea at a time. Use `signal-blue` sparingly; it is a
-navigation or annotation cue, not a second dominant brand color. Do not add
-gradients, glowing effects, or a rainbow palette without a new approval.
-
-The five selectable campaign schemes are documented in
-[color-schemes.md](color-schemes.md). They provide palette and semantic-role
-options; identity placement remains fixed, while typography and composition may
-follow the approved brief. Do not mix schemes within a single carousel.
+Use `accent-cobalt` for at most one idea per page: a keyword, key path, one bar,
+or one number. It is not decoration. Do not add gradients, glow, neon, or any
+color outside this six-token system.
 
 ### Typography
 
-- Display: `Space Grotesk` SemiBold/Bold when available; use `Noto Sans`
-  SemiBold/Bold as the local fallback. The display role may use tight line
-  breaks and large scale, but never sacrifice readability.
-- Body: `Inter` Regular/Medium when available; use `Noto Sans` Regular/Medium
-  as the local fallback.
-- Technical labels and code: `IBM Plex Mono` or `Noto Sans Mono` fallback.
-- Use one display family, one body family, and one monospace family at most.
-  Do not download fonts or claim a font is embedded unless the runtime verifies
-  it.
+- Display and headings: `DM Sans 700`.
+- Body: `DM Sans 400`.
+- Labels and code: `JetBrains Mono`; use `Space Mono` only as a fallback.
+- Do not download fonts or claim a font is embedded unless the runtime verifies
+  it. Record a fallback when it matters to the output.
 
 ### Layout and geometry
 
-- There is no default aspect ratio, orientation, pixel size, page count, or
-  design template. Select geometry from the approved brief and intended
-  channel, then record the exact output dimensions.
-- Recommended starting points are a generous outer margin, a visible but quiet
-  frame, and a simple two-column option for evidence or comparison pages; adapt
-  them to the approved brief.
-- Align headlines, body copy, diagrams, and source notes to a coherent grid
-  selected for the chosen geometry.
-- Use asymmetry deliberately when it improves the reader's path.
-- Keep one dominant idea per page and avoid decorative dashboard chrome that
-  does not improve comprehension.
+- Portrait carousel pages are `1080 × 1350 px`; standalone cards are `1080 ×
+  1080 px`.
+- Use `88 px` side margins, `170 px` top and bottom clearance, an `8 px` base
+  unit, `18 px` box radius, `16 px` code radius, and `2 px` rules.
+- Use `124 px` display, `80 px` heading, `36 px` body, and `20 px` uppercase
+  monospace labels with `+8%` tracking. Body line-height is `1.4` with a
+  maximum line width of `780 px`.
+- Keep the page left-aligned by default and give each page one dominant idea.
+- Select the smallest content-justified page count; the reusable template set
+  is not a mandatory ten-page sequence.
 
-### Identity placement contract
+### Shared chrome contract
 
-Apply this exact identity to every page unless the user approves a variant:
+Apply this exact chrome to every portrait carousel page:
 
-- Top left: `M. Ahsan Izhar`
-- Top right: `ahsanizhar.com`
-- Bottom right: `Senior Software Engineer`
+- top left: category label;
+- top right: context tag;
+- bottom left: `M. Ahsan Izhar - ahsanizhar.com`;
+- bottom right: sequential `NN / NN` counter;
+- lower-right engineering motif and sparse right-side utility rail as shown in
+  the canonical PNGs;
+- no generic full-width footer divider on ordinary pages.
 
-Use the same placement, casing, and punctuation across the document. Keep the
-identity small and subordinate to the page message. No pagination, bottom-left
-identity, logo, or additional identity element is required by this contract.
-
-Do not add a logo, employer, client, sponsor, title variation, social handle,
-or additional domain without explicit approval. The supplied domain is exactly
-`ahsanizhar.com`.
+Keep casing and punctuation consistent. The footer and utility labels are
+supporting structure, not the page's focal message. Standalone square cards may
+omit the counter when the brief requires a clean single-card composition.
 
 ### Branch and variant rules
 
-The base identity is the default branch. A topic or campaign may select one of
-the five named color schemes or vary the highlight label, diagram accent,
-typography, or section marker. The identity-placement contract remains fixed;
-other design choices follow the approved brief.
+The exact token and typography system is the default branch. A topic may vary
+the category label, context tag, selected template, diagram content, or page
+composition, but may not add colors or fonts.
 Record any variant with:
 
 - branch name and purpose;
@@ -135,8 +97,8 @@ Record any variant with:
 - expiry/review date if temporary;
 - approval owner.
 
-Do not create a new color branch merely to distinguish adjacent posts. Use the
-topic label, page marker, or a small signal-blue annotation first.
+Do not create a new color or font branch merely to distinguish adjacent posts.
+Use the topic label, page marker, or page composition first.
 
 ## Brand-source inventory
 
@@ -156,24 +118,13 @@ Record the source, scope, owner, and approval state for each rule:
 
 Do not infer a global brand system from one screenshot, post, or example.
 
-## Color schemes
+## Color use and accessibility
 
-When approved tokens exist, use their exact names and values from the supplied
-source. When they do not exist and a neutral draft is requested, define a
-temporary scheme with roles rather than presenting arbitrary colors as brand:
-
-- `background`: page field;
-- `surface`: cards, code blocks, or grouped content;
-- `text`: primary readable text;
-- `muted`: secondary text only when contrast remains sufficient;
-- `primary`: main identity or structural accent;
-- `secondary`: supporting category or section accent;
-- `accent`: one attention cue used sparingly;
-- `success`, `warning`, or `error`: semantic states only when needed.
-
-Document contrast decisions and non-color cues. Do not use color alone to
-communicate sequence, status, or category. Avoid adding gradients, neon
-accents, or a “tech” palette unless the approved identity calls for them.
+Use only the six canonical tokens above. Pair color with labels, position,
+rules, or shape so order, status, and category do not depend on color alone.
+Check paper/panel/gray text separately from ink and cobalt focal text. Preserve
+the hierarchy in grayscale and for common color-vision differences. Do not use
+the accent as a text field unless the contrast check passes.
 
 ## Typography and hierarchy
 
@@ -187,22 +138,18 @@ Use a restrained hierarchy for:
 - page headline;
 - supporting text;
 - code, data, or quotation treatment;
-- identity anchors, source note, and disclosure when needed.
+- category/context labels, footer, source note, and disclosure when needed.
 
 Hierarchy should survive grayscale, zoom, and mobile viewing.
 
-## Identity anchors
+## Identity and utility labels
 
-The three identity anchors are required on every page unless the user approves
-a variant:
-
-- top left: `M. Ahsan Izhar`;
-- top right: `ahsanizhar.com`;
-- bottom right: `Senior Software Engineer`.
-
-Keep these placements stable, readable, and subordinate to the page message.
-Do not add an unapproved personal name, company name, claim, logo, page number,
-or additional domain.
+The shared chrome uses the approved author string in the footer. The approved
+AI-engineering role may appear in a closing author block when the selected
+composition includes one. Category labels, context tags, page counters, source
+notes, and disclosures are utility content and must remain subordinate to the
+page message. Do not add a logo, employer, sponsor, social handle, additional
+domain, or title variation without explicit approval.
 
 ## Optional supporting footer content
 
