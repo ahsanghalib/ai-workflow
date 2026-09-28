@@ -69,7 +69,8 @@ When an option is selected, inspect all of its page PNGs before authoring and
 keep the selected option's shell, spacing, and motif language consistent. Do
 not combine an option's pages with the baseline template set or another
 option. The editable SVG and PDF files beside each option are for source and
-export review; the final deliverable remains native editable PPTX content.
+export review; the final editable source remains native PPTX content, while
+the final handoff is a PDF or explicitly requested image.
 
 ## Mandatory calibration pass
 

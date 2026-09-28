@@ -18,4 +18,4 @@ Do not treat them as individual template references.
 When an alternate option is selected, inspect only that option's `slides/`
 references and keep its composition consistent across the carousel. The SVG
 and PDF files are included for source review and export comparison; do not use
-them as flattened slide backgrounds in the final PPTX.
+them as flattened slide backgrounds in the final PDF or requested image.

@@ -83,8 +83,9 @@ closing page. A deck-level pass is valid only when every page passes.
 - Inkscape/SVG: use `validate_document`, object-query or bounding-box evidence,
   and rendered previews. If the MCP only returns structure without text
   geometry, mark geometry as `unverified` and do not call the visual final.
-- Raster-only GIMP output: treat text as non-editable and do not use it as the
-  canonical source for this workflow. It may be a review/export artifact only.
+- Raster-only GIMP MCP output: treat text as non-editable and do not use it as
+  the canonical source for this workflow. It may be an image-only treatment,
+  review artifact, or export artifact only.
 
 ## QA receipt fields
 

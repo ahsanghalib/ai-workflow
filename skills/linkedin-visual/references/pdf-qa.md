@@ -50,8 +50,10 @@ QA file was explicitly requested and created:
 - Checked: YYYY-MM-DD HH:MM, workspace timezone
 - Editable source: [post-<slug>-YYYY-MM-DD.pptx](...)
 - Output PDF: [post-<slug>-YYYY-MM-DD.pdf](...)
-- Drive PPTX link: ... | not uploaded
+- Output image: [post-<slug>-YYYY-MM-DD.png](...) | not requested
+- Drive PPTX link: ... | not uploaded | source upload not requested
 - Drive PDF link: ... | not uploaded
+- Drive image link: ... | not requested | not uploaded
 - Structural checks: verified | failed | unverified
 - Rendered visual review: verified | failed | unverified
 - Page count/dimensions: ...

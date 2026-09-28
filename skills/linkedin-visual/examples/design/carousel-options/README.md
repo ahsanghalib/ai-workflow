@@ -1,7 +1,8 @@
 # Alternate carousel design systems
 
 These are three complete, six-page portrait design options for review before a
-direction is selected for a canonical PPTX build. Each option contains:
+direction is selected for a canonical editable-source build. Each option
+contains:
 
 - `slides/` — rendered 1080 × 1350 PNG references, one per page;
 - `carousel.pdf` — the matching six-page review export;
@@ -10,8 +11,8 @@ direction is selected for a canonical PPTX build. Each option contains:
 
 Choose one option for a carousel and keep its page language consistent. Do not
 mix layouts, chrome, or motifs across options. These are visual references and
-editable exploration sources; the final LinkedIn deliverable remains a native
-editable PPTX plus its matching PDF.
+editable exploration sources; the final LinkedIn deliverable uses the editable
+PPTX as its source and the matching PDF as the default export.
 
 The skill chooses in this order: an explicit user direction, a content-fit
 match, or the baseline system when the post is ambiguous. It uses random

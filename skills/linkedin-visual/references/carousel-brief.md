@@ -41,14 +41,17 @@ publication approval remains separate.
 - Orientation: portrait carousel | square standalone card
 - Page dimensions: `1080 × 1350 px` carousel | `1080 × 1080 px` standalone
   card
-- Deliverable: final editable PPTX + matching PDF
+- Final output: matching PDF by default | PNG/JPG image when explicitly
+  requested
+- Editable source: PPTX path ... | not available
 - Preview files: none | PNG | JPG
 - Authoring tool: local presentation
 - Canonical design references selected: ...
 - Local source path: ... | not available
 - Local PDF path: ... | not available
-- Drive PPTX link: ... | not uploaded
+- Drive PPTX link: ... | not uploaded | source upload not requested
 - Drive PDF link: ... | not uploaded
+- Drive image link: ... | not requested | not uploaded
 - Runtime workspace: ...
 
 ## Visual identity

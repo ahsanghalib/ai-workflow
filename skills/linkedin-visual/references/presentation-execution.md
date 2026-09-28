@@ -118,9 +118,9 @@ before export.
 
 Before any remote mutation, apply the `linkedin-workspace` authorization
 contract: identify the exact selected Drive folder, workbook/tab/range, and
-intended PPTX/PDF and Visual Assets changes; confirm that the user authorized
-that target and operation; then upload and write state. Do not create or choose
-a remote target implicitly.
+intended final PDF or requested-image, optional source, and Visual Assets
+changes; confirm that the user authorized that target and operation; then
+upload and write state. Do not create or choose a remote target implicitly.
 
 After uploading, verify Drive metadata and reread the affected Sheet rows. If
 upload or readback fails, keep the local files and mark synchronization

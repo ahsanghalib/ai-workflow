@@ -58,7 +58,9 @@ composition has failed the fidelity check.
 
 ## Export and QA
 
-- Save the final editable PPTX first, then export a matching PDF.
+- Save the editable PPTX source first, then export a matching PDF. The PDF is
+  the default final output; export a PNG/JPG instead only when explicitly
+  requested.
 - Inspect every rendered page for clipping, overflow, line breaks, text-box
   bounds, text-to-text collisions, reserved-region collisions, contrast,
   mobile legibility, repeated chrome, page dimensions, engineering motif,
@@ -82,11 +84,14 @@ When the shared Drive/Sheet workflow is actually available and selected:
   asset-row changes;
 - confirm that the user authorized that exact target and operation before any
   upload or Sheet mutation;
-- upload the final PPTX and PDF to the same selected visual folder;
+- upload the final PDF, or the explicitly requested image, to the same
+  selected visual folder;
+- upload the editable PPTX source only when source archival is explicitly
+  requested or required by the selected workspace contract;
 - verify each upload by reading Drive metadata;
-- record separate `Visual Assets` entries for `editable-source` and
-  `linkedin-pdf`;
-- use the PDF link as the Content Library `Primary Visual Link`;
+- record a `linkedin-pdf` or requested-image Visual Assets entry, plus an
+  `editable-source` entry only when the PPTX is uploaded;
+- use the PDF or image link as the Content Library `Primary Visual Link`;
 - if either upload or readback fails, keep local files and mark sync unverified
   rather than pretending the asset is ready.
 

@@ -2,10 +2,11 @@
 name: linkedin-visual
 description: >-
   Use when deciding whether an approved LinkedIn post needs a visual and, when
-  useful, creating an Ahsan-style editable PPTX carousel or standalone visual.
-  For M Ahsan Izhar, reproduce the canonical designs in examples/design as the
-  visual target; do not improvise a generic tech-carousel style. Preserve
-  approved claims and do not publish or schedule posts.
+  useful, creating an Ahsan-style PDF carousel or requested image export with
+  an editable PPTX source when needed. For M Ahsan Izhar, reproduce the
+  canonical designs in examples/design as the visual target; do not improvise
+  a generic tech-carousel style. Preserve approved claims and do not publish
+  or schedule posts.
 license: MIT
 ---
 
@@ -55,8 +56,49 @@ Do not use the old/nonexistent path `examples/designs/`.
 
 This skill is harness-neutral. Use the following neighboring capabilities only
 when the active harness exposes them; their absence must not block the local
-editable PPTX workflow. Do not treat an installed skill file as evidence that
-its runtime capability is available.
+source-and-export workflow. Do not treat an installed skill file as evidence
+that its runtime capability is available.
+
+### Allowed design paths
+
+Before authoring any visual, inspect the active harness's exposed tool list for
+connected Inkscape MCP and GIMP MCP capabilities. Do not infer availability
+from an installed application, plugin, or configuration entry. Check both
+graphics MCP paths before selecting the fallback.
+
+Use the first suitable path after that probe:
+
+- **Inkscape MCP:** when exposed, use it for editable vector explorations,
+  diagrams, option references, SVG inspection, and geometry evidence. When the
+  deliverable is an editable presentation, translate the approved result into
+  native PPTX objects before final export.
+- **GIMP MCP:** when exposed and the page needs raster work, use it for image
+  preparation such as cropping, retouching, or image-only treatments inside an
+  approved image frame. Do not use a rasterized GIMP page as the canonical
+  source, and do not flatten authored text, diagrams, or page chrome into a
+  bitmap.
+- **Native editable PPTX:** use it when neither graphics MCP is exposed, when
+  neither is suitable for the requested page, or when an editable source is
+  needed. It is the canonical authoring source for the carousel or standalone
+  visual; the final handoff is still a PDF unless an image is explicitly
+  requested.
+
+Routing order:
+
+1. If Inkscape MCP is exposed and the page needs vector, diagram,
+   option-reference, or geometry work, use it.
+2. Otherwise, if GIMP MCP is exposed and the page needs raster image work, use
+   it.
+3. Otherwise, call the native PPTX/presentation capability and author the
+   visual there.
+4. If no permitted path is available, preserve the approved page outline and
+   mark rendering as blocked or unverified.
+
+Keep the editable PPTX as the source when it is used, even when Inkscape MCP or
+GIMP MCP contributed during design preparation. Export a PDF by default; export
+an image only when explicitly requested. Do not hand off PPTX as the final
+deliverable unless the user explicitly asks for it. Do not switch to a web
+design editor, generic image generator, or unapproved design integration.
 
 - `brand-guidelines`: apply and audit the approved identity tokens, fonts,
   assets, provenance, accessibility constraints, and usage restrictions before
@@ -86,8 +128,8 @@ its runtime capability is available.
   unverified checks separately.
 
 The existing `copywriting` and `humanizer` routing remains conditional and
-limited to eligible prose. Do not route this workflow to external design
-editors; the local editable PPTX remains the canonical authoring path.
+limited to eligible prose. These editorial capabilities do not authorize any
+additional design tool or external mutation.
 
 ## Priority when instructions conflict
 
@@ -131,7 +173,10 @@ For the Ahsan system:
   citations, screenshots, or identity details.
 - Do not change the post thesis simply to fit a template.
 - Do not publish, schedule, or claim LinkedIn acceptance.
-- Use the local editable presentation path for the final source.
+- Use the local editable presentation path for the source when presentation
+  authoring is selected.
+- Default final output is a PDF. Produce a PNG/JPG image only when explicitly
+  requested; do not make PPTX the final handoff by default.
 - Keep authored text, rules, shapes, connectors, diagram nodes, bars, and panels
   native/editable whenever the presentation capability supports it.
 - A supplied screenshot/photo may remain raster content inside a designated
@@ -263,24 +308,29 @@ failed or unverified. Do not claim checks that were not performed.
 
 ### 8. Save final files
 
-Save a new editable PPTX revision and export the matching PDF. Do not silently
-overwrite an existing source. Record the source path, export path, selected
-canonical references, page count, dimensions, font fallbacks, QA state, and any
-remaining deviation.
+Save a new editable PPTX source revision when presentation authoring is used,
+then export the matching PDF. Export a PNG/JPG instead only when explicitly
+requested. Do not silently overwrite an existing source. Record the source
+path, final export path, selected canonical references, page count, dimensions,
+font fallbacks, QA state, and any remaining deviation.
 
 ## Workspace integration
 
 When the shared Content Library / Visual Assets workflow is actually available:
 
 - read the exact approved Content Library source/hash;
-- generate and QA the local PPTX + PDF first;
+- generate and QA the local editable source plus the final PDF or requested
+  image first;
 - before any Drive or Sheet mutation, identify the exact selected folder,
   workbook, and intended asset-row changes, then confirm that the user has
   authorized that target and operation;
-- upload both files to the selected Drive visual folder;
-- create separate Visual Assets entries for `editable-source` and
-  `linkedin-pdf`;
-- use the verified PDF Drive link as `Primary Visual Link`;
+- upload the final PDF, or the requested image, to the selected Drive visual
+  folder;
+- upload the editable PPTX source only when the user explicitly requests source
+  archival or the selected workspace contract requires it;
+- create a `linkedin-pdf` or requested-image Visual Assets entry, plus an
+  `editable-source` entry only when the PPTX source is uploaded;
+- use the verified PDF or image Drive link as `Primary Visual Link`;
 - re-read Drive metadata and Sheet rows before marking the visual ready.
 
 If Drive/Sheet access is unavailable, keep the local files as valid unsynced
@@ -315,6 +365,6 @@ Supporting references:
 ## Completion report
 
 Report the source used, `none/image/document` decision, selected canonical
-reference files, final PPTX/PDF paths, QA state, any unverified checks, and
-sync/approval state when workspace integration was used. Do not publish or
-schedule.
+reference files, editable source path when present, final PDF or requested
+image path, QA state, any unverified checks, and sync/approval state when
+workspace integration was used. Do not publish or schedule.
