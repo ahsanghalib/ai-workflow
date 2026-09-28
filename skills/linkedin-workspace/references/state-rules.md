@@ -2,11 +2,15 @@
 
 ## Content
 
-`draft -> needs_review -> approved -> queued -> scheduled/posted`
+`draft -> needs_review -> approved -> ready_for_manual_post -> scheduled -> posted`
+
+The user may also move directly from `ready_for_manual_post` to `posted` by
+confirming publication or supplying the live URL.
 
 The operational fields are separate; do not collapse them into one status.
 Approval describes content approval, visual status describes the asset, and
-publish status describes LinkedIn publication.
+publish status describes the manual-publication handoff and user-supplied
+publication result.
 
 ## Relationship
 
@@ -14,6 +18,17 @@ publish status describes LinkedIn publication.
 
 Stages may be skipped only when the actual interaction supports it. Do not call
 someone `engaged` merely because the user commented on their post.
+
+## Hiring posts
+
+Keep one factual row per qualifying hiring post in the `Hiring Posts` worksheet.
+Every row must retain the exact `Post URL`, linked `Prospect ID`, publication
+context, source visibility, and linked `Interaction ID` when an action is
+prepared. Do not maintain an automated hiring-post workflow status. The
+`Application Status` field is manual: leave it blank until the user sets
+`applied` or `not_applied`; never infer or change it from a comment, connection,
+or application URL. A hiring post is not proof of budget, authority, service
+need, candidacy, or application submission.
 
 ## Prospect enrichment and contactability
 
@@ -41,18 +56,19 @@ Record the concrete commercial signal that justifies each transition.
   exact draft and its prospect/post context are persisted in the `Interactions`
   row and the user approval is still pending. It does not mean approved,
   submitted, or verified.
-- For post publication and scheduling, `pending_approval` means the exact
-  caption snapshot, content hash, target action, and required asset state are
-  persisted in the `Publishing Queue` row and the external-action approval is
-  still pending.
 - `submitted` means an action was attempted.
 - `verified` means the live LinkedIn UI visibly confirms the exact action.
 - `pending_verification` means an action was attempted but the result is
   ambiguous. Do not retry automatically or treat it as completed.
-- For publication, keep the Content Library content state at `queued` until the
-  corresponding Publishing Queue row is resolved from fresh visible evidence.
-- `scheduled` means LinkedIn shows the post in its scheduled state with the
-  expected content/time.
-- `posted` means the live post is visible and its URL was captured.
+- For an owned post, `ready_for_manual_post` means the exact approved content
+  and any required approved visual are synchronized in `Content Library`; it
+  does not mean the post is live.
+- `scheduled` means the user explicitly confirmed that LinkedIn accepted the
+  schedule. A URL is not required; record `Scheduled For` when the user supplies
+  it and leave `Post URL` blank otherwise.
+- `posted` means the user supplied the exact LinkedIn URL or explicitly confirmed
+  publication, and the workspace recorded that evidence in the Content Library.
+- The workspace never schedules the post or claims live UI verification.
 
-Never infer external completion from local files or Sheet rows.
+Never infer publication from local files, approval, visual readiness, or Sheet
+rows alone. A user-supplied URL or explicit user confirmation is required.

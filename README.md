@@ -948,15 +948,17 @@ refer to when asking an assistant to use one explicitly.
 - `linkedin-visual` — decide whether an approved post needs a visual, then
   structure a source-grounded image or carousel. Copywriting shapes the
   narrative before design; Canva is the preferred authoring adapter when it is
-  available, with a local renderer as fallback.
-- `linkedin-publish` — publish or schedule only approved LinkedIn content and
-  verify the resulting state.
-- `linkedin-engagement` — find relevant posts or people and prepare selective,
-  individually approved comments or initial connection requests.
+  available, with another approved design capability as fallback.
+- `linkedin-comments` — find strong, non-hiring posts and prepare individually
+  approved comments.
+- `linkedin-hiring` — find hiring/recruiting posts from the previous 48 hours,
+  enrich the hiring contact and company, and prepare individually approved
+  comments or connection requests.
 - `linkedin-lead-followup` — review warm prospects and draft the next
   relationship or commercial follow-up action.
-- `linkedin-workspace` — maintain the shared LinkedIn workspace across local
-  Markdown and connected Drive or Sheets state.
+- `linkedin-workspace` — maintain the shared LinkedIn workspace, including
+  manual-publication links and status, across local Markdown and connected Drive
+  or Sheets state.
 
 Skills do not grant permission by themselves. The active runtime still decides
 which tools are available, and the user still controls approvals and external
@@ -976,8 +978,9 @@ Archives are written to the ignored `zip/` directory. The current bundle
 contains:
 
 `brainstorming`, `brand-guidelines`, `copywriting`, `founder-decision`,
-`humanizer`, `linkedin-engagement`, `linkedin-lead-followup`, `linkedin-post`,
-`linkedin-publish`, `linkedin-visual`, `linkedin-workspace`,
+`humanizer`, `linkedin-comments`, `linkedin-hiring`,
+`linkedin-lead-followup`, `linkedin-post`, `linkedin-visual`,
+`linkedin-workspace`,
 `product-discovery`, `research-brief`, and `social-content`.
 
 Repository-control, terminal, Codex-runtime, and local-browser workflows are

@@ -20,7 +20,8 @@ is not to force a sales CTA into every post.
 ## Boundaries
 
 - Do not publish, schedule, comment, message, or access an authenticated social
-  account. Hand approved content to `linkedin-publish`.
+  account. This skill ends with an approved, synchronized draft for the user to
+  publish manually.
 - Do not create visual assets. Hand approved content to `linkedin-visual`.
 - Do not invent personal experience, customers, metrics, outcomes, partnerships,
   shipped work, credentials, or opinions.
@@ -45,15 +46,14 @@ When `linkedin-workspace` and its shared Sheet are available:
 
 For a new or revised post, persist the exact draft in the selected workspace
 before asking for content approval. The verified `Content Library` row is the
-handoff contract for visual production and publishing; do not hand off a post
-whose Sheet write failed or has an ambiguous result.
+handoff contract for visual production and manual-publication tracking; do not
+hand off a post whose Sheet write failed or has an ambiguous result.
 
 Remote Sheet/Drive writes require an authorized capability and a user-selected
 workspace target. If those writes are unavailable or not authorized, preserve
-the draft locally and report the unsynchronized state. Do not request approval
-for publication or hand the post to an external-action skill until the required
-workspace row is persisted and verified, unless the user explicitly selects a
-local/session-only workflow.
+the draft locally and report the unsynchronized state. Do not mark the post
+ready for manual publication until the required workspace row is persisted and
+verified.
 
 When cloud state is unavailable, use the selected local workspace and the legacy
 `posts.md`/post-file structure. Do not block drafting solely because Google Drive
@@ -134,9 +134,11 @@ timing rules, or algorithm claims from a template or creator case study.
     claims. Ask for approval of that exact revision. If declined, persist
     `Approval=declined` and do not hand off the post.
 12. After explicit approval, update and verify `Approval=approved` for the same
-    revision/hash. Then hand off to `linkedin-visual` or `linkedin-publish` as
-    appropriate. Each downstream skill owns its own asset or external-action
-    persistence checkpoint.
+    revision/hash. If the post needs a visual, hand it to `linkedin-visual`; if
+    it does not, set and verify `Publish Status=ready_for_manual_post`. Do not
+    publish or schedule it. After the user manually publishes or schedules it,
+    the user can confirm the outcome or provide the exact LinkedIn URL to
+    `linkedin-workspace` for reconciliation.
 
 ## Existing-corpus review mode
 
@@ -158,4 +160,4 @@ For a large imported corpus such as the user's existing ~60 Markdown posts:
 
 Report created/revised Content IDs, files/Drive links changed, approval state,
 claims verified or still unresolved, likely duplicate/rejected candidates, and
-whether each approved post is ready for visual assessment or publishing.
+whether each approved post is ready for visual assessment or manual publication.

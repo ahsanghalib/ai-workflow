@@ -28,35 +28,27 @@ One row per post/content item.
 | Visual Status | `not_assessed`, `not_needed`, `planned`, `in_progress`, `ready`, `failed` |
 | Visual Type | `none`, `image`, `document` |
 | Primary Visual Link | Drive link |
-| Publish Status | `not_queued`, `queued`, `scheduled`, `posted`, `failed`, `skipped` |
+| Publish Status | `not_ready`, `ready_for_manual_post`, `scheduled`, `posted`, `not_applicable` |
+| Post URL | Exact LinkedIn post URL supplied by the user after manual publication |
+| Scheduled For | Schedule time confirmed by the user, when known |
+| Published At | Publication time supplied by the user, when known |
+| Publication Evidence | `not_provided`, `user_confirmed_scheduled`, `user_supplied_url`, `user_confirmed_posted` |
 | Priority | Optional operational priority |
 | Sync State | `synced`, `local_newer`, `drive_newer`, `conflict`, `not_synced` |
 | Created At | Timestamp |
 | Updated At | Timestamp |
 | Notes | Free text |
 
-## Publishing Queue
+## Manual publication and scheduling tracking
 
-One row per planned publication attempt.
-
-| Column | Purpose |
-|---|---|
-| Queue ID | Stable queue record ID |
-| Content ID | Link to Content Library |
-| Planned Date | Local target date |
-| Planned Time | Local target time |
-| Timezone | Explicit timezone |
-| Mode | `publish_now` or `schedule` |
-| Caption Snapshot | Exact text to submit |
-| Content Hash | Hash of caption snapshot |
-| Asset Link | Approved Drive asset |
-| Status | `queued`, `pending_approval`, `pending_verification`, `scheduled`, `posted`, `failed`, `skipped` |
-| Scheduled For | Verified LinkedIn schedule, when applicable |
-| Published At | Verified publication time |
-| Post URL | Live LinkedIn URL |
-| Last Verified | Verification timestamp |
-| Failure Reason | Exact blocker/failure |
-| Notes | Free text |
+Owned posts do not use a separate queue tab. After approval and any required
+visual approval, set `Content Library.Publish Status=ready_for_manual_post`.
+The user publishes or schedules independently. If the user confirms a schedule,
+record `Publish Status=scheduled` and `Publication Evidence=user_confirmed_scheduled`;
+leave `Post URL` blank because LinkedIn may not provide a scheduled-post URL. If
+the user later supplies the live LinkedIn URL, record `Post URL`, set
+`Publish Status=posted`, and use `Publication Evidence=user_supplied_url`. The
+workspace must not claim live UI verification or schedule a post itself.
 
 ## Visual Assets
 
@@ -98,7 +90,8 @@ One row per planned publication attempt.
 | Contact Routes | Verified available routes such as comment, connection, message, email, phone, website, or contact form |
 | Contactability Status | `multiple`, `linkedin_only`, `email_available`, `phone_available`, `company_route`, `no_verified_route`, or `blocked` |
 | Last Contactability Checked | Timestamp/date of the latest route check |
-| Prospect Type | `buyer`, `referrer`, `partner`, `peer`, `other` |
+| Prospect Type | `company` or `individual` |
+| Relationship Context | Free-text context such as `buyer`, `hiring_contact`, `referrer`, `partner`, `peer`, `candidate`, or another evidence-backed role; not a prospect-type enum |
 | Why Relevant | Concrete reason |
 | First Seen | Timestamp/date |
 | Last Interaction | Timestamp/date |
@@ -130,6 +123,41 @@ row concise and retain field-level provenance here.
 | Confidence | `high`, `medium`, or `low` |
 | Status | `observed`, `conflicting`, or `not_found` |
 | Notes | Scope, caveat, or reason a value was not used |
+
+## Hiring Posts
+
+One row per qualifying hiring or recruiting post. This is a dedicated worksheet
+in the shared workbook, linked to the enriched company or individual prospect
+in `Prospects` and the exact response in `Interactions`.
+
+| Column | Purpose |
+|---|---|
+| Hiring Post ID | Stable ID such as `HIR-0001`; never renumber |
+| Prospect ID | Linked company or individual prospect |
+| Post URL | Exact LinkedIn hiring-post URL |
+| Author Name | Name shown on the post |
+| Author Profile URL | LinkedIn profile URL when available |
+| Company | Company named or shown in the post |
+| Company URL | Official company URL when known |
+| Company LinkedIn URL | Official company LinkedIn page when available |
+| Role or Team | Role, team, or hiring need stated in the post |
+| Hiring Post Type | `job_opening`, `candidate_request`, `referral_request`, `recruiting_announcement`, `career_update`, `interview`, or `other` |
+| Published At | Published timestamp when visible |
+| Captured At | Timestamp when the post was reviewed |
+| Location | Public role/location information |
+| Work Mode | `onsite`, `hybrid`, `remote`, or `not_stated` |
+| Employment Type | Employment type when stated |
+| Seniority | Seniority when stated |
+| Skills or Keywords | Relevant skills or terms stated in the post |
+| Application or Referral URL | Official route shown in the post; do not imply submission |
+| Post Summary | Short factual summary |
+| Why Relevant | Concrete fit or relationship reason |
+| Application Status | Manual field; the skill must not set or change it; the user may set `applied` or `not_applied` |
+| Interaction ID | Linked exact comment or connection-request record |
+| External Action URL | Verified LinkedIn action URL when available |
+| Last Verified | Timestamp of the latest UI/state verification |
+| Source Visibility | `public` or `authenticated_visible` |
+| Notes | Conflicts, caveats, and reconciliation notes |
 
 ## Interactions
 

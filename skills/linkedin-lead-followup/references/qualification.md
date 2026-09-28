@@ -2,13 +2,18 @@
 
 Qualification is evidence-based, not score-based.
 
-## Prospect type
+## Prospect kind and relationship context
 
-- `buyer` — person plausibly involved in buying/commissioning relevant work.
-- `referrer` — person likely to introduce relevant buyers or opportunities.
-- `partner` — agency/consultant/specialist with complementary delivery potential.
-- `peer` — useful professional relationship without current commercial evidence.
-- `other` — relevant but does not fit the above.
+The `Prospect Type` field describes only the record kind:
+
+- `company`
+- `individual`
+
+Do not encode commercial or relationship roles in that field. Record flexible,
+evidence-backed context in `Relationship Context`, `Why Relevant`, or `Notes`,
+such as `buyer`, `hiring_contact`, `referrer`, `partner`, `peer`, `candidate`,
+or another role that fits the observed situation. These labels are descriptive,
+not proof of authority, intent, budget, or qualification.
 
 ## Commercial evidence
 

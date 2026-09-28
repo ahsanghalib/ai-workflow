@@ -6,6 +6,8 @@ description: >-
   commercial opportunities through the shared pipeline. Not for cold bulk
   outreach, generic prospect scraping, or publishing posts. Uses `copywriting`
   then `humanizer` to clarify and naturalize an already-grounded message.
+  Require a verified Sheet interaction before sending; local state is for
+  review and drafting only.
 license: MIT
 ---
 
@@ -25,7 +27,9 @@ When a shared Sheet is selected, persist the exact follow-up draft in an
 `Interactions` row with `Status=pending_approval` and re-read it before asking
 for approval. If that write fails or is ambiguous, do not ask for approval or
 send the message; retain the local draft for reconciliation by stable IDs.
-Use a session-only workflow only when the user explicitly chooses it.
+Use local/session state for read-only review and drafting when no authorized
+Sheet is available, but never send a follow-up message without a verified
+Interaction row in the selected workspace.
 
 Read:
 
@@ -39,8 +43,9 @@ Read:
   a job title alone.
 - Do not invent familiarity, prior conversations, referrals, client work,
   availability, outcomes, or technical claims.
-- Do not draft or send an initial connection request here; hand that action to
-  `linkedin-engagement`, which owns discovery and initial connection requests.
+- Do not draft or send an initial connection request here. Connection requests
+  are outside warm follow-up unless the user selects a separate approved
+  workflow.
 - Do not send a message without approval for that exact action.
 - Do not repeatedly follow up with someone who has not responded unless the user
   explicitly asks and the follow-up remains professionally reasonable.
@@ -53,7 +58,6 @@ Read:
 3. Update factual relationship state only from observed evidence.
 4. Choose the least-salesy useful next action:
    - public reply;
-   - handoff to `linkedin-engagement` for an initial connection request;
    - no action / continue observing;
    - DM when the relationship/context supports it;
    - qualification question when a real problem/project is already being discussed;

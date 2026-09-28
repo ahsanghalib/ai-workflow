@@ -47,10 +47,10 @@ web_chat_skills=(
 	copywriting
 	founder-decision
 	humanizer
-	linkedin-engagement
+	linkedin-comments
+	linkedin-hiring
 	linkedin-lead-followup
 	linkedin-post
-	linkedin-publish
 	linkedin-visual
 	linkedin-workspace
 	product-discovery

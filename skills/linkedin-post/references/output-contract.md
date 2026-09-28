@@ -82,5 +82,29 @@ A draft/reviewed file is not publishable. Only explicit approval of the exact
 revision changes `Approval` to `approved` / file status to
 `APPROVED-UNPUBLISHED`.
 
-Do not infer publication from approval, visual generation, queue creation, or
-file upload. Publication is owned and verified by `linkedin-publish`.
+Do not infer publication from approval, visual generation, or file upload. The
+user publishes or schedules manually. Record the outcome only when the user
+supplies the exact LinkedIn post URL or explicitly confirms scheduling or
+publication through the workspace tracking workflow.
+
+## Manual publication and scheduling handoff
+
+After the exact post is approved and any required visual is ready:
+
+- set `Publish Status=ready_for_manual_post` in `Content Library`;
+- leave `Post URL`, `Scheduled For`, and `Published At` blank until the user
+  reports the outcome;
+- when the user confirms scheduling, set `Publish Status=scheduled`, record
+  `Publication Evidence=user_confirmed_scheduled`, optionally record
+  `Scheduled For`, and leave `Post URL` blank;
+- when the user supplies the exact LinkedIn URL, update `Post URL`, set
+  `Publish Status=posted`, and record `Publication Evidence=user_supplied_url`;
+- when the user confirms publication without a URL, set `Publish Status=posted`
+  and record `Publication Evidence=user_confirmed_posted` while leaving `Post URL`
+  blank;
+- record `Published At` only when the user supplies the time or it is otherwise
+  explicitly known;
+- if the outcome is ambiguous or a supplied URL cannot be tied to the Content ID,
+  keep the row at `ready_for_manual_post` and ask for clarification.
+
+No skill in this workflow opens LinkedIn to publish or schedule the user's post.

@@ -26,7 +26,8 @@ Extract these fields from the current post format when available:
 - visual-generation status and links.
 
 If a field is missing, leave it blank or mark it for review. Do not infer a
-personal claim or publication status.
+personal claim or publication status. A `posted` status requires the user's
+exact LinkedIn URL or explicit publication confirmation.
 
 ## Stable IDs
 
@@ -47,4 +48,5 @@ creating a second row. Similar topics are not duplicates by themselves.
 
 After migration, set clearly unfinished/draft posts to `Approval=needs_review`.
 Preserve explicitly approved posts as `approved` when the source file states that
-status. Never mark a post `posted` unless publication is independently known.
+status. Never mark a post `posted` unless the user supplies the exact LinkedIn
+URL or explicitly confirms publication.
