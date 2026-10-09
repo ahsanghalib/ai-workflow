@@ -117,6 +117,21 @@ For charts, dashboards, and data-heavy interfaces, define legibility, non-color
 distinctions, empty and loading states, and the smallest useful responsive
 behavior instead of prescribing a chart type without context.
 
+Before creating new CSS for a repeated visual role, audit the existing anatomy,
+tokens, classes, states, and responsive behavior. Repeated roles with the same
+structure should use one shared component or class, with a small named variant
+or optional slot only when the difference changes the role. Keep typography
+roles, line-height, margins, section rhythm, and content gutters in shared
+tokens or classes; use semantic light/dark token pairs for surfaces,
+illustrations, sticky headers, and their content. Remove superseded rules
+instead of layering conflicting overrides or styling by section ID. Read
+[`references/component-consistency.md`](references/component-consistency.md)
+when auditing or extending repeated UI.
+For the evidence-backed first-pass visual, responsive, motion, and usability
+scorecard, read
+[`references/ui-review-principles.md`](references/ui-review-principles.md)
+before proposing a system or handing off an audit.
+
 ### 5. Check platform and stack fit
 
 Inspect the repository's actual stack and existing component library. Adapt

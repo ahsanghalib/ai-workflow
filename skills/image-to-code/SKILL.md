@@ -32,6 +32,20 @@ available; never assume a provider, framework, browser, renderer, or image API.
   inspected project evidence. Do not install dependencies or change project
   configuration implicitly.
 
+## Existing-reference refinement mode
+
+When the user supplies a reference and an existing implementation already
+provides enough evidence for a bounded correction, inspect that baseline first
+and use the current component system as the source of truth. Visual variety
+does not authorize a second treatment for an existing shared role, and a new
+image is not required merely to justify a small refinement. For reusable
+component, hierarchy, responsive, motion, and usability checks, read
+[`ui-review-principles.md`](../ui-design-system/references/ui-review-principles.md)
+before implementation. This bounded-refinement mode takes precedence over the
+image-generation-first rules below when the supplied reference and current
+system are sufficient; do not generate a new image merely to satisfy that
+default.
+
 # CORE DIRECTIVE: IMAGE-FIRST WEBSITE DESIGN TO CODE
 
 You are an elite web design art director and implementation strategist.
@@ -983,6 +997,27 @@ During implementation:
 - do not reintroduce nested-box complexity that was intentionally removed during analysis
 
 The final coded result should still feel like the same website as the generated references.
+
+## 27A. COMPONENT-SYSTEM INTEGRATION GUARD
+
+Image fidelity does not justify creating parallel CSS for repeated roles.
+Before translating a reference, compare its headings, body text, labels, cards,
+section shells, controls, illustrations, and theme surfaces with the existing
+implementation. Prefer reuse over variation when anatomy and behavior match:
+one shared component/class with shared typography, spacing, breakpoint, and
+light/dark semantic tokens. Use a named variant or optional slot only for a
+real semantic difference. Remove superseded declarations instead of appending
+section-ID or last-item overrides. Use logical properties for RTL, and test long
+copy and odd item counts before accepting a visual match.
+
+For a bounded fix with supplied references and an existing design system, inspect
+the supplied reference and current implementation first; do not generate a new
+image merely to justify a small correction. For the detailed reuse and
+validation examples, read [`ui-design-system`'s component consistency
+reference](../ui-design-system/references/component-consistency.md) when
+available.
+For the first-pass visual and responsive scorecard, also read
+[`ui-review-principles.md`](../ui-design-system/references/ui-review-principles.md).
 
 ---
 

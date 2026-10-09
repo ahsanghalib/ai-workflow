@@ -103,6 +103,19 @@ Describe:
 If the project has no visual system, offer restrained alternatives and wait for
 approval before creating a new direction or signature visual treatment.
 
+Before introducing a page-specific style, audit the repeated roles it shares
+with the rest of the product. Reuse the existing heading, body, label, card,
+section-shell, control, and theme-token contracts when anatomy and behavior
+match; use a named variant or optional slot only for a real difference. Keep
+responsive breakpoints, section rhythm, gutters, long-copy behavior, and RTL
+layout rules consistent across those shared roles. For the detailed reuse and
+acceptance checklist, read [`ui-design-system`'s component consistency
+reference](../ui-design-system/references/component-consistency.md) when that
+skill is available.
+For the agent-owned visual and usability review loop, read
+[`ui-review-principles.md`](../ui-design-system/references/ui-review-principles.md)
+before writing the brief or declaring the layout ready for implementation.
+
 ### 3. Specify interaction and state contracts
 
 For every important interaction, define loading, success, empty, error,

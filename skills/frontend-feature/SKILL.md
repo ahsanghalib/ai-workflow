@@ -73,6 +73,17 @@ dependencies or tooling without approval.
    the server; never treat hidden controls or browser state as authorization.
 7. Reuse shared UI primitives; keep domain workflows out of a generic shared UI
    package.
+   Before adding styles, audit repeated visual roles in the affected feature.
+   Identical anatomy and behavior should use the same component/class and
+   responsive tokens; add a named variant or optional slot only for a real
+   semantic difference. Remove superseded declarations instead of stacking
+   section-specific overrides. Keep light/dark semantic pairs, shared
+   typography and spacing roles, long-copy behavior, and RTL logical layout
+   consistent with the existing system. Use the
+   [`ui-design-system` component consistency reference](../ui-design-system/references/component-consistency.md)
+   when available. Use the same skill's
+   [`ui-review-principles.md`](../ui-design-system/references/ui-review-principles.md)
+   for the pre-edit design read and agent-owned responsive/usability scorecard.
 8. Use `frontend-design` for genuinely new page, layout, responsive, interaction,
    or accessibility design work, and `ui-design-system` for product-wide visual
    system changes. Do not invent a parallel design system in a feature.
