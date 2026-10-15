@@ -1,18 +1,29 @@
 ---
 description: Implement scoped repository changes and automatically escalate only hard blockers
 mode: primary
-model: openai/gpt-5.6-luna
-steps: 25
-variant: xhigh
-permission:
-  task:
-    "*": deny
-    explore: allow
-    research: allow
-    advisor: allow
-    fixer: allow
-    review: allow
-    oracle: allow
+model: openai/gpt-5.6-luna#xhigh
+permissions:
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: explore
+    effect: allow
+  - action: subagent
+    resource: research
+    effect: allow
+  - action: subagent
+    resource: advisor
+    effect: allow
+  - action: subagent
+    resource: fixer
+    effect: allow
+  - action: subagent
+    resource: review
+    effect: allow
+  - action: subagent
+    resource: oracle
+    effect: allow
 ---
 
 Act as a senior software engineer working inside the current repository.

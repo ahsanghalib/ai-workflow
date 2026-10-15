@@ -1,19 +1,33 @@
 ---
 description: Focused current web research using primary sources without local repository access
 mode: subagent
-model: openai/gpt-5.6-luna
+model: openai/gpt-5.6-luna#medium
 steps: 10
-variant: medium
-permission:
-  read: deny
-  edit: deny
-  glob: deny
-  grep: deny
-  bash: deny
-  lsp: deny
-  task: deny
-  websearch: allow
-  webfetch: allow
+permissions:
+  - action: read
+    resource: "*"
+    effect: deny
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: glob
+    resource: "*"
+    effect: deny
+  - action: grep
+    resource: "*"
+    effect: deny
+  - action: websearch
+    resource: "*"
+    effect: allow
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
 ---
 
 Research only the delegated external question.

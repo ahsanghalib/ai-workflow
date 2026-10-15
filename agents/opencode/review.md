@@ -1,24 +1,48 @@
 ---
 description: Read-only focused code review for proven correctness and regression issues
 mode: subagent
-model: openai/gpt-5.6-terra
+model: openai/gpt-5.6-terra#high
 steps: 15
-variant: high
-permission:
-  edit: deny
-  glob: allow
-  grep: allow
-  task: deny
-  websearch: deny
-  webfetch: deny
-  bash:
-    "*": deny
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git show*": allow
-    "rg *": allow
-    "fd *": allow
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: glob
+    resource: "*"
+    effect: allow
+  - action: grep
+    resource: "*"
+    effect: allow
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "git status*"
+    effect: allow
+  - action: shell
+    resource: "git diff*"
+    effect: allow
+  - action: shell
+    resource: "git log*"
+    effect: allow
+  - action: shell
+    resource: "git show*"
+    effect: allow
+  - action: shell
+    resource: "rg *"
+    effect: allow
+  - action: shell
+    resource: "fd *"
+    effect: allow
 ---
 
 Review only the requested change. Do not modify files.

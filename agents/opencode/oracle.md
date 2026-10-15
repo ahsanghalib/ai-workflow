@@ -1,25 +1,48 @@
 ---
 description: Independent read-only GPT escalation for unresolved hard problems and high-risk second opinions
 mode: all
-model: openai/gpt-5.6-sol
+model: openai/gpt-5.6-sol#low
 steps: 12
-variant: low
-permission:
-  read: allow
-  edit: deny
-  glob: allow
-  grep: allow
-  task: deny
-  websearch: deny
-  webfetch: deny
-  bash:
-    "*": deny
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git show*": allow
-    "rg *": allow
-    "fd *": allow
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: glob
+    resource: "*"
+    effect: allow
+  - action: grep
+    resource: "*"
+    effect: allow
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "git status*"
+    effect: allow
+  - action: shell
+    resource: "git diff*"
+    effect: allow
+  - action: shell
+    resource: "git log*"
+    effect: allow
+  - action: shell
+    resource: "git show*"
+    effect: allow
+  - action: shell
+    resource: "rg *"
+    effect: allow
+  - action: shell
+    resource: "fd *"
+    effect: allow
 ---
 
 Act as an independent senior software-engineering specialist brought in only for a difficult blocker or a high-risk second opinion.

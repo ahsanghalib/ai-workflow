@@ -1,16 +1,24 @@
 ---
 description: Analyze architecture and make technical decisions without modifying files
 mode: all
-model: openai/gpt-5.6-terra
+model: openai/gpt-5.6-terra#high
 steps: 10
-variant: high
-permission:
-  edit: deny
-  bash: deny
-  task:
-    "*": deny
-    explore: allow
-    research: allow
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: explore
+    effect: allow
+  - action: subagent
+    resource: research
+    effect: allow
 ---
 
 Act as a principal software architect and technical advisor for this repository.

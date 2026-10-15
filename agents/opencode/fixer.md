@@ -2,14 +2,18 @@
 description: Resolve a narrowly scoped hard implementation blocker delegated by engineer
 mode: subagent
 hidden: true
-model: openai/gpt-5.6-terra
+model: openai/gpt-5.6-terra#high
 steps: 15
-variant: high
-permission:
-  task:
-    "*": deny
-  websearch: deny
-  webfetch: deny
+permissions:
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: deny
 ---
 
 Resolve only the hard blocker delegated by `engineer`.
