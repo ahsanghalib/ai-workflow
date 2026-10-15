@@ -4,10 +4,12 @@
 
 This public repository contains reusable AI workflow configuration. `skills/`
 holds Markdown skill entrypoints and their `references/`; `agents/codex/` and
-`agents/opencode/` contain the two runtimes' agent profiles. `codex/` stores
-Codex configuration. `opencode/` contains OpenCode JSON configuration, model
+`agents/opencode/` contain the Codex and OpenCode agent profiles, while
+`pi/agents/` contains Pi-native agent presets. `codex/` stores Codex
+configuration. `opencode/` contains OpenCode JSON configuration, model
 metadata, quota/TUI settings, placeholder runtime directories, and the
-TypeScript notification plugin. The executable helper scripts live in
+TypeScript notification plugin. `pi/` contains Pi settings and extensions for
+agent switching and permission gates. The executable helper scripts live in
 `scripts/` and `bin/`, and `scripts/validate-skills.sh` is the skill validator.
 The content and client-acquisition workflows are centered on `copywriting`,
 `social-content`, and the six supported `linkedin-*` skills. Keep personal paths,
@@ -23,11 +25,13 @@ but use standard `AGENTS.md`
 OpenCode uses `opencode/opencode.json`, `opencode/opencode-models.json`, and
 the Markdown profiles in `agents/opencode/`. Codex uses `codex/config.toml` and
 the TOML profiles in `agents/codex/`; its `config_file` entries expect those
-profiles under the Codex configuration directory. When changing agent
-behavior, update both runtime profiles when the behavior is shared, while
-preserving each runtime's native syntax. Treat marketplace, plugin, MCP, and
-desktop paths in Codex configuration as environment-specific and do not add
-machine-local values to public changes.
+profiles under the Codex configuration directory. Pi uses `pi/settings.json`,
+the Markdown profiles in `pi/agents/`, and the TypeScript extensions in
+`pi/extensions/`; those profiles are selected as Pi agent presets rather than
+spawned as child agents. When changing shared agent behavior, update each
+runtime's native profile representation while preserving runtime-specific
+syntax. Treat marketplace, plugin, MCP, desktop, and model paths as
+environment-specific and do not add machine-local values to public changes.
 
 ## Shared Skills
 
