@@ -47,37 +47,19 @@ for forbidden_route in \
   fi
 done
 
-for documentation_contract in \
-  'Repository-control bootstrap and reconciliation' \
-  'One substantive unit-of-work lifecycle' \
-  'Behavioral contract plus mutable execution record' \
-  'Contract-quality review and readiness, not approval' \
-  'Conditional implementation architecture design' \
-  'Conditional non-trivial persistence design' \
-  'One bounded task from an approved or in-progress SPEC' \
-  'Optional tracking item' \
-  'Optional dashboard' \
-  'Final completion gate'; do
-  grep -Fq "$documentation_contract" "$readme" ||
-    fail "README lost workflow ownership contract: $documentation_contract"
-done
-grep -Fq 'The normal workflow is routed by need' "$readme" ||
-  fail 'README implies every skill must run for every change'
-if grep -Fq '#### Project control and planning' "$readme"; then
-  fail 'README retained stale project-control planning heading'
-fi
-for placement_contract in \
-  'Temporary current work state' \
-  'Feature behavior, requirements, and acceptance' \
-  'Feature-specific technical or data design' \
-  'Feature tasks, validation, and implementation notes' \
-  'Cross-feature engineering convention' \
-  'Cross-feature architecture' \
-  'Agent/runtime memory' \
-  'Structural truth' \
-  'Do not duplicate the same fact'; do
-  grep -Fq "$placement_contract" "$readme" ||
-    fail "README lost knowledge-placement contract: $placement_contract"
+grep -Fq '### Shared skills' "$readme" ||
+  fail 'README lacks the shared-skill catalog section'
+grep -Fq '| Project and change lifecycle | `project-init`, `spec-workflow`, `spec-review`, `implement-next`' "$readme" ||
+  fail 'README does not route project lifecycle work through the documented skills'
+grep -Fq 'Skills provide workflows and boundaries; they do not grant tool access or' "$readme" ||
+  fail 'README omits the shared-skill capability boundary'
+grep -Fq '### Global instructions and project guidance' "$readme" ||
+  fail 'README lacks the global and project guidance section'
+for guidance_link in \
+  '[`GLOBAL_AGENTS.md`](GLOBAL_AGENTS.md)' \
+  '[`AGENTS.md`](AGENTS.md)'; do
+  grep -Fq "$guidance_link" "$readme" ||
+    fail "README lacks the expected guidance link: $guidance_link"
 done
 
 grep -Fq 'Do not create a separate planning document' "$spec_workflow" ||
