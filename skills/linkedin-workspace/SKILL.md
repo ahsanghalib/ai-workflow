@@ -146,6 +146,8 @@ For an existing Markdown corpus, especially the user's current LinkedIn posts:
 
 When a post changes after migration:
 
+- apply the revision invalidation rules in
+  [state-rules.md](references/state-rules.md) before changing the snapshot;
 - increment `Revision`;
 - update the exact Sheet `Final Post Text` snapshot;
 - recompute `Content Hash`;

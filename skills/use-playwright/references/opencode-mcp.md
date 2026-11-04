@@ -23,8 +23,8 @@ to another harness or infer that another provider accepts the same schema.
    the collision, show the required migration, and stop for explicit user
    direction.
 5. Before creating Playwright configuration or an artifact directory, ensure the
-   root `.gitignore` contains the exact line `.playwright-mcp/`. If absent, append
-   only that line, show the change, and obtain normal edit approval. Verify the
+   root `.gitignore` contains the exact line `.playwright-mcp/`. If absent, propose
+   only that line and obtain normal edit approval before appending it. Verify the
    line exists before continuing. Before creating configuration or any artifact,
    verify the selected profile's non-existent sentinel path is effectively
    ignored. Run:
@@ -36,8 +36,9 @@ to another harness or infer that another provider accepts the same schema.
    Replace `<profile>` with `public` or `manual-auth`. If that command fails, do
    not write or enable a Playwright profile; report the ignore-rule conflict. Do
    not create a screenshot directory or sentinel file.
-6. Otherwise, create `.opencode/` when absent and merge the selected complete
-   local policy below into `.opencode/opencode.json`. Preserve unrelated keys and
+6. Otherwise, build a candidate merge of the selected complete local policy
+   below for `.opencode/opencode.json`; defer directory creation and final
+   writes until validation and approval in steps 8–9. Preserve unrelated keys and
    MCP servers. Disable the other Playwright profile in the same merge. The
    global configuration must not define Playwright MCP servers, Playwright tools,
    or Playwright permissions.

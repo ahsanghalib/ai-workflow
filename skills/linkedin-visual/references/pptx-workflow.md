@@ -104,3 +104,8 @@ Do not silently switch to a generic image generator or web template service.
 If presentation rendering or image inspection is unavailable, do not claim
 canonical-template fidelity or rendered-page QA passed. Keep the local source
 and mark those checks unverified.
+
+For Visual Assets rows, use `Type=document` with `Variant=linkedin-pdf`
+for PDFs and `Variant=editable-source` for PPTX sources. Use `Type=image`
+for image exports, with the requested format in `Variant`. These labels are
+variants, not additional values of the shared `Type` enum.

@@ -25,10 +25,12 @@ Once confirmed, do not re-ask during the same session.
 
 ## Research and evidence
 
-For factual or evidence-backed posts, search for current specific data such as
+Use supplied evidence first. When research is requested or approved, search
+for current specific data such as
 studies, field experiments, and reports. Prefer named institutions, sample
 sizes, and primary sources from the last 12 months when current evidence is
-needed. Collect three to five concrete statistics with URLs before writing.
+needed. Collect statistics only when the draft needs numeric claims; do not
+require a quota or replace adequate source material merely to add numbers.
 Record whether a finding is one study or a consensus and preserve sample-size,
 time-window, and methodology caveats. Never turn correlation into causation.
 If solid data is unavailable, say so and offer an argument-only post.
@@ -53,13 +55,13 @@ Use these channel targets:
 | Channel | Guidance |
 | --- | --- |
 | X | Observation, update, or question within 280 effective characters; URLs count as 23 characters; one source link; 3-6 specific hashtags. |
-| LinkedIn | 150-300 words, short paragraphs, professional lesson or grounded narrative, all sources, 3-6 hashtags. |
 | Reddit | Community-relevant context, transparent affiliation, useful contribution; never disguise promotion. |
 | Hacker News | Factual and technical; lead with what was made and why it may help. |
 | Product Hunt | Maker context, audience, problem, solution, and limitations; no manufactured proof. |
 | Blog/newsletter | Durable explanation with evidence, examples, and a precise takeaway. |
 
-Load `humanizer` after the structure is complete when available. Include with
+Apply a bounded `copywriting` pass for structure and clarity, then load
+`humanizer` when available. Include with
 each draft the supporting sources, claims needing approval, required
 disclosures, and wording that must not be presented as fact.
 
@@ -67,7 +69,8 @@ disclosures, and wording that must not be presented as fact.
 
 Before presenting drafts:
 
-- Self-rate each draft out of 10 and revise anything below 8.
+- Check source fidelity, channel fit, clarity, and disclosure; revise concrete
+  failures rather than treating a self-assigned score as validation.
 - Check whether a skimmer could misread a statistic as undermining the
   author's credibility, then reframe without changing the data.
 - Present all drafts for review and iterate on feedback.
@@ -97,7 +100,7 @@ than stitching them together.
 - [ ] Statistics sourced, dated, linked, and paraphrased.
 - [ ] Single-study and correlation caveats preserved.
 - [ ] Humanizer applied or the equivalent voice/fact audit completed.
-- [ ] Each draft self-rated at least 8/10 and positioning checked.
+- [ ] Source fidelity, channel fit, clarity, disclosure, and positioning checked.
 - [ ] User reviewed and explicitly approved drafts before file output.
 - [ ] `sm_<post-title>/posts.md` contains all approved channel drafts and `Sources`.
 - [ ] Approved images are in the same directory and referenced when applicable.

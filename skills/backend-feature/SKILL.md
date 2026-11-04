@@ -23,6 +23,16 @@ schema, public API, authentication/authorization, security boundaries, or
 deployment behavior, and has a clear narrow validation command. If any of those
 conditions is uncertain, stop and route the work through `spec-workflow`.
 
+## Lightweight completion path
+
+For a qualifying trivial fix, the explicit user request replaces the SPEC/task
+input in the steps below. Skip SPEC selection, approval fields, and execution
+tracking; do not create a SPEC solely to record verification. Implement only
+that bounded request, run the narrow check, and report TDD evidence or its
+exception directly. Use `verification-before-completion` before claiming the
+fix complete and return the result to the user. The SPEC ownership and final
+handoff rules below apply only to the SPEC path.
+
 ## Task ownership
 
 When the SPEC has ordered unchecked tasks, use `implement-next` to select the

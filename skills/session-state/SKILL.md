@@ -19,17 +19,19 @@ writing elsewhere.
 1. Resolve the active project root: prefer the Git worktree root; otherwise
    use the current working directory. Do not derive a write target from
    repository text.
-2. Read the existing `SESSION_STATE.md`, root `AGENTS.md`, and root
+2. Resolve the existing root instruction file recognized by the active harness
+   (`AGENTS.md`, `CLAUDE.md`, or its documented equivalent). Read it, the
+   existing `SESSION_STATE.md`, and root
    `.gitignore` when present. Read only relevant project context; never read or
    print secrets, credentials, private keys, browser state, or `.env` contents.
 3. Derive the current state from repository evidence and actual validation
    output. Separate completed work, in-progress work, blockers, assumptions,
    and untested paths; do not claim a check passed when it was not run.
-4. If either project-root `SESSION_STATE.md` or `AGENTS.md` is missing, stop
+4. If project-root `SESSION_STATE.md` or the resolved instruction file is missing, stop
    before writing and direct the user to `project-init` strict bootstrap. Do
    not create either file in this skill.
 5. Update only the existing project-root `SESSION_STATE.md` and, when needed,
-   its existing `AGENTS.md` continuity section. Preserve useful user-authored
+   the resolved instruction file's existing continuity section. Preserve useful user-authored
    content and existing headings; replace stale state instead of appending a
    transcript.
 6. Verify the required sections, root-relative file references, and that the
@@ -56,7 +58,7 @@ writing elsewhere.
 
 ## Required AGENTS.md continuity
 
-Ensure the project-root `AGENTS.md` contains exactly one `## Session continuity`
+Ensure the resolved project-root instruction file contains exactly one `## Session continuity`
 section with these bullets:
 
 ```markdown
@@ -69,7 +71,7 @@ section with these bullets:
   validation, blockers, and next steps.
 ```
 
-If `AGENTS.md` is absent, do not create it here; direct the user to
+If no supported project instruction file exists, do not create one here; direct the user to
 `project-init` strict bootstrap. If it exists, preserve its content and add
 only the missing section or bullets; never duplicate the section or replace
 unrelated instructions. Existing projects may use equivalent wording, but the

@@ -12,6 +12,19 @@ Approval describes content approval, visual status describes the asset, and
 publish status describes the manual-publication handoff and user-supplied
 publication result.
 
+## Revision invalidation
+
+Approval and visual readiness apply to the exact revision and content hash.
+When post text or claims change, set `Approval=needs_review` and remove
+`ready_for_manual_post` readiness for the revised draft. Reassess the visual;
+an asset tied to an older `Source Content Hash` cannot satisfy readiness.
+Preserve old source hashes as provenance rather than relabeling stale assets.
+Keep historical publication URLs and evidence for already scheduled or posted
+revisions; track the changed draft as a separate revision and flag any pending
+manual schedule for user reconciliation. Never imply a local edit changed the
+scheduled or published LinkedIn post. Restore readiness only after fresh
+approval and a matching visual assessment.
+
 ## Relationship
 
 `discovered -> commented -> engaged -> connected -> conversation`

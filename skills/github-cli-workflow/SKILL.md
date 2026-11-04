@@ -127,8 +127,9 @@ Present all of the following before asking for approval:
 - how the result will be verified.
 
 Ask: **“Approve exactly this one GitHub action?”** Do not execute until the
-user approves the prepared action. If the user approves several actions, split
-them into separate commands and obtain approval for each command.
+user approves the prepared action. If the user explicitly approves several fully specified actions, execute
+them as separate commands within that approval. Ask again only when the
+target, content, side effects, or scope changes.
 
 ### 3. Execute once and verify
 

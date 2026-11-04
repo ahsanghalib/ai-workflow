@@ -11,8 +11,10 @@ approved SPEC's `# Execution` section.
 1. Read the approved SPEC or explicitly selected project-control documents,
    existing repository evidence, and local rules.
 2. State the exact decision to make and the constraints that matter.
-3. Ask `technical-design` to compare a bounded set of options, interfaces,
+3. When an approved SPEC exists, ask `technical-design` to compare a bounded set of options, interfaces,
    boundaries, trade-offs, migration implications, and validation needs.
+   Without an approved SPEC, return a research-only comparison from the
+   selected project evidence; do not invoke the SPEC-gated design workflow.
 4. Ask `source-driven-development` to verify current documented behavior when a
    framework, library, runtime, API, version, or provider convention affects
    the comparison. Prefer authoritative primary documentation.

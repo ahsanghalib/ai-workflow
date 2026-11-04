@@ -368,3 +368,8 @@ Report the source used, `none/image/document` decision, selected canonical
 reference files, editable source path when present, final PDF or requested
 image path, QA state, any unverified checks, and sync/approval state when
 workspace integration was used. Do not publish or schedule.
+
+For Visual Assets rows, use `Type=document` with `Variant=linkedin-pdf`
+for PDFs and `Variant=editable-source` for PPTX sources. Use `Type=image`
+for image exports, with the requested format in `Variant`. These labels are
+variants, not additional values of the shared `Type` enum.

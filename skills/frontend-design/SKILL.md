@@ -27,13 +27,13 @@ quality, not decoration.
 
 ## Precedence and boundaries
 
-Apply guidance in this order:
-
-1. Existing project brand assets, design tokens, components, accessibility
-   conventions, and content guidelines.
-2. Existing framework, dependencies, and repository constraints.
-3. The user's explicit brief and acceptance criteria.
-4. This skill's design and accessibility guidance.
+Follow the active instruction hierarchy and the user's explicit scope and
+acceptance criteria. Use approved project brand assets, tokens, components,
+and repository conventions as the baseline. When the user explicitly requests
+a change to that baseline, identify its impact and follow the authorized
+change; do not let existing conventions silently override the request.
+Preserve applicable accessibility and safety requirements. This skill supplies
+defaults only where the brief and project evidence leave a gap.
 
 - Do not invent or replace a brand identity. Ask for brand guidance or provide
   neutral, clearly labelled options when the project has none.

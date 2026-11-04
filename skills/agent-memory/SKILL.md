@@ -43,7 +43,8 @@ and retrieval from processing unbounded project content.
 
 ## Session capture
 
-After each meaningful task or session, create one new session capsule. Capture
+After a task or session that meets the Store criteria below, create one new
+session capsule. Skip routine work and facts already in permanent docs. Capture
 almost all high-signal context a future agent needs, not a transcript.
 
 Required sections:

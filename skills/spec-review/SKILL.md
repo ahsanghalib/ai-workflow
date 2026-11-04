@@ -1,6 +1,6 @@
 ---
 name: spec-review
-description: Review one user-authored SPEC for behavioral completeness and return a ready or not ready verdict before approval. Use for gaps in requirements, actors, permissions, invariants, failure behavior, acceptance evidence, compatibility, or scope; do not use for SPEC lifecycle/task preparation, repository bootstrap, or implementation.
+description: Review one user-selected SPEC, including drafts prepared through spec-workflow, for behavioral completeness and return a ready or not ready verdict before approval. Use for gaps in requirements, actors, permissions, invariants, failure behavior, acceptance evidence, compatibility, or scope; do not use for SPEC lifecycle/task preparation, repository bootstrap, or implementation.
 license: MIT
 metadata:
   compatibility: no bundled executable dependencies
@@ -14,8 +14,8 @@ does not approve the contract.
 
 ## Boundaries
 
-- Review one existing, user-authored SPEC identified by the exact path or
-  stable ID supplied for this review. If the target is missing or ambiguous,
+- Review one existing, user-selected SPEC identified by the exact path or
+  stable ID supplied for this review, including drafts from `spec-workflow`. If the target is missing or ambiguous,
   stop and report that condition rather than choosing a file.
 - Return only a contract-readiness verdict: `ready` or `not ready`, with
   evidence-backed findings. `ready` means sufficiently defined for the user to

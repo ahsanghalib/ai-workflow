@@ -39,13 +39,13 @@ Do not use it for a single page or component brief, which belongs to
 for repository architecture, use `technical-design`; for supplied identity
 rules, use `brand-guidelines`.
 
-Apply constraints in this order:
-
-1. Existing project tokens, components, accessibility and content conventions.
-2. Approved brand rules and assets, when supplied.
-3. Existing framework, platform, dependency, and repository constraints.
-4. The user's explicit brief and acceptance criteria.
-5. This skill's neutral system guidance.
+Follow the active instruction hierarchy and the user's explicit scope and
+acceptance criteria. Use approved project brand assets, tokens, components,
+and repository conventions as the baseline. When the user explicitly requests
+a change to that baseline, identify its impact and follow the authorized
+change; do not let existing conventions silently override the request.
+Preserve applicable accessibility and safety requirements. This skill supplies
+defaults only where the brief and project evidence leave a gap.
 
 Never invent a brand identity, copy another organization's visual identity, or
 turn one campaign example into a global rule. When brand evidence is absent,

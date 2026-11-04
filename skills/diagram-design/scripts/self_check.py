@@ -96,6 +96,12 @@ class DiagramParser(HTMLParser):
                 self.unsafe.append(f"executable attribute {key} on <{tag}>")
             if key == "srcdoc":
                 self.unsafe.append(f"srcdoc attribute on <{tag}>")
+            if tag == "meta" and key == "http-equiv" and value.strip().casefold() == "refresh":
+                self.unsafe.append("meta refresh navigation is not allowed")
+            # srcset's comma-delimited grammar permits commas inside data URLs;
+            # fail closed instead of misparsing candidates and missing a remote URL.
+            if key == "srcset":
+                self.unsafe.append("srcset is not allowed in a single-file diagram")
             if key in REFERENCE_ATTRS:
                 self.references.append((tag, data.get("rel", ""), value))
             if key in CSS_REFERENCE_ATTRS:

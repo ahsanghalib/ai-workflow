@@ -23,9 +23,10 @@ values in it.
 
 Keep bootstrap, reconciliation, feature specification, approval,
 implementation, commits, branch changes, remote or issue mutations,
-deployment, and production operations as separate gates. Do not push,
-force-push, perform destructive Git cleanup, deploy, or modify a remote service
-without explicit approval for the exact operation. Do not edit generated files
+deployment, and production operations as separate gates. Pushes and remote
+service mutations require explicit approval for the exact operation. Never
+force-push, perform destructive Git cleanup, deploy, or run production
+operations; approval does not override the global prohibitions. Do not edit generated files
 directly; use their documented generator or report the missing generator.
 
 Local Git is optional for documentation bootstrap. If Git is absent or
@@ -69,10 +70,10 @@ use the smallest justified document under `docs/`, preserving any established
 source of truth. Executable source, schema, configuration, and migrations are
 authoritative where applicable.
 
-## Continuity and reload
+## Session continuity
 
 Read `SESSION_STATE.md` at the start of substantive work when it exists. Keep
-it out of version control when the project policy does so. Its work fields are
+it out of version control and confirm the root `.gitignore` covers it. Its work fields are
 the active SPEC and active SPEC task; it is not a permanent requirements store.
 
 After `AGENTS.md` or equivalent routing changes, review the diff and start a

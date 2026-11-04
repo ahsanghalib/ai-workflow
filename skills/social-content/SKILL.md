@@ -48,7 +48,7 @@ visual assets, also read [references/visuals.md](references/visuals.md).
 2. If factual research is requested, build a short evidence ledger with source,
    claim, status, and caveat. If evidence is weak, label the draft opinion.
 3. Draft for the selected channel using the compact guidance below. Load
-   `humanizer` after the structure is complete when that companion skill is
+   `copywriting` for a bounded structure and clarity pass, then `humanizer` when that companion skill is
    available; otherwise perform the same factual and voice-preservation audit
    directly.
 4. Fact-check every claim, label the draft unpublished, and present it for
