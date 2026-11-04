@@ -68,9 +68,11 @@ image generation as a requirement for every frontend change.
    A crop may aid inspection of an existing image; it cannot reveal missing
    detail. Regenerate only when it resolves the gap without replacing an
    approved source of truth.
-4. Read [design-extraction.md](references/design-extraction.md) for detailed
-   art direction, extraction, component integration, or multi-section work.
-   Apply only the relevant sections. Use restrained density, readable text,
+4. Read [design-direction-and-layout.md](references/design-direction-and-layout.md)
+   for visual direction, section imagery, and layout extraction. Read
+   [implementation-and-quality.md](references/implementation-and-quality.md)
+   for token/component integration, responsive implementation, and final
+   review. Apply only the relevant sections. Use restrained density, readable text,
    coherent section rhythm, and shared components; avoid decorative clutter.
 5. Preserve approved copy and claims. Generated text is a visual placeholder,
    not factual evidence. Resolve unreadable text from supplied source material
