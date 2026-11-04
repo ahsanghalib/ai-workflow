@@ -6,11 +6,12 @@ usage() {
   cat <<'EOF'
 Usage: script.sh [repository]
 
-Link runtime-specific agents and global instructions from this repository, and
-shared skills into ~/.agents/skills.
+Link runtime-specific agents, global instructions, shared skills, and the
+worktree helpers into their usual user-level locations.
 
 The repository defaults to the parent directory of this script. When the
 script is stored elsewhere, pass the repository path or set AI_WORKFLOW_REPO.
+Worktree helpers default to ~/.local/bin; set AI_WORKFLOW_BIN_DIR to override.
 EOF
 }
 
@@ -36,6 +37,8 @@ repository=$(cd -- "$repository" 2>/dev/null && pwd -P) || die "Repository does 
 home_dir=${HOME:?HOME must be set}
 codex_home=${CODEX_HOME:-$home_dir/.codex}
 opencode_home=${XDG_CONFIG_HOME:-$home_dir/.config}/opencode
+claude_home=${CLAUDE_CONFIG_DIR:-$home_dir/.claude}
+bin_home=${AI_WORKFLOW_BIN_DIR:-$home_dir/.local/bin}
 
 link_path() {
   local source_path=$1
@@ -58,8 +61,10 @@ link_path() {
 link_agents() {
   link_path "$repository/agents/codex" "$codex_home/agents"
   link_path "$repository/agents/opencode" "$opencode_home/agents"
+  link_path "$repository/agents/claude" "$claude_home/agents"
   link_path "$repository/GLOBAL_AGENTS.md" "$codex_home/AGENTS.md"
   link_path "$repository/GLOBAL_AGENTS.md" "$opencode_home/AGENTS.md"
+  link_path "$repository/GLOBAL_AGENTS.md" "$claude_home/CLAUDE.md"
 }
 
 link_skills() {
@@ -75,10 +80,17 @@ link_skills() {
     [[ -d $source_path ]] || continue
     skill_name=${source_path##*/}
     link_path "$source_path" "$home_dir/.agents/skills/$skill_name"
+    link_path "$source_path" "$claude_home/skills/$skill_name"
   done
+}
+
+link_worktree_helpers() {
+  link_path "$repository/bin/worktree-new" "$bin_home/worktree-new"
+  link_path "$repository/bin/worktree-close" "$bin_home/worktree-close"
 }
 
 link_agents
 link_skills
+link_worktree_helpers
 
 printf 'Done. Existing %s/skills/.system was left untouched.\n' "$codex_home"
