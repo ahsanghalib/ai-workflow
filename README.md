@@ -3,7 +3,7 @@
 Reusable skills, agent profiles, safety guidance, runtime configuration, and
 helper scripts for human-led AI coding workflows.
 
-The repository supports Claude Code, OpenCode, and Codex with native agent
+The repository supports Claude Code, OpenCode, Codex, and Pi with native agent
 profiles. Its shared `SKILL.md` workflows are written for compatible runtimes
 that support this format. Runtime discovery, tool access, and permissions still
 depend on the runtime and your local setup.
@@ -63,15 +63,15 @@ Seven roles are provided in each native format:
 - **Oracle** gives an independent read-only opinion on high-risk uncertainty.
 
 Profiles are in [`agents/claude/`](agents/claude),
-[`agents/codex/`](agents/codex), and
-[`agents/opencode/`](agents/opencode). The profiles share broad roles while
-using each runtime's native format.
+[`agents/codex/`](agents/codex), [`agents/opencode/`](agents/opencode), and
+[`agents/pi/`](agents/pi). The profiles share broad roles while using each
+runtime's native format.
 
 ### Global instructions and project guidance
 
 [`GLOBAL_AGENTS.md`](GLOBAL_AGENTS.md) sets cross-repository safety and
 workflow rules. The optional linker maps it to the conventional user-level
-instruction path for Claude Code, Codex, and OpenCode.
+instruction path for Claude Code, Codex, OpenCode, and Pi.
 
 [`AGENTS.md`](AGENTS.md) documents this repository's layout, commands, and
 conventions. Project-specific instructions belong in the project being worked
@@ -88,6 +88,7 @@ configuration directory.
 | Claude Code | [`claude/settings.json`](claude/settings.json), `agents/claude/` |
 | Codex | [`codex/config.toml`](codex/config.toml), `agents/codex/` |
 | OpenCode | [`opencode/opencode.json`](opencode/opencode.json), [`opencode/cli.json`](opencode/cli.json), `opencode/opencode-quota/`, `opencode/plugins/`, `agents/opencode/` |
+| Pi | [`pi/agent/settings.json`](pi/agent/settings.json), [`pi/agent/APPEND_SYSTEM.md`](pi/agent/APPEND_SYSTEM.md), `pi/agent/extensions/`, `pi/agent/mcp.json`, `pi/agent/prompts/`, `pi/agent/skills/`, `agents/pi/` |
 
 OpenCode also includes a TypeScript notification plugin
 ([`attention-notify.ts`](opencode/plugins/attention-notify.ts)) and its
@@ -151,11 +152,11 @@ instructions, run the linker after reviewing its targets:
 ```
 
 The linker uses `CODEX_HOME`, `XDG_CONFIG_HOME`,
-`CLAUDE_CONFIG_DIR`, and `AI_WORKFLOW_BIN_DIR` when set; otherwise it uses
-standard user-level locations. It refuses to replace existing ordinary files
-or directories, but replaces symlinks at its targets. Check existing links
-before running it. It does not copy Claude, Codex, or OpenCode runtime
-configuration.
+`CLAUDE_CONFIG_DIR`, `PI_CONFIG_DIR`, and `AI_WORKFLOW_BIN_DIR` when set;
+otherwise it uses standard user-level locations. It refuses to replace existing
+ordinary files or directories, but replaces symlinks at its targets. Check
+existing links before running it. It does not copy Claude, Codex, OpenCode, or
+Pi runtime configuration.
 
 Read and adapt runtime configuration before installing it. In particular,
 check permission settings, model identifiers, paths, plugins, and MCP commands
