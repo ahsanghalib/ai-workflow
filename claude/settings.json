@@ -2,6 +2,13 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "model": "sonnet",
   "agent": "engineer",
+  "enabledPlugins": {},
+  "theme": "dark-ansi",
+  "modelSettings": {
+    "claude-sonnet-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "permissions": {
     "defaultMode": "default",
     "deny": [
