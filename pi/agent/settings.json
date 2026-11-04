@@ -1,0 +1,26 @@
+{
+  "$schema": "https://pi.dev/schemas/settings.schema.json",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-6-luna",
+  "defaultThinkingLevel": "high",
+  "defaultProjectTrust": "ask",
+  "quietStartup": "header",
+  "enableSkillCommands": true,
+  "doubleEscapeAction": "tree",
+  "defaultTools": ["read", "bash", "edit", "write", "grep", "find", "ls"],
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 16384,
+    "keepRecentTokens": 20000
+  },
+  "packages": [
+    "npm:@plannotator/pi-extension",
+    "npm:pi-subagents",
+    "npm:pi-lens",
+    "npm:cc-safety-net",
+    "npm:agents-cron",
+    "npm:pi-web-access",
+    "npm:pi-webapp"
+  ],
+  "lastChangelogVersion": "1.5.0"
+}

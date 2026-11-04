@@ -38,6 +38,7 @@ home_dir=${HOME:?HOME must be set}
 codex_home=${CODEX_HOME:-$home_dir/.codex}
 opencode_home=${XDG_CONFIG_HOME:-$home_dir/.config}/opencode
 claude_home=${CLAUDE_CONFIG_DIR:-$home_dir/.claude}
+pi_home=${PI_CONFIG_DIR:-$home_dir/.pi}/agent
 bin_home=${AI_WORKFLOW_BIN_DIR:-$home_dir/.local/bin}
 
 link_path() {
@@ -62,9 +63,11 @@ link_agents() {
   link_path "$repository/agents/codex" "$codex_home/agents"
   link_path "$repository/agents/opencode" "$opencode_home/agents"
   link_path "$repository/agents/claude" "$claude_home/agents"
+  link_path "$repository/agents/pi" "$pi_home/agents"
   link_path "$repository/GLOBAL_AGENTS.md" "$codex_home/AGENTS.md"
   link_path "$repository/GLOBAL_AGENTS.md" "$opencode_home/AGENTS.md"
   link_path "$repository/GLOBAL_AGENTS.md" "$claude_home/CLAUDE.md"
+  link_path "$repository/GLOBAL_AGENTS.md" "$pi_home/AGENTS.md"
 }
 
 link_skills() {
