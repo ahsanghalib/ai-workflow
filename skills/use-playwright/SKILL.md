@@ -14,7 +14,7 @@ approval flow. It is harness-neutral: never assume OpenCode, Codex, a
 provider-specific config path, schema, tool prefix, or restart command.
 
 The repository includes one conditional adapter reference:
-`references/opencode-mcp.md` applies only when the active harness is OpenCode
+[`references/opencode-mcp.md`](references/opencode-mcp.md) applies only when the active harness is OpenCode
 and its documented project-local configuration is available. Other harnesses
 must use their own documented adapter or stop for manual setup; never
 translate the OpenCode reference into an unverified provider or harness.
