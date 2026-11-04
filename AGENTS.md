@@ -9,7 +9,8 @@ profiles. `codex/` stores Codex configuration. `opencode/` contains OpenCode
 JSON configuration, model metadata, quota/TUI settings, placeholder runtime
 directories, and the TypeScript notification plugin. The executable helper
 scripts live in `scripts/` and `bin/`, and `scripts/validate-skills.sh` is
-the skill validator.
+the skill validator. The root `evals/` holds repository-level model evaluation
+cases, runner scripts, runner tests, and Git-ignored generated reports.
 The content and client-acquisition workflows are centered on `copywriting`,
 `social-content`, and the six supported `linkedin-*` skills. Keep personal paths,
 credentials, provider accounts, and machine-local overrides out of the
@@ -68,6 +69,7 @@ change:
 ```bash
 bash scripts/validate-skills.sh       # Validate skill references and entrypoints
 bash tests/validate-skills.test.sh    # Regression-test the skill validator
+python3 -m unittest discover -s evals/tests -p 'test_*.py'  # Test eval tooling
 bash -n scripts/*.sh bin/*            # Check helper-script syntax
 scripts/package-skills.sh --clean     # Build the curated web skill ZIP bundle
 cd opencode && npm install           # Install plugin type dependencies

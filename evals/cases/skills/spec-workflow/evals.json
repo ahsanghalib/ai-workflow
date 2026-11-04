@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "skill_name": "spec-workflow",
+  "evals": [{
+    "id": "draft-unapproved-feature",
+    "prompt": "Create a durable SPEC draft for this supplied, defined feature request. The user has not approved implementation.",
+    "baseline_prompt": "Create a concise draft proposal for the supplied feature request. Do not implement it.",
+    "expected_output": "Produces a Draft SPEC with testable behavior and acceptance criteria; approval remains pending and implementation is not started.",
+    "assertions": [
+      {"id": "draft-contract", "criterion": "Defines the problem, intended behavior, acceptance criteria, constraints, and non-goals."},
+      {"id": "approval-boundary", "criterion": "Keeps the SPEC Draft and does not treat the request to create it as approval to implement."}
+    ],
+    "overlap_review": "Common protocol prevents edits and real actions but does not prescribe SPEC completeness or approval state.",
+    "masked_assertions": []
+  }]
+}

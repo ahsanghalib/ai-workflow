@@ -1,0 +1,104 @@
+{
+  "cases": [
+    {
+      "id": "planning-1",
+      "family": "planning",
+      "query": "We have an idea for an internal agent product but the behavior is unclear; help us settle a design before coding."
+    },
+    {
+      "id": "planning-2",
+      "family": "planning",
+      "query": "Which customer problem should our proposed invoice assistant target, and what experiment could disprove demand?"
+    },
+    {
+      "id": "planning-3",
+      "family": "planning",
+      "query": "Turn this defined feature request into a durable approval-ready SPEC with acceptance criteria."
+    },
+    {
+      "id": "planning-4",
+      "family": "planning",
+      "query": "Review this draft SPEC for missing failure behavior; do not approve or implement it."
+    },
+    {
+      "id": "design-5",
+      "family": "design",
+      "query": "Plan the responsive and keyboard behavior for this checkout drawer."
+    },
+    {
+      "id": "design-6",
+      "family": "design",
+      "query": "Audit shared typography roles, semantic colors, and component variants across our product."
+    },
+    {
+      "id": "design-7",
+      "family": "design",
+      "query": "Translate this supplied landing-page image into the existing frontend."
+    },
+    {
+      "id": "design-8",
+      "family": "design",
+      "query": "Remove the background from this photograph."
+    },
+    {
+      "id": "browser-9",
+      "family": "browser",
+      "query": "Run the existing localhost Playwright checkout regression with synthetic fixtures."
+    },
+    {
+      "id": "browser-10",
+      "family": "browser",
+      "query": "Inspect this public documentation page with an isolated read-only browser."
+    },
+    {
+      "id": "browser-11",
+      "family": "browser",
+      "query": "Prepare a project-local read-only browser profile for these approved origins."
+    },
+    {
+      "id": "browser-12",
+      "family": "browser",
+      "query": "Inspect the dashboard after I manually sign in to a fresh isolated browser."
+    },
+    {"id":"planning-13","family":"planning","query":"Compare two technical options, their failure modes, interfaces, and migration costs for this approved SPEC."},
+    {"id":"planning-14","family":"planning","query":"We have two viable business directions; compare downside, reversibility, opportunity cost, and the cheapest decisive test."},
+    {"id":"visual-15","family":"visual","query":"Apply the supplied brand voice, colors, typography, and image rules to this approved artifact."},
+    {"id":"visual-16","family":"visual","query":"Create a renderer-backed sequence diagram from these typed architecture facts."},
+    {"id":"visual-17","family":"visual","query":"Design a readable architecture diagram with explicit nodes, edges, and visual hierarchy, without a renderer-backed typed workflow."},
+    {"id":"visual-18","family":"visual","query":"Apply Apple-style interface principles to transitions and gesture behavior in this SwiftUI screen."},
+    {"id":"visual-19","family":"visual","query":"Review the purpose, frequency, easing, performance, and reduced-motion behavior of this web animation."},
+    {"id":"browser-20","family":"browser","query":"Automate a public read-only browser workflow through the installed agent-browser CLI and capture evidence."},
+    {"id":"browser-21","family":"browser","query":"Use direct CDP browser control to inspect a rendered public page and collect DOM evidence."},
+    {"id":"linkedin-22","family":"linkedin","query":"Draft and revise a source-grounded LinkedIn post from this approved technical brief."},
+    {"id":"linkedin-23","family":"linkedin","query":"Decide whether this approved LinkedIn post needs a visual, then prepare a carousel PDF and editable PPTX."},
+    {"id":"linkedin-24","family":"linkedin","query":"Find a strong non-hiring LinkedIn post from a qualified prospect and draft a grounded comment for approval."},
+    {"id":"linkedin-25","family":"linkedin","query":"Find a relevant recruiting post and prepare a tailored application or recruiter comment."},
+    {"id":"linkedin-26","family":"linkedin","query":"Review warm prospects and interactions, choose the next relationship step, and draft a grounded follow-up."},
+    {"id":"linkedin-27","family":"linkedin","query":"Audit and reconcile the shared local Markdown, Drive, and Sheets prospect workspace without contacting anyone."},
+    {"id":"editorial-28","family":"editorial","query":"Write concise source-grounded homepage copy for this supplied brief and audience."},
+    {"id":"editorial-29","family":"editorial","query":"Revise this supplied paragraph to remove formulaic AI prose while preserving its facts and author voice."},
+    {"id":"editorial-30","family":"editorial","query":"Turn this supplied announcement into a truthful Reddit post with a channel-specific title and body."},
+    {"id":"review-31","family":"review","query":"Review this implementation against SPEC-0042 acceptance criteria, tests, and security boundaries."},
+    {"id":"review-32","family":"review","query":"Review only the working-tree diff and report actionable, evidence-backed findings."},
+    {"id":"security-33","family":"security","query":"Review this agent's untrusted input, prompt injection, retrieval, and tool-call boundaries."},
+    {"id":"security-34","family":"security","query":"Audit this authentication, authorization, file access, and external-input code for security weaknesses."},
+    {"id":"security-35","family":"security","query":"Inspect dependency manifests, lockfiles, install scripts, and CI actions for supply-chain risks."},
+    {"id":"engineering-36","family":"engineering","query":"Design tables, keys, constraints, nullability, and relationships for the approved feature SPEC."},
+    {"id":"engineering-37","family":"engineering","query":"Diagnose this failing test by reproducing it, isolating the cause, and testing one hypothesis at a time."},
+    {
+      "id": "ambiguous-design",
+      "family": "design",
+      "query": "Make the app look more consistent."
+    },
+    {
+      "id": "ambiguous-browser",
+      "family": "browser",
+      "query": "Check the account page."
+    },
+    {
+      "id": "ambiguous-planning",
+      "family": "planning",
+      "query": "Help with my new feature idea."
+    }
+  ]
+}

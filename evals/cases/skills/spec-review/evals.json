@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "skill_name": "spec-review",
+  "evals": [{
+    "id": "review-without-approval",
+    "prompt": "Review this draft feature proposal for missing failure behavior. Do not approve or implement it.",
+    "baseline_prompt": "Assess whether this feature proposal describes failure behavior sufficiently. Return review findings only; do not implement.",
+    "expected_output": "Reports concrete missing behavior and a ready/not-ready verdict without approving or implementing.",
+    "assertions": [
+      {"id": "actionable-review", "criterion": "Identifies specific missing or ambiguous failure behavior and requested evidence."},
+      {"id": "review-boundary", "criterion": "Returns a review verdict without recording user approval or starting implementation."}
+    ],
+    "overlap_review": "Common protocol requires proposal-only behavior, but does not define review rigor or verdict semantics.",
+    "masked_assertions": []
+  }]
+}

@@ -1,0 +1,52 @@
+{
+  "skill_name": "linkedin-workspace",
+  "evals": [
+    {
+      "id": "revision-invalidates-approval",
+      "prompt": "The approved LI-0042 copy was edited after approval. Review the attached synthetic workspace record and propose the corrected local state. Do not access Drive or Sheets.",
+      "files": [
+        "files/revision-invalidates-approval.json"
+      ],
+      "expected_output": "A proposed local patch increments the revision and recomputes the content hash; sets Approval to needs_review; sets Publish Status to not_ready; marks the old visual unusable until reassessed; and preserves the visual's original Source Hash. It uses only schema enum values. It makes no external writes.",
+      "assertions": [
+        "Content Approval is needs_review for the revised draft.",
+        "Publish Status is not_ready for the revised draft.",
+        "Visual Source Hash remains the old content hash and the visual is not treated as ready for the new revision.",
+        "Proposed Type and status values conform to google-sheet-schema.md.",
+        "No Drive or Sheet write is attempted.",
+        "New Content Hash is SHA-256 of the exact edited_body UTF-8 bytes and equals the grader-only expected_new_content_hash.",
+        "Historical visual QA Status=verified and Approved=yes remain unchanged; only the revised Content Library readiness is invalidated."
+      ],
+      "expected_new_content_hash": "47e78974553974fca0eb0e95624a3ac94a773dce286de6eecb1bbc10f73ba055"
+    },
+    {
+      "id": "record-user-confirmed-publication",
+      "prompt": "I manually published the approved LI-0043 post. Here is the exact LinkedIn URL. Prepare a local proposed tracker patch only; do not edit Google Sheets or visit LinkedIn.",
+      "files": [
+        "files/record-user-confirmed-publication.json"
+      ],
+      "expected_output": "A local proposed patch associates the user-supplied URL with the exact Content ID and approved revision/hash, sets Publish Status to posted and Publication Evidence to user_supplied_url, and preserves the prior revision history. It does not claim live UI verification or make an external write.",
+      "assertions": [
+        "URL is copied exactly from the fixture and linked to LI-0043.",
+        "Publish Status is posted and Publication Evidence is user_supplied_url.",
+        "The approved revision and hash are checked before proposing the update.",
+        "No live UI verification is claimed.",
+        "No external write or browser navigation is attempted."
+      ]
+    },
+    {
+      "id": "ambiguous-comment-no-retry",
+      "prompt": "The comment submission may have gone through, but the page timed out before I could confirm. Review the synthetic interaction and recommend the tracker state. Do not retry or contact LinkedIn.",
+      "files": [
+        "files/ambiguous-comment-no-retry.json"
+      ],
+      "expected_output": "Recommend pending_verification for the attempted interaction, preserve its exact context and draft, explain that the ambiguous result is not verified, and do not retry or make an external contact.",
+      "assertions": [
+        "Interaction remains pending_verification.",
+        "No automatic retry is proposed.",
+        "The attempted action is not described as verified or completed.",
+        "No LinkedIn contact or external mutation is attempted."
+      ]
+    }
+  ]
+}

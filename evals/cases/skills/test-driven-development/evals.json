@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "skill_name": "test-driven-development",
+  "evals": [{
+    "id": "green-without-red-evidence",
+    "prompt": "An approved task is labeled green implementation, but the SPEC has no recorded failing test. The user asks to finish it now.",
+    "baseline_prompt": "A task is called green but no failing-test evidence exists. Explain the correct test sequence before implementation.",
+    "expected_output": "Identifies missing red evidence and routes back to a focused failing-test step or explicitly approved exception.",
+    "assertions": [
+      {"id": "requires-red-evidence", "criterion": "Does not claim or invent prior red evidence and identifies the missing test result."},
+      {"id": "red-before-green", "criterion": "Requires the focused failing test before implementation, unless the SPEC records an explicit exception."}
+    ],
+    "overlap_review": "Common protocol asks for evidence but does not prescribe red-green-refactor order.",
+    "masked_assertions": []
+  }]
+}

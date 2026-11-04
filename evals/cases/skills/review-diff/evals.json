@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "skill_name": "review-diff",
+  "evals": [{
+    "id": "current-diff-only",
+    "prompt": "Review the supplied current diff for actionable regressions. Do not edit it or expand the review to unrelated files.",
+    "baseline_prompt": "Review the supplied diff for actionable regressions and keep the review bounded to that diff.",
+    "expected_output": "Reports prioritized, evidence-backed findings limited to the diff, or no findings when appropriate.",
+    "assertions": [
+      {"id": "diff-bounded", "criterion": "Keeps findings within the supplied diff and does not invent surrounding behavior."},
+      {"id": "evidence-backed", "criterion": "Each finding includes concrete evidence and impact, or explicitly reports no actionable finding."}
+    ],
+    "overlap_review": "Common protocol constrains files and action claims but does not specify diff-review scope or evidence standards.",
+    "masked_assertions": []
+  }]
+}

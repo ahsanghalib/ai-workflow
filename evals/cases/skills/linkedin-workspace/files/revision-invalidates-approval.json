@@ -1,0 +1,33 @@
+{
+  "fixture_notice": "Synthetic evaluation data. No real account, person, or LinkedIn content.",
+  "request": {
+    "content_id": "LI-0042",
+    "revision": 8,
+    "edited_body": "A revised synthetic post body.",
+    "external_write_authorized": false
+  },
+  "content_library": {
+    "Content ID": "LI-0042",
+    "Revision": 7,
+    "Content Hash": "0c75b48f311e4598deae3181007c0bf713e8001994ffe9acbddb105c6a302f79",
+    "Final Post Text": "The previously approved synthetic post.",
+    "Approval": "approved",
+    "Visual Status": "ready",
+    "Visual Type": "document",
+    "Primary Visual Link": "https://drive.example.invalid/file/synthetic",
+    "Publish Status": "ready_for_manual_post",
+    "Post URL": "",
+    "Publication Evidence": "not_provided"
+  },
+  "visual_assets": [
+    {
+      "Asset ID": "ASSET-0042",
+      "Content ID": "LI-0042",
+      "Type": "document",
+      "Variant": "linkedin-pdf",
+      "Source Hash": "0c75b48f311e4598deae3181007c0bf713e8001994ffe9acbddb105c6a302f79",
+      "QA Status": "verified",
+      "Approved": "yes"
+    }
+  ]
+}

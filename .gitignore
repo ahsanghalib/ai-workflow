@@ -349,3 +349,6 @@ SESSION_STATE.md
 .tmp/
 tmp/
 temp/
+
+# Local model evaluation reports, traces, and temporary fixtures
+/evals/reports/

@@ -1,0 +1,192 @@
+{
+  "cases": [
+    {
+      "id": "planning-1",
+      "family": "planning",
+      "query": "We have an idea for an internal agent product but the behavior is unclear; help us settle a design before coding.",
+      "expected_primary_skill": "brainstorming",
+      "disallowed_primary_skills": [
+        "product-discovery",
+        "spec-workflow",
+        "spec-review"
+      ]
+    },
+    {
+      "id": "planning-2",
+      "family": "planning",
+      "query": "Which customer problem should our proposed invoice assistant target, and what experiment could disprove demand?",
+      "expected_primary_skill": "product-discovery",
+      "disallowed_primary_skills": [
+        "brainstorming",
+        "spec-workflow",
+        "spec-review"
+      ]
+    },
+    {
+      "id": "planning-3",
+      "family": "planning",
+      "query": "Turn this defined feature request into a durable approval-ready SPEC with acceptance criteria.",
+      "expected_primary_skill": "spec-workflow",
+      "disallowed_primary_skills": [
+        "brainstorming",
+        "product-discovery",
+        "spec-review"
+      ]
+    },
+    {
+      "id": "planning-4",
+      "family": "planning",
+      "query": "Review this draft SPEC for missing failure behavior; do not approve or implement it.",
+      "expected_primary_skill": "spec-review",
+      "disallowed_primary_skills": [
+        "brainstorming",
+        "product-discovery",
+        "spec-workflow"
+      ]
+    },
+    {
+      "id": "design-5",
+      "family": "design",
+      "query": "Plan the responsive and keyboard behavior for this checkout drawer.",
+      "expected_primary_skill": "frontend-design",
+      "disallowed_primary_skills": [
+        "ui-design-system",
+        "image-to-code",
+        "imagegen"
+      ]
+    },
+    {
+      "id": "design-6",
+      "family": "design",
+      "query": "Audit shared typography roles, semantic colors, and component variants across our product.",
+      "expected_primary_skill": "ui-design-system",
+      "disallowed_primary_skills": [
+        "frontend-design",
+        "image-to-code",
+        "imagegen"
+      ]
+    },
+    {
+      "id": "design-7",
+      "family": "design",
+      "query": "Translate this supplied landing-page image into the existing frontend.",
+      "expected_primary_skill": "image-to-code",
+      "disallowed_primary_skills": [
+        "frontend-design",
+        "ui-design-system",
+        "imagegen"
+      ]
+    },
+    {
+      "id": "design-8",
+      "family": "design",
+      "query": "Remove the background from this photograph.",
+      "expected_primary_skill": "imagegen",
+      "disallowed_primary_skills": [
+        "frontend-design",
+        "ui-design-system",
+        "image-to-code"
+      ]
+    },
+    {
+      "id": "browser-9",
+      "family": "browser",
+      "query": "Run the existing localhost Playwright checkout regression with synthetic fixtures.",
+      "expected_primary_skill": "webapp-testing",
+      "disallowed_primary_skills": [
+        "playwright-public-web",
+        "use-playwright",
+        "playwright-manual-auth"
+      ]
+    },
+    {
+      "id": "browser-10",
+      "family": "browser",
+      "query": "Inspect this public documentation page with an isolated read-only browser.",
+      "expected_primary_skill": "playwright-public-web",
+      "disallowed_primary_skills": [
+        "webapp-testing",
+        "use-playwright",
+        "playwright-manual-auth"
+      ]
+    },
+    {
+      "id": "browser-11",
+      "family": "browser",
+      "query": "Prepare a project-local read-only browser profile for these approved origins.",
+      "expected_primary_skill": "use-playwright",
+      "disallowed_primary_skills": [
+        "webapp-testing",
+        "playwright-public-web",
+        "playwright-manual-auth"
+      ]
+    },
+    {
+      "id": "browser-12",
+      "family": "browser",
+      "query": "Inspect the dashboard after I manually sign in to a fresh isolated browser.",
+      "expected_primary_skill": "playwright-manual-auth",
+      "disallowed_primary_skills": [
+        "webapp-testing",
+        "playwright-public-web",
+        "use-playwright"
+      ]
+    },
+    {"id":"planning-13","family":"planning","query":"Compare two technical options, their failure modes, interfaces, and migration costs for this approved SPEC.","expected_primary_skill":"technical-design","disallowed_primary_skills":["founder-decision","brainstorming","spec-workflow"]},
+    {"id":"planning-14","family":"planning","query":"We have two viable business directions; compare downside, reversibility, opportunity cost, and the cheapest decisive test.","expected_primary_skill":"founder-decision","disallowed_primary_skills":["product-discovery","brainstorming","technical-design"]},
+    {"id":"visual-15","family":"visual","query":"Apply the supplied brand voice, colors, typography, and image rules to this approved artifact.","expected_primary_skill":"brand-guidelines","disallowed_primary_skills":["ui-design-system","frontend-design","copywriting"]},
+    {"id":"visual-16","family":"visual","query":"Create a renderer-backed sequence diagram from these typed architecture facts.","expected_primary_skill":"archify","disallowed_primary_skills":["diagram-design","frontend-design","technical-design"]},
+    {"id":"visual-17","family":"visual","query":"Design a readable architecture diagram with explicit nodes, edges, and visual hierarchy, without a renderer-backed typed workflow.","expected_primary_skill":"diagram-design","disallowed_primary_skills":["archify","frontend-design","ui-design-system"]},
+    {"id":"visual-18","family":"visual","query":"Apply Apple-style interface principles to transitions and gesture behavior in this SwiftUI screen.","expected_primary_skill":"apple-design","disallowed_primary_skills":["frontend-motion-review","frontend-design","frontend-feature"]},
+    {"id":"visual-19","family":"visual","query":"Review the purpose, frequency, easing, performance, and reduced-motion behavior of this web animation.","expected_primary_skill":"frontend-motion-review","disallowed_primary_skills":["frontend-design","figma-implement-motion","performance-optimization"]},
+    {"id":"browser-20","family":"browser","query":"Automate a public read-only browser workflow through the installed agent-browser CLI and capture evidence.","expected_primary_skill":"agent-browser","disallowed_primary_skills":["browser-use","playwright-public-web","webapp-testing"]},
+    {"id":"browser-21","family":"browser","query":"Use direct CDP browser control to inspect a rendered public page and collect DOM evidence.","expected_primary_skill":"browser-use","disallowed_primary_skills":["agent-browser","playwright-public-web","webapp-testing"]},
+    {"id":"linkedin-22","family":"linkedin","query":"Draft and revise a source-grounded LinkedIn post from this approved technical brief.","expected_primary_skill":"linkedin-post","disallowed_primary_skills":["copywriting","social-content","linkedin-comments"]},
+    {"id":"linkedin-23","family":"linkedin","query":"Decide whether this approved LinkedIn post needs a visual, then prepare a carousel PDF and editable PPTX.","expected_primary_skill":"linkedin-visual","disallowed_primary_skills":["linkedin-post","presentations","linkedin-workspace"]},
+    {"id":"linkedin-24","family":"linkedin","query":"Find a strong non-hiring LinkedIn post from a qualified prospect and draft a grounded comment for approval.","expected_primary_skill":"linkedin-comments","disallowed_primary_skills":["linkedin-hiring","linkedin-lead-followup","linkedin-post"]},
+    {"id":"linkedin-25","family":"linkedin","query":"Find a relevant recruiting post and prepare a tailored application or recruiter comment.","expected_primary_skill":"linkedin-hiring","disallowed_primary_skills":["linkedin-comments","linkedin-lead-followup","linkedin-post"]},
+    {"id":"linkedin-26","family":"linkedin","query":"Review warm prospects and interactions, choose the next relationship step, and draft a grounded follow-up.","expected_primary_skill":"linkedin-lead-followup","disallowed_primary_skills":["linkedin-comments","linkedin-hiring","linkedin-workspace"]},
+    {"id":"linkedin-27","family":"linkedin","query":"Audit and reconcile the shared local Markdown, Drive, and Sheets prospect workspace without contacting anyone.","expected_primary_skill":"linkedin-workspace","disallowed_primary_skills":["linkedin-lead-followup","google-drive","linkedin-comments"]},
+    {"id":"editorial-28","family":"editorial","query":"Write concise source-grounded homepage copy for this supplied brief and audience.","expected_primary_skill":"copywriting","disallowed_primary_skills":["humanizer","social-content","linkedin-post"]},
+    {"id":"editorial-29","family":"editorial","query":"Revise this supplied paragraph to remove formulaic AI prose while preserving its facts and author voice.","expected_primary_skill":"humanizer","disallowed_primary_skills":["copywriting","social-content","linkedin-post"]},
+    {"id":"editorial-30","family":"editorial","query":"Turn this supplied announcement into a truthful Reddit post with a channel-specific title and body.","expected_primary_skill":"social-content","disallowed_primary_skills":["copywriting","humanizer","linkedin-post"]},
+    {"id":"review-31","family":"review","query":"Review this implementation against SPEC-0042 acceptance criteria, tests, and security boundaries.","expected_primary_skill":"code-review","disallowed_primary_skills":["review-diff","spec-review","security-and-hardening"]},
+    {"id":"review-32","family":"review","query":"Review only the working-tree diff and report actionable, evidence-backed findings.","expected_primary_skill":"review-diff","disallowed_primary_skills":["code-review","spec-review","security-and-hardening"]},
+    {"id":"security-33","family":"security","query":"Review this agent's untrusted input, prompt injection, retrieval, and tool-call boundaries.","expected_primary_skill":"ai-security-review","disallowed_primary_skills":["security-and-hardening","mcp-builder","code-review"]},
+    {"id":"security-34","family":"security","query":"Audit this authentication, authorization, file access, and external-input code for security weaknesses.","expected_primary_skill":"security-and-hardening","disallowed_primary_skills":["ai-security-review","supply-chain-security","code-review"]},
+    {"id":"security-35","family":"security","query":"Inspect dependency manifests, lockfiles, install scripts, and CI actions for supply-chain risks.","expected_primary_skill":"supply-chain-security","disallowed_primary_skills":["security-and-hardening","ai-security-review","code-review"]},
+    {"id":"engineering-36","family":"engineering","query":"Design tables, keys, constraints, nullability, and relationships for the approved feature SPEC.","expected_primary_skill":"schema-design","disallowed_primary_skills":["backend-feature","technical-design","source-driven-development"]},
+    {"id":"engineering-37","family":"engineering","query":"Diagnose this failing test by reproducing it, isolating the cause, and testing one hypothesis at a time.","expected_primary_skill":"systematic-debugging","disallowed_primary_skills":["test-driven-development","performance-optimization","code-simplification"]},
+    {
+      "id": "ambiguous-design",
+      "family": "design",
+      "query": "Make the app look more consistent.",
+      "expected_primary_skill": null,
+      "expected_behavior": "Ask whether consistency concerns one page or a shared product system before substantive design. Loading a provisional skill to clarify is allowed.",
+      "acceptable_provisional_skills": [
+        "ui-design-system",
+        "frontend-design"
+      ]
+    },
+    {
+      "id": "ambiguous-browser",
+      "family": "browser",
+      "query": "Check the account page.",
+      "expected_primary_skill": null,
+      "expected_behavior": "Resolve target and authentication context before navigation; do not infer permission for account mutations."
+    },
+    {
+      "id": "ambiguous-planning",
+      "family": "planning",
+      "query": "Help with my new feature idea.",
+      "expected_primary_skill": null,
+      "expected_behavior": "Clarify whether customer demand, feature behavior, or SPEC authoring is unresolved before substantive work. Loading a provisional skill to clarify is allowed.",
+      "acceptable_provisional_skills": [
+        "brainstorming",
+        "product-discovery",
+        "spec-workflow"
+      ]
+    }
+  ],
+  "status": "prepared; runtime loading not measured"
+}

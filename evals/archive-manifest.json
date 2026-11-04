@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {"path": "archive/historical-reports/SKILL_AUDIT.md", "title": "Historical skill audit", "label": "historical"},
+    {"path": "archive/historical-reports/SKILL_EVALUATION_RESULTS.md", "title": "Historical behavior evaluation (earlier comparisons invalid; retests are documented separately)", "label": "known-invalid comparisons; historical review"},
+    {"path": "archive/historical-reports/SKILL_IMPROVEMENTS_TODO.md", "title": "Historical skill improvements TODO", "label": "historical"},
+    {"path": "archive/baseline-isolation-dry-v1/summary.json", "title": "Baseline isolation v1 summary", "label": "dry-run; ungraded"},
+    {"path": "archive/baseline-isolation-luna-medium-v1/summary.json", "title": "Baseline isolation Luna medium v1 summary", "label": "historical; ungraded"},
+    {"path": "archive/baseline-isolation-luna-medium-v1/isolation-audit.json", "title": "Baseline isolation audit", "label": "historical; methodology audit"},
+    {"path": "archive/codex-luna-dryrun-20261104/summary.json", "title": "Codex Luna dry run summary", "label": "dry-run; ungraded"},
+    {"path": "archive/codex-only-dryrun-20261104/summary.json", "title": "Codex-only dry run summary", "label": "dry-run; ungraded"},
+    {"path": "archive/routing-runs.jsonl", "title": "Historical routing run trace", "label": "historical; ungraded"},
+    {"path": "archive/runs.jsonl", "title": "Historical behavior run trace", "label": "known-invalid; contaminated baseline; excluded from scores"},
+    {"path": "archive/runs-retest2.jsonl", "title": "Historical behavior retest trace", "label": "historical; partial; ungraded"},
+    {"path": "archive/run_eval.py", "title": "Legacy evaluation runner source", "label": "legacy artifact; not current runner"},
+    {"path": "archive/run_routing.py", "title": "Legacy routing runner source", "label": "legacy artifact; not current runner"},
+    {"path": "archive/legacy-run_eval-contaminated.py.txt", "title": "Contaminated legacy runner snapshot", "label": "known-invalid methodology artifact"}
+  ]
+}

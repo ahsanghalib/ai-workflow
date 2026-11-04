@@ -1,0 +1,31 @@
+{
+  "fixture_notice": "Synthetic evaluation data. No real account, person, or LinkedIn content.",
+  "request": {
+    "content_id": "LI-0043",
+    "confirmed_action": "published",
+    "linkedin_url": "https://www.linkedin.com/posts/example-synthetic-activity-1234567890123456789-abCd",
+    "external_write_authorized": false,
+    "browser_navigation_authorized": false
+  },
+  "content_library": {
+    "Content ID": "LI-0043",
+    "Revision": 3,
+    "Content Hash": "905efbba29996994b8652706ea01d835ac79784c428d57d6c7b18c3b606f1636",
+    "Final Post Text": "Approved synthetic post body.",
+    "Approval": "approved",
+    "Visual Status": "not_needed",
+    "Visual Type": "none",
+    "Publish Status": "ready_for_manual_post",
+    "Post URL": "",
+    "Publication Evidence": "not_provided"
+  },
+  "history": [
+    {
+      "Revision": 2,
+      "Content Hash": "b466ae01e5fe297b1fd30990632c6d01f4eeafaeba0b89170618d410072e270e",
+      "Publish Status": "not_applicable",
+      "Post URL": "",
+      "Publication Evidence": "not_provided"
+    }
+  ]
+}

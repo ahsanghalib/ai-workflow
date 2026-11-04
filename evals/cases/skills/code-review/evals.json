@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "skill_name": "code-review",
+  "evals": [{
+    "id": "review-evidence-only",
+    "prompt": "Review this supplied patch for bugs. Report findings only; do not change files.",
+    "baseline_prompt": "Inspect this patch for correctness issues and report only evidence-backed findings. Do not implement changes.",
+    "expected_output": "Prioritizes actionable correctness issues, cites exact evidence, or says no finding when none is supported.",
+    "assertions": [
+      {"id": "actionable-findings", "criterion": "Findings describe impact and point to concrete code evidence; no speculative issues."},
+      {"id": "review-only", "criterion": "Does not implement a fix or claim tests were run without evidence."}
+    ],
+    "overlap_review": "Common protocol makes review-only behavior shared; only finding quality and evidence are gradeable.",
+    "masked_assertions": ["review-only"]
+  }]
+}

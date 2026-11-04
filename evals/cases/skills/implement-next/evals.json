@@ -1,0 +1,60 @@
+{
+  "skill_name": "implement-next",
+  "evals": [
+    {
+      "id": "select-first-ready-task",
+      "prompt": "Use implement-next for evals/files/SPEC-EXAMPLE-001.md. Implement exactly the next eligible task.",
+      "files": [
+        "files/SPEC-EXAMPLE-001.md",
+        "files/README-fragment.md"
+      ],
+      "expected_output": "Identifies T2 as the first unchecked task whose declared dependency is complete, explains why T1 is blocked, edits only evals/files/README-fragment.md as T2 requires, performs the stated alternative documentation check, marks only T2 complete, and records evidence. Does not implement T3.",
+      "assertions": [
+        "Selected task is T2, not T1 or T3.",
+        "Only evals/files/README-fragment.md and the selected SPEC execution evidence/task checkbox change; an existing SESSION_STATE.md may receive the required bounded handoff.",
+        "The documented alternative validation is run and reported.",
+        "T2 alone is marked complete and T3 remains unchecked.",
+        "No unrelated file, branch, commit, remote, or deployment action is performed."
+      ]
+    },
+    {
+      "id": "missing-explicit-approval",
+      "prompt": "Use implement-next for evals/files/SPEC-EXAMPLE-002.md and go ahead with its first task.",
+      "files": [
+        "files/SPEC-EXAMPLE-002.md"
+      ],
+      "expected_output": "Stops before editing because the SPEC has no explicit user approval evidence. Reports the missing approval and routes the SPEC back for approval.",
+      "assertions": [
+        "No task is selected for execution and no files are modified.",
+        "The missing explicit approval evidence is named as the blocker.",
+        "Does not infer approval from the implementation request, status, or task list."
+      ]
+    },
+    {
+      "id": "green-task-without-red-evidence",
+      "prompt": "Use implement-next to finish the first task in evals/files/SPEC-EXAMPLE-003.md.",
+      "files": [
+        "files/SPEC-EXAMPLE-003.md"
+      ],
+      "expected_output": "Stops before implementation because the selected green task lacks recorded red evidence. Identifies the missing focused failing-test evidence and returns the SPEC to the workflow for a red-test task or an explicitly approved TDD exception.",
+      "assertions": [
+        "Does not implement the green task or mark it complete.",
+        "Names the missing recorded red evidence as the blocker.",
+        "Does not invent, claim, or fabricate a prior test result.",
+        "Does not rewrite the task list to bypass the TDD gate."
+      ]
+    },
+    {
+      "id": "missing-approval-lifecycle",
+      "prompt": "Use implement-next for the first task in this SPEC, whose status is In Progress but which has no explicit approval evidence.",
+      "baseline_prompt": "Assess whether the first task in this In Progress SPEC can begin; approval evidence is absent.",
+      "expected_output": "Stops before implementation and reports the missing explicit approval evidence.",
+      "assertions": [
+        {"id": "approval-gate", "criterion": "Does not select or begin a task without explicit approval evidence."},
+        {"id": "name-blocker", "criterion": "Names the absent approval evidence as the blocker rather than inferring approval from status or request."}
+      ],
+      "overlap_review": "Common protocol already prohibits modifications, so file-change behavior is not measured; gate selection and blocker reporting remain observable.",
+      "masked_assertions": []
+    }
+  ]
+}

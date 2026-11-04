@@ -1,0 +1,13 @@
+{
+  "fixture_notice": "Synthetic evaluation data. No real account, person, or LinkedIn content.",
+  "interaction": {
+    "Interaction ID": "INT-SYNTH-009",
+    "Prospect ID": "PROSPECT-SYNTH-009",
+    "Post URL": "https://www.linkedin.com/posts/example-synthetic-post-1234567890123456789-abCd",
+    "Draft Text": "A concise synthetic comment about the post's stated topic.",
+    "Status": "pending_verification",
+    "Attempted": true,
+    "Live UI confirmation": "unavailable after timeout",
+    "retry_authorized": false
+  }
+}
