@@ -2,11 +2,10 @@
 name: linkedin-visual
 description: >-
   Use when deciding whether an approved LinkedIn post needs a visual and, when
-  useful, creating an Ahsan-style PDF carousel or requested image export with
-  an editable PPTX source when needed. For M Ahsan Izhar, reproduce the
-  canonical designs in examples/design as the visual target; do not improvise
-  a generic tech-carousel style. Preserve approved claims and do not publish
-  or schedule posts.
+  useful, creating a PDF carousel or requested image export with an editable
+  PPTX source when needed. Automatically apply the Ahsan profile for M Ahsan
+  Izhar deliverables; apply other profiles only when explicitly selected.
+  Preserve approved claims and do not publish or schedule posts.
 license: MIT
 ---
 
@@ -16,43 +15,18 @@ Create a visual only when it improves comprehension, credibility, or
 scanability. Preserve the approved source's claims, certainty, attribution,
 disclosures, and audience.
 
-For M Ahsan Izhar, **visual fidelity to the supplied design references is a
-non-negotiable requirement**. The goal is not merely to use the same colors and
-fonts. The generated pages must preserve the reference layouts, proportions,
-negative space, utility chrome, engineering motif, and single-cobalt focal
-language.
+## Optional identity profile
 
-## Ahsan visual source of truth
-
-When the visual is for M Ahsan Izhar, read these in this order before
-rendering:
-
-1. [references/ahsan-local-design-system.md](references/ahsan-local-design-system.md)
-2. [references/visual-selection.md](references/visual-selection.md)
-3. [references/design-selection.md](references/design-selection.md)
-4. [references/visual-fidelity.md](references/visual-fidelity.md)
-5. the exact canonical PNG(s) in `examples/design/` for the selected template(s)
-6. [references/presentation-execution.md](references/presentation-execution.md)
-7. [references/pptx-workflow.md](references/pptx-workflow.md)
-8. [references/text-fit-and-collision.md](references/text-fit-and-collision.md)
-
-Then read the remaining references only as needed for narrative, selection,
-accessibility, platform constraints, or QA.
-
-**Canonical visual-reference directory:** `examples/design/`
-
-The directory also contains three approved alternate design systems under
-`examples/design/carousel-options/`: `evidence-ledger`, `dark-signal`, and
-`modular-index`. The baseline templates remain the default. When the user asks
-to compare or use an alternate option, apply
-[references/design-selection.md](references/design-selection.md), then read
-that option's README and rendered `slides/` PNGs. Choose one complete option
-and keep the carousel consistent; do not mix options or invent a fourth visual
-system.
-
-Do not use the old/nonexistent path `examples/designs/`.
+When the deliverable is for M Ahsan Izhar, automatically load
+[references/ahsan-profile.md](references/ahsan-profile.md) before design. Do not
+ask whether to apply his established profile again. Other users and brands
+follow their supplied identity system and approved references. The profile does
+not change shared claim, approval, export, or accessibility requirements.
 
 ## Conditional capability routing
+
+Brand-specific guidance below this section applies to M Ahsan Izhar work only.
+For other brands, follow the user-supplied approved identity.
 
 This skill is harness-neutral. Use the following neighboring capabilities only
 when the active harness exposes them; their absence must not block the local
