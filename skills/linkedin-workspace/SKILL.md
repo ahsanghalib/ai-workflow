@@ -150,7 +150,10 @@ When a post changes after migration:
   [state-rules.md](references/state-rules.md) before changing the snapshot;
 - increment `Revision`;
 - update the exact Sheet `Final Post Text` snapshot;
-- recompute `Content Hash`;
+- recompute `Content Hash` with a deterministic local hashing tool over the
+  exact UTF-8 final body, without an added newline or algorithm prefix; never
+  guess a digest or treat a supplied expected value as independent validation;
+  if hashing is unavailable, mark it unverified and do not assert readiness;
 - update the Drive source file only after re-checking the authorized capability
   and selected target;
 - set `Sync State=conflict` rather than silently overwriting when two approved
@@ -183,3 +186,19 @@ Use the workbook to report useful funnel facts such as:
 
 Do not fabricate attribution. If a lead cannot be tied to a specific post or
 interaction, record the source as unknown or mixed.
+
+## Optional offline consistency preflight
+
+Before proposing a ready-to-post state, a shell-capable harness may run
+`python3 scripts/check-approval.py` from this skill directory, with synthetic
+or explicitly authorized JSON on stdin. Input fields are `content`,
+`visual_assets`, and `approval` (Content ID, Revision, Content Hash, approved).
+The checker compares the exact UTF-8 body hash, revision, identity, and visual
+evidence. It returns JSON `decision` and reasons, exiting 0 for allowed and 1
+for denied. No network or write occurs. A shell-free harness performs the same
+checks manually and reports that the preflight was not executed.
+
+This is a consistency check, not proof of user approval: caller-provided JSON
+can be forged. A downstream writer must independently obtain trusted approval
+for the same target/revision/hash and recheck current state immediately before
+mutation. Passing this checker never authorizes publication or external writes.

@@ -15,10 +15,17 @@ publication result.
 ## Revision invalidation
 
 Approval and visual readiness apply to the exact revision and content hash.
-When post text or claims change, set `Approval=needs_review` and remove
-`ready_for_manual_post` readiness for the revised draft. Reassess the visual;
-an asset tied to an older `Source Content Hash` cannot satisfy readiness.
+When post text or claims change, set `Approval=needs_review` and set
+`Publish Status=not_ready` instead of `ready_for_manual_post` for the revised
+draft. Reassess the visual;
+an asset tied to an older `Source Hash` cannot satisfy readiness.
 Preserve old source hashes as provenance rather than relabeling stale assets.
+Also preserve the existing asset's `QA Status` and `Approved` values: they
+record assessment of that historical artifact, not readiness of the revised
+post. Do not reset a historical asset to unverified/pending merely because
+copy changed. Invalidate readiness on the Content Library row and record the
+revision mismatch in Notes; create separate asset evidence when a new artifact
+is generated and assessed.
 Keep historical publication URLs and evidence for already scheduled or posted
 revisions; track the changed draft as a separate revision and flag any pending
 manual schedule for user reconciliation. Never imply a local edit changed the

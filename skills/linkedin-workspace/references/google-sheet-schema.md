@@ -22,7 +22,7 @@ One row per post/content item.
 | Source File Link | Google Drive link |
 | Research Link | Research/evidence file link |
 | Revision | Integer revision |
-| Content Hash | SHA-256 of exact final post body |
+| Content Hash | 64 lowercase hexadecimal SHA-256 characters of exact final post body (no algorithm prefix) |
 | Final Post Text | Exact approved/draft publishing snapshot |
 | Approval | `draft`, `needs_review`, `approved`, `declined`, `archived` |
 | Visual Status | `not_assessed`, `not_needed`, `planned`, `in_progress`, `ready`, `failed` |
@@ -60,7 +60,7 @@ workspace must not claim live UI verification or schedule a post itself.
 | Variant | Optional variant name |
 | Filename | Stored filename |
 | Drive Link | Asset link |
-| Source Hash | Content hash used to generate it |
+| Source Hash | Exact Content Hash used to generate it, in the same lowercase hex format |
 | QA Status | `draft`, `verified`, `failed`, `unverified` |
 | Approved | `yes`, `no`, `pending` |
 | Created At | Timestamp |
