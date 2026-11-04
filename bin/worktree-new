@@ -47,10 +47,10 @@ copy_ignored_runtime_files() {
 		local -a components=()
 
 		[[ "$raw" != /* ]] || return 1
-		IFS=/ read -r -a components <<< "$raw"
+		IFS=/ read -r -a components <<<"$raw"
 		for component in "${components[@]}"; do
 			case "$component" in
-			''|.) ;;
+			'' | .) ;;
 			..)
 				[[ -n "$normalized" ]] || return 1
 				if [[ "$normalized" == */* ]]; then
@@ -74,7 +74,7 @@ copy_ignored_runtime_files() {
 	}
 
 	if [[ -n ${WORKTREE_COPY_EXCLUDE:-} ]]; then
-		IFS=: read -r -a extra_excludes <<< "$WORKTREE_COPY_EXCLUDE"
+		IFS=: read -r -a extra_excludes <<<"$WORKTREE_COPY_EXCLUDE"
 		for raw_pattern in "${extra_excludes[@]}"; do
 			[[ -n "$raw_pattern" ]] || continue
 			if ! pattern="$(normalize_copy_exclude_prefix "$raw_pattern")"; then
@@ -121,7 +121,7 @@ copy_ignored_runtime_files() {
 		abort_ignored_runtime_copy || failure_status=$?
 		if ! cleanup_ignored_path_list; then
 			printf 'Could not remove the temporary ignored-path list.\n' >&2
-			(( failure_status == 0 )) && failure_status=1
+			((failure_status == 0)) && failure_status=1
 		fi
 
 		return "$failure_status"
@@ -153,22 +153,22 @@ copy_ignored_runtime_files() {
 		local candidate=$1
 
 		case "$candidate" in
-			.netrc|*/.netrc|.npmrc|*/.npmrc|.pypirc|*/.pypirc|\
-			auth.json|*/auth.json|token.json|*/token.json|\
-			credentials.json|*/credentials.json|service-account*.json|*/service-account*.json|\
-			credentials.*|*/credentials.*|firebase-adminsdk-*.json|*/firebase-adminsdk-*.json|\
-			id_rsa|*/id_rsa|id_rsa.*|*/id_rsa.*|id_ecdsa|*/id_ecdsa|id_dsa|*/id_dsa|\
-			id_ed25519|*/id_ed25519|id_ed25519.*|*/id_ed25519.*|id_xmss|*/id_xmss|\
-			id_*_sk|*/id_*_sk|\
-			*.pem|*.key|*.p12|*.pfx|\
-			*.jks|*.keystore|\
-			.ssh|*/.ssh|.ssh/*|*/.ssh/*|.aws|*/.aws|.aws/*|*/.aws/*|\
-			.gnupg|*/.gnupg|.gnupg/*|*/.gnupg/*|.kube|*/.kube|.kube/*|*/.kube/*)
-				return 0
-				;;
-			.docker|*/.docker|.docker/*|*/.docker/*)
-				return 0
-				;;
+		.netrc | */.netrc | .npmrc | */.npmrc | .pypirc | */.pypirc | \
+			auth.json | */auth.json | token.json | */token.json | \
+			credentials.json | */credentials.json | service-account*.json | */service-account*.json | \
+			credentials.* | */credentials.* | firebase-adminsdk-*.json | */firebase-adminsdk-*.json | \
+			id_rsa | */id_rsa | id_rsa.* | */id_rsa.* | id_ecdsa | */id_ecdsa | id_dsa | */id_dsa | \
+			id_ed25519 | */id_ed25519 | id_ed25519.* | */id_ed25519.* | id_xmss | */id_xmss | \
+			id_*_sk | */id_*_sk | \
+			*.pem | *.key | *.p12 | *.pfx | \
+			*.jks | *.keystore | \
+			.ssh | */.ssh | .ssh/* | */.ssh/* | .aws | */.aws | .aws/* | */.aws/* | \
+			.gnupg | */.gnupg | .gnupg/* | */.gnupg/* | .kube | */.kube | .kube/* | */.kube/*)
+			return 0
+			;;
+		.docker | */.docker | .docker/* | */.docker/*)
+			return 0
+			;;
 		esac
 
 		return 1
@@ -180,12 +180,12 @@ copy_ignored_runtime_files() {
 		local component
 		local -a components=()
 
-		IFS=/ read -r -a components <<< "$relative_path"
+		IFS=/ read -r -a components <<<"$relative_path"
 		for component in "${components[@]}"; do
 			[[ -n "$component" && "$component" != '.' ]] || continue
 			parent="$parent/$component"
 			if [[ -L "$parent" ||
-				( -e "$parent" && ! -d "$parent" ) ]]; then
+				(-e "$parent" && ! -d "$parent") ]]; then
 				return 0
 			fi
 		done
@@ -249,15 +249,15 @@ validate_worktree_target_ancestors() {
 	local -a components=()
 
 	if [[ -L "$candidate" ||
-		( -e "$candidate" && ! -d "$candidate" ) ]]; then
+		(-e "$candidate" && ! -d "$candidate") ]]; then
 		return 1
 	fi
 
-	IFS=/ read -r -a components <<< "$branch"
+	IFS=/ read -r -a components <<<"$branch"
 	for component in "${components[@]}"; do
 		candidate="$candidate/$component"
 		if [[ -L "$candidate" ||
-			( -e "$candidate" && ! -d "$candidate" ) ]]; then
+			(-e "$candidate" && ! -d "$candidate") ]]; then
 			return 1
 		fi
 	done
@@ -279,8 +279,8 @@ if ! git check-ref-format --branch "$branch" >/dev/null 2>&1; then
 fi
 
 case "$start_window" in
-	edit|agent|test|git) ;;
-	*) die "invalid start window '$start_window' (expected: edit, agent, test, or git)" ;;
+edit | agent | test | git) ;;
+*) die "invalid start window '$start_window' (expected: edit, agent, test, or git)" ;;
 esac
 
 if ! current_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
@@ -297,10 +297,26 @@ if ! main_checkout="$(resolve_existing_directory "$main_checkout")"; then
 fi
 
 repo_name="$(basename "$main_checkout")"
-worktree_root="$(dirname "$main_checkout")/${repo_name}.worktrees"
-# Mirror branch namespaces in the worktree directory. For example:
-#   feature/auth-login -> <repo>.worktrees/feature/auth-login
-# This avoids inventing or rewriting the branch name.
+[[ -n ${AI_WORKFLOW_WORKTREE_ROOT:-} ]] ||
+	die 'AI_WORKFLOW_WORKTREE_ROOT is not set; set it to an absolute directory'
+worktree_base=$AI_WORKFLOW_WORKTREE_ROOT
+[[ "$worktree_base" == /* ]] || die 'AI_WORKFLOW_WORKTREE_ROOT must be an absolute path'
+if [[ ! -d "$worktree_base" ]]; then
+	printf 'Worktree root does not exist: %s\nCreate it? [y/N] ' "$worktree_base" >&2
+	if ! IFS= read -r create_root; then
+		die 'could not read confirmation to create the worktree root'
+	fi
+	case "$create_root" in
+	y | Y | yes | YES | Yes) ;;
+	*) die 'worktree root creation declined' ;;
+	esac
+	mkdir -p -- "$worktree_base" || die "could not create worktree root: $worktree_base"
+fi
+if ! worktree_base="$(resolve_existing_directory "$worktree_base")"; then
+	die "worktree root is not a directory: $worktree_base"
+fi
+worktree_root="${worktree_base%/}/${repo_name}"
+# Preserve branch namespaces without rewriting the branch name.
 target="${worktree_root}/${branch}"
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
@@ -341,8 +357,8 @@ git -C "$main_checkout" worktree add --no-track -b "$branch" "$target" "$base_re
 
 copy_status=0
 copy_ignored_runtime_files "$current_root" "$target" || copy_status=$?
-if (( copy_status != 0 )); then
-	if (( copy_status == 2 )); then
+if ((copy_status != 0)); then
+	if ((copy_status == 2)); then
 		die "ignored-file copy failed and cleanup was incomplete; inspect: $target"
 	fi
 
