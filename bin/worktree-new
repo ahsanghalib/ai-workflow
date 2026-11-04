@@ -6,6 +6,265 @@ die() {
 	exit 1
 }
 
+resolve_existing_directory() {
+	local path=$1
+
+	[[ -d "$path" ]] || return 1
+	(cd -P -- "$path" && pwd -P)
+}
+
+copy_ignored_runtime_files() {
+	local source_root=$1
+	local destination_root=$2
+	local path destination ignored_list copied=0 pattern raw_pattern abort_status relative_parent
+	local -a copied_destinations=()
+	local -a copy_exclude_paths=(
+		node_modules bower_components jspm_packages
+		.pnpm-store .yarn .npm
+		.venv venv env __pypackages__ .tox .nox
+		ENV env.bak venv.bak
+		__pycache__ .pytest_cache .mypy_cache .ruff_cache .pyre .pytype .pyright
+		.hypothesis .ipynb_checkpoints htmlcov .uv
+		target vendor packages
+		.gradle .dart_tool .pub-cache Pods Carthage Build
+		.bundle .eggs pip-wheel-metadata .yardoc _yardoc
+		_build deps .elixir_ls .stack-work dist-newstyle .cabal-sandbox
+		CMakeFiles .vs TestResults BenchmarkDotNet.Artifacts .cxx
+		build dist out coverage .cache .parcel-cache .next .nuxt .output
+		.svelte-kit .astro .vite .angular .storybook-out storybook-static
+		.expo .nyc_output
+		.terraform .serverless .aws-sam .cdk.out cdk.out .pulumi
+		zip _site site .docusaurus .mkdocs_cache docs/_build
+		test-results playwright-report blob-report allure-results allure-report
+		.direnv .tmp tmp temp
+	)
+	local -a extra_excludes=()
+	local -a copy_exclude_prefixes=()
+
+	normalize_copy_exclude_prefix() {
+		local raw=$1
+		local component normalized=''
+		local -a components=()
+
+		[[ "$raw" != /* ]] || return 1
+		IFS=/ read -r -a components <<< "$raw"
+		for component in "${components[@]}"; do
+			case "$component" in
+			''|.) ;;
+			..)
+				[[ -n "$normalized" ]] || return 1
+				if [[ "$normalized" == */* ]]; then
+					normalized="${normalized%/*}"
+				else
+					normalized=''
+				fi
+				;;
+			*)
+				if [[ -n "$normalized" ]]; then
+					normalized="$normalized/$component"
+				else
+					normalized="$component"
+				fi
+				;;
+			esac
+		done
+
+		[[ -n "$normalized" ]] || return 1
+		printf '%s\n' "$normalized"
+	}
+
+	if [[ -n ${WORKTREE_COPY_EXCLUDE:-} ]]; then
+		IFS=: read -r -a extra_excludes <<< "$WORKTREE_COPY_EXCLUDE"
+		for raw_pattern in "${extra_excludes[@]}"; do
+			[[ -n "$raw_pattern" ]] || continue
+			if ! pattern="$(normalize_copy_exclude_prefix "$raw_pattern")"; then
+				printf 'Invalid WORKTREE_COPY_EXCLUDE path: %s\n' "$raw_pattern" >&2
+				return 1
+			fi
+			copy_exclude_prefixes+=("$pattern")
+		done
+	fi
+
+	cleanup_ignored_runtime_copy() {
+		local index destination_path cleanup_status=0
+
+		for ((index = ${#copied_destinations[@]} - 1; index >= 0; index--)); do
+			destination_path=${copied_destinations[index]}
+			[[ -e "$destination_path" || -L "$destination_path" ]] || continue
+			if [[ -d "$destination_path" && ! -L "$destination_path" ]]; then
+				if ! rm -r -- "$destination_path"; then
+					cleanup_status=1
+				fi
+			elif ! rm -f -- "$destination_path"; then
+				cleanup_status=1
+			fi
+		done
+
+		return "$cleanup_status"
+	}
+
+	abort_ignored_runtime_copy() {
+		if ! cleanup_ignored_runtime_copy; then
+			printf 'Could not clean up copied runtime files after a copy failure.\n' >&2
+			return 2
+		fi
+		return 1
+	}
+
+	cleanup_ignored_path_list() {
+		rm -f -- "$ignored_list"
+	}
+
+	copy_failure_status() {
+		local failure_status=0
+
+		abort_ignored_runtime_copy || failure_status=$?
+		if ! cleanup_ignored_path_list; then
+			printf 'Could not remove the temporary ignored-path list.\n' >&2
+			(( failure_status == 0 )) && failure_status=1
+		fi
+
+		return "$failure_status"
+	}
+
+	is_copy_excluded() {
+		local candidate=$1
+
+		for pattern in "${copy_exclude_paths[@]}"; do
+			[[ -n "$pattern" ]] || continue
+			if [[ "$candidate" == "$pattern" ||
+				"$candidate" == "$pattern/"* ||
+				"$candidate" == */"$pattern" ||
+				"$candidate" == */"$pattern/"* ]]; then
+				return 0
+			fi
+		done
+
+		for pattern in "${copy_exclude_prefixes[@]}"; do
+			if [[ "$candidate" == "$pattern" || "$candidate" == "$pattern/"* ]]; then
+				return 0
+			fi
+		done
+
+		return 1
+	}
+
+	is_copy_sensitive() {
+		local candidate=$1
+
+		case "$candidate" in
+			.netrc|*/.netrc|.npmrc|*/.npmrc|.pypirc|*/.pypirc|\
+			auth.json|*/auth.json|token.json|*/token.json|\
+			credentials.json|*/credentials.json|service-account*.json|*/service-account*.json|\
+			credentials.*|*/credentials.*|firebase-adminsdk-*.json|*/firebase-adminsdk-*.json|\
+			id_rsa|*/id_rsa|id_rsa.*|*/id_rsa.*|id_ecdsa|*/id_ecdsa|id_dsa|*/id_dsa|\
+			id_ed25519|*/id_ed25519|id_ed25519.*|*/id_ed25519.*|id_xmss|*/id_xmss|\
+			id_*_sk|*/id_*_sk|\
+			*.pem|*.key|*.p12|*.pfx|\
+			*.jks|*.keystore|\
+			.ssh|*/.ssh|.ssh/*|*/.ssh/*|.aws|*/.aws|.aws/*|*/.aws/*|\
+			.gnupg|*/.gnupg|.gnupg/*|*/.gnupg/*|.kube|*/.kube|.kube/*|*/.kube/*)
+				return 0
+				;;
+			.docker|*/.docker|.docker/*|*/.docker/*)
+				return 0
+				;;
+		esac
+
+		return 1
+	}
+
+	has_unsafe_destination_parent() {
+		local relative_path=$1
+		local parent="$destination_root"
+		local component
+		local -a components=()
+
+		IFS=/ read -r -a components <<< "$relative_path"
+		for component in "${components[@]}"; do
+			[[ -n "$component" && "$component" != '.' ]] || continue
+			parent="$parent/$component"
+			if [[ -L "$parent" ||
+				( -e "$parent" && ! -d "$parent" ) ]]; then
+				return 0
+			fi
+		done
+
+		return 1
+	}
+
+	if ! ignored_list="$(mktemp "${TMPDIR:-/tmp}/worktree-new.XXXXXX")"; then
+		printf 'Could not create a temporary ignored-path list.\n' >&2
+		return 1
+	fi
+	if ! git -C "$source_root" ls-files --others --ignored --exclude-standard -z >"$ignored_list"; then
+		cleanup_ignored_path_list || true
+		printf 'Could not enumerate ignored runtime paths.\n' >&2
+		return 1
+	fi
+
+	while IFS= read -r -d '' path; do
+		[[ -n "$path" ]] || continue
+		is_copy_excluded "$path" && continue
+		if [[ ${WORKTREE_COPY_ALLOW_SENSITIVE:-} != 1 ]] && is_copy_sensitive "$path"; then
+			continue
+		fi
+		relative_parent="${path%/*}"
+		[[ "$relative_parent" == "$path" ]] && relative_parent=''
+		if has_unsafe_destination_parent "$relative_parent"; then
+			printf 'Ignored path has an unsafe tracked parent: %s\n' "$path" >&2
+			abort_status=0
+			copy_failure_status || abort_status=$?
+			return "$abort_status"
+		fi
+
+		if git -C "$destination_root" ls-files --error-unmatch -- \
+			":(literal)$path" >/dev/null 2>&1; then
+			printf 'Ignored path collides with a tracked base path: %s\n' "$path" >&2
+			abort_status=0
+			copy_failure_status || abort_status=$?
+			return "$abort_status"
+		fi
+
+		destination="$destination_root/$path"
+		copied_destinations+=("$destination")
+		if ! mkdir -p -- "$(dirname -- "$destination")" ||
+			! cp -a -- "$source_root/$path" "$destination"; then
+			abort_status=0
+			copy_failure_status || abort_status=$?
+			return "$abort_status"
+		fi
+		copied=$((copied + 1))
+	done <"$ignored_list"
+	cleanup_ignored_path_list || return 1
+
+	printf 'Copied %d ignored runtime path(s) from %s\n' "$copied" "$source_root"
+}
+
+validate_worktree_target_ancestors() {
+	local worktree_root=$1
+	local branch=$2
+	local candidate="$worktree_root"
+	local component
+	local -a components=()
+
+	if [[ -L "$candidate" ||
+		( -e "$candidate" && ! -d "$candidate" ) ]]; then
+		return 1
+	fi
+
+	IFS=/ read -r -a components <<< "$branch"
+	for component in "${components[@]}"; do
+		candidate="$candidate/$component"
+		if [[ -L "$candidate" ||
+			( -e "$candidate" && ! -d "$candidate" ) ]]; then
+			return 1
+		fi
+	done
+
+	return 0
+}
+
 branch="${1:-}"
 base_ref="${2:-origin/main}"
 start_window="${3:-agent}"
@@ -33,7 +292,9 @@ main_checkout="$({
 		awk '/^worktree / { print substr($0, 10); exit }'
 } || true)"
 [[ -n "$main_checkout" ]] || die 'could not determine the main Git checkout'
-main_checkout="$(realpath -e -- "$main_checkout")"
+if ! main_checkout="$(resolve_existing_directory "$main_checkout")"; then
+	die "main Git checkout does not exist: $main_checkout"
+fi
 
 repo_name="$(basename "$main_checkout")"
 worktree_root="$(dirname "$main_checkout")/${repo_name}.worktrees"
@@ -60,8 +321,38 @@ if git -C "$main_checkout" show-ref --verify --quiet "refs/heads/${branch}"; the
 	die "branch already exists: $branch"
 fi
 
-mkdir -p "$(dirname "$target")"
+if ! validate_worktree_target_ancestors "$worktree_root" "$branch"; then
+	die "worktree target has a symlink or non-directory ancestor: $target"
+fi
+
+mkdir -p -- "$(dirname "$target")"
+if ! target_parent="$(resolve_existing_directory "$(dirname "$target")")"; then
+	die "could not resolve worktree target parent: $target"
+fi
+if [[ "$target_parent" != "$worktree_root" &&
+	"$target_parent" != "$worktree_root/"* ]]; then
+	die "worktree target escaped the expected directory: $target"
+fi
+if [[ -e "$target" || -L "$target" ]]; then
+	die "target already exists: $target"
+fi
+
 git -C "$main_checkout" worktree add --no-track -b "$branch" "$target" "$base_ref"
+
+copy_status=0
+copy_ignored_runtime_files "$current_root" "$target" || copy_status=$?
+if (( copy_status != 0 )); then
+	if (( copy_status == 2 )); then
+		die "ignored-file copy failed and cleanup was incomplete; inspect: $target"
+	fi
+
+	printf 'Failed to copy ignored runtime files; rolling back %s.\n' "$target" >&2
+	if git -C "$main_checkout" worktree remove "$target" &&
+		git -C "$main_checkout" branch -D -- "$branch"; then
+		die 'worktree creation rolled back after ignored-file copy failure'
+	fi
+	die "ignored-file copy failed and rollback was incomplete: $target"
+fi
 
 printf '\nCreated worktree: %s\n' "$target"
 printf 'Branch: %s\n' "$branch"

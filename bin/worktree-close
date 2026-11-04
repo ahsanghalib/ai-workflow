@@ -6,6 +6,45 @@ die() {
 	exit 1
 }
 
+resolve_existing_directory() {
+	local path=$1
+
+	[[ -d "$path" ]] || return 1
+	(cd -P -- "$path" && pwd -P)
+}
+
+repository_slug_from_remote_url() {
+	local remote_url=$1
+	local authority path owner repo extra
+	local without_scheme
+
+	case "$remote_url" in
+	*://*)
+		without_scheme=${remote_url#*://}
+		authority=${without_scheme%%/*}
+		path=${without_scheme#*/}
+		;;
+	*:* )
+		authority=${remote_url%%:*}
+		path=${remote_url#*:}
+		;;
+	*)
+		return 1
+		;;
+	esac
+
+	authority=${authority##*@}
+	path=${path%%\?*}
+	path=${path%%\#*}
+	path=${path%/}
+	path=${path%.git}
+	IFS=/ read -r owner repo extra <<< "$path"
+	[[ -n "$authority" && -n "$owner" && -n "$repo" && -z ${extra:-} ]] ||
+		return 1
+
+	printf '%s/%s/%s\n' "$authority" "$owner" "$repo"
+}
+
 target_arg="${1:-}"
 merged_into="${2:-origin/main}"
 
@@ -14,22 +53,25 @@ if [[ -z "$target_arg" ]]; then
 	exit 2
 fi
 
-if ! input_path="$(realpath -e -- "$target_arg" 2>/dev/null)"; then
+if ! input_path="$(resolve_existing_directory "$target_arg" 2>/dev/null)"; then
 	die "path does not exist: $target_arg"
 fi
-[[ -d "$input_path" ]] || die "path is not a directory: $input_path"
 
 if ! target="$(git -C "$input_path" rev-parse --show-toplevel 2>/dev/null)"; then
 	die "not inside a Git worktree: $input_path"
 fi
-target="$(realpath -e -- "$target")"
+if ! target="$(resolve_existing_directory "$target")"; then
+	die "worktree root does not exist: $target"
+fi
 
 main_checkout="$({
 	git -C "$target" worktree list --porcelain |
 		awk '/^worktree / { print substr($0, 10); exit }'
 } || true)"
 [[ -n "$main_checkout" ]] || die 'could not determine the main Git checkout'
-main_checkout="$(realpath -e -- "$main_checkout")"
+if ! main_checkout="$(resolve_existing_directory "$main_checkout")"; then
+	die "main Git checkout does not exist: $main_checkout"
+fi
 
 if [[ "$target" == "$main_checkout" ]]; then
 	die "refusing to remove the main checkout: $target"
@@ -47,6 +89,18 @@ if [[ -n "$(git -C "$target" status --porcelain)" ]]; then
 	printf 'Worktree is not clean: %s\n' "$target" >&2
 	git -C "$target" status --short >&2
 	exit 1
+fi
+
+ignored_status="$(git -C "$target" status --porcelain=v1 --ignored --untracked-files=normal |
+		awk '$1 == "!!"')"
+if [[ -n "$ignored_status" ]]; then
+	printf 'Worktree contains ignored files that would be removed: %s\n' "$target" >&2
+	printf '%s\n' "$ignored_status" >&2
+	exit 1
+fi
+
+if ! branch_tip="$(git -C "$target" rev-parse --verify HEAD 2>/dev/null)"; then
+	die "could not determine the current branch tip: $target"
 fi
 
 remote=""
@@ -69,27 +123,55 @@ if ! git -C "$main_checkout" rev-parse --verify "${merged_into}^{commit}" >/dev/
 fi
 
 merge_proof='git ancestry'
+pr_repo=''
+pr_remote="$remote"
+
+if [[ -z "$pr_remote" ]] &&
+	git -C "$main_checkout" remote get-url origin >/dev/null 2>&1; then
+	pr_remote=origin
+fi
+if [[ -n "$pr_remote" ]]; then
+	remote_url="$(git -C "$main_checkout" remote get-url "$pr_remote" 2>/dev/null || true)"
+	if [[ -n "$remote_url" ]]; then
+		pr_repo="$(repository_slug_from_remote_url "$remote_url" || true)"
+	fi
+fi
 
 if ! git -C "$main_checkout" merge-base --is-ancestor "$branch" "$merged_into"; then
 	pr_number=""
-	if command -v gh >/dev/null 2>&1; then
-		pr_number="$({
+	multiple_pr_matches=0
+	if command -v gh >/dev/null 2>&1 && [[ -n "$pr_repo" ]]; then
+		pr_candidates="$({
 			cd "$main_checkout"
 			gh pr list \
+				--repo "$pr_repo" \
 				--head "$branch" \
 				--base "$base_branch" \
 				--state merged \
-				--limit 1 \
-				--json number \
-				--jq '.[0].number // empty' 2>/dev/null
+				--limit 100 \
+				--json number,headRefOid \
+				--jq '.[] | [.number, .headRefOid] | @tsv' 2>/dev/null
 		} || true)"
+
+		while IFS=$'\t' read -r candidate_number candidate_head; do
+			[[ -n "$candidate_number" && "$candidate_head" == "$branch_tip" ]] || continue
+			if [[ -n "$pr_number" ]]; then
+				multiple_pr_matches=1
+				break
+			fi
+			pr_number="$candidate_number"
+		done <<< "$pr_candidates"
 	fi
 
-	if [[ -n "$pr_number" ]]; then
+	if (( multiple_pr_matches )); then
+		printf 'Multiple merged GitHub PRs match branch %s at tip %s.\n' \
+			"$branch" "$branch_tip" >&2
+		exit 1
+	elif [[ -n "$pr_number" ]]; then
 		merge_proof="merged GitHub PR #${pr_number}"
 	else
 		printf 'Branch %s is not an ancestor of %s.\n' "$branch" "$merged_into" >&2
-		printf 'If the PR was squash/rebase merged, authenticate GitHub CLI so the merged PR can be verified.\n' >&2
+		printf 'A squash/rebase merge must match the current branch tip; authenticate GitHub CLI so it can be verified.\n' >&2
 		exit 1
 	fi
 fi
