@@ -57,10 +57,14 @@ worktree-new feature/my-change origin/main agent
 ```
 
 The default base is `origin/main` and the default start window is `agent`.
-After creation, enter the printed sibling path, for example:
+Set `AI_WORKFLOW_WORKTREE_ROOT` to an absolute directory before creating a
+worktree. The helper errors if it is unset. If the directory does not exist,
+the helper asks before creating it. Worktrees are grouped by repository name
+and branch beneath that root. After creation, enter the exact path printed by
+the helper:
 
 ```bash
-cd ../my-repository.worktrees/feature/my-change
+cd /path/printed/by/worktree-new
 git branch --show-current
 ```
 
@@ -88,7 +92,7 @@ that exact cleanup, including the target path, branch, merge ref, and any
 remote verification. Run it from outside the target worktree:
 
 ```bash
-worktree-close ../my-repository.worktrees/feature/my-change origin/main
+worktree-close /path/printed/by/worktree-new origin/main
 ```
 
 `worktree-close` refuses to remove the main checkout, a detached or dirty
