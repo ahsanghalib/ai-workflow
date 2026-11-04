@@ -1,0 +1,106 @@
+{
+  "$schema": "https://raw.githubusercontent.com/gotgenes/pi-packages/main/packages/pi-permission-system/schemas/permissions.schema.json",
+  "debugLog": false,
+  "permissionReviewLog": true,
+  "yoloMode": false,
+  "doublePressToConfirm": true,
+  "permissionDialogKeys": {
+    "approve": "y",
+    "approveSession": "s",
+    "approveSessionBoth": "b",
+    "deny": "n",
+    "denyWithReason": "r"
+  },
+  "promptNotifications": [],
+  "forwardingTimeoutMs": 600000,
+  "promptMaxRows": 24,
+  "promptFieldMaxWidth": 400,
+  "reviewLogFieldMaxWidth": 1000,
+  "piInfrastructureReadPaths": [],
+  "authorizerChain": [],
+  "shellTools": {
+    "exec_command": {
+      "commandArgument": "cmd",
+      "workdirArgument": "workdir"
+    }
+  },
+  "permission": {
+    "*": "ask",
+    "path": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow",
+      "*auth.json": "deny",
+      "*credentials.json": "deny",
+      "*secrets.json": "deny",
+      "*tokens.json": "deny",
+      "*service-account.json": "deny",
+      "*firebase-adminsdk-*.json": "deny",
+      "*appsettings.*.json": "deny",
+      "*.git-credentials": "deny",
+      "*.netrc": "deny",
+      "*.npmrc": "deny",
+      "*.pypirc": "deny",
+      "*/.aws/*": "deny",
+      "*/.kube/*": "deny",
+      "*/.ssh/*": "deny",
+      "*.pem": "deny",
+      "*.key": "deny",
+      "*.p12": "deny",
+      "*.pfx": "deny",
+      "*.tfvars": "deny",
+      "*.tfvars.json": "deny"
+    },
+    "read": "allow",
+    "write": "ask",
+    "edit": "ask",
+    "bash": {
+      "*": "ask",
+      "git *": "ask",
+      "git status": "allow",
+      "git status *": "allow",
+      "git diff": "allow",
+      "git diff *": "allow",
+      "git log": "allow",
+      "git log *": "allow",
+      "git show": "allow",
+      "git show *": "allow",
+      "git branch --show-current": "allow",
+      "sudo *": "deny",
+      "doas *": "deny",
+      "rm -r *": "deny",
+      "rm -R *": "deny",
+      "rm --recursive *": "deny",
+      "find * -delete": "deny",
+      "find * -exec rm *": "deny",
+      "shred *": "deny",
+      "git reset --hard *": "deny",
+      "git clean *": "deny",
+      "git push *": "deny",
+      "git checkout -- *": "deny",
+      "git restore *": "deny",
+      "terraform apply *": "deny",
+      "terraform destroy *": "deny",
+      "aws *": "deny",
+      "kubectl *": "deny",
+      "docker *": "deny",
+      "npm publish *": "deny",
+      "pnpm publish *": "deny",
+      "pacman *": "deny",
+      "yay *": "deny",
+      "systemctl *": "deny"
+    },
+    "mcp": {
+      "*": "ask",
+      "mcp_status": "allow",
+      "mcp_list": "allow"
+    },
+    "skill": {
+      "*": "ask"
+    },
+    "external_directory": {
+      "*": "ask"
+    }
+  }
+}
