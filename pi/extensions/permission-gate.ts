@@ -28,7 +28,9 @@ const deniedCommandPatterns = [
 ];
 
 function asRecord(value: unknown): Record<string, unknown> {
-  return value !== null && typeof value === "object" ? (value as Record<string, unknown>) : {};
+  return value !== null && typeof value === "object"
+    ? (value as Record<string, unknown>)
+    : {};
 }
 
 function pathFromInput(input: unknown): string | undefined {
@@ -48,10 +50,19 @@ function shellCommand(input: unknown): string {
 }
 
 function isSafeInspectionCommand(command: string): boolean {
-  return /^git\s+(?:status|diff|log|show|branch\s+--show-current)(?:\s|$)/i.test(command);
+  return /^git\s+(?:status|diff|log|show|branch\s+--show-current)(?:\s|$)/i.test(
+    command,
+  );
 }
 
-async function confirm(ctx: { hasUI: boolean; ui: { confirm(title: string, message: string): Promise<boolean> } }, title: string, detail: string) {
+async function confirm(
+  ctx: {
+    hasUI: boolean;
+    ui: { confirm(title: string, message: string): Promise<boolean> };
+  },
+  title: string,
+  detail: string,
+) {
   if (!ctx.hasUI) return false;
   return ctx.ui.confirm(title, detail);
 }
@@ -69,14 +80,24 @@ export default function permissionGate(pi: ExtensionAPI) {
     if (event.toolName === "edit" || event.toolName === "write") {
       const path = pathFromInput(event.input);
       if (path && isProtectedPath(path)) {
-        return { block: true, reason: `Protected path mutation blocked: ${path}` };
+        return {
+          block: true,
+          reason: `Protected path mutation blocked: ${path}`,
+        };
       }
 
-      const allowed = await confirm(ctx, "Allow file mutation?", `${event.toolName}: ${path ?? "unknown path"}`);
-      return allowed ? undefined : { block: true, reason: "File mutation was not approved" };
+      const allowed = await confirm(
+        ctx,
+        "Allow file mutation?",
+        `${event.toolName}: ${path ?? "unknown path"}`,
+      );
+      return allowed
+        ? undefined
+        : { block: true, reason: "File mutation was not approved" };
     }
 
-    if (event.toolName !== "bash" && event.toolName !== "powershell") return undefined;
+    if (event.toolName !== "bash" && event.toolName !== "powershell")
+      return undefined;
 
     const command = shellCommand(event.input);
     if (deniedCommandPatterns.some((pattern) => pattern.test(command))) {
@@ -85,7 +106,13 @@ export default function permissionGate(pi: ExtensionAPI) {
 
     if (isSafeInspectionCommand(command)) return undefined;
 
-    const allowed = await confirm(ctx, "Allow shell command?", command || "Empty shell command");
-    return allowed ? undefined : { block: true, reason: "Shell command was not approved" };
+    const allowed = await confirm(
+      ctx,
+      "Allow shell command?",
+      command || "Empty shell command",
+    );
+    return allowed
+      ? undefined
+      : { block: true, reason: "Shell command was not approved" };
   });
 }
