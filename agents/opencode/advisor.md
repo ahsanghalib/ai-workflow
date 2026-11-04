@@ -1,7 +1,7 @@
 ---
 description: Analyze architecture and make technical decisions without modifying files
 mode: all
-model: openai/gpt-5.6-terra#high
+model: openai/gpt-6.1-sol#high
 steps: 10
 permissions:
   - action: edit

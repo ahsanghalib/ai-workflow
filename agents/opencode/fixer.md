@@ -2,7 +2,7 @@
 description: Resolve a narrowly scoped hard implementation blocker delegated by engineer
 mode: subagent
 hidden: true
-model: openai/gpt-5.6-terra#high
+model: openai/gpt-6.1-sol#high
 steps: 15
 permissions:
   - action: subagent

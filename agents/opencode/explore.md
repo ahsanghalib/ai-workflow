@@ -1,7 +1,7 @@
 ---
 description: Read-only repository exploration that returns only evidence needed by the parent
 mode: subagent
-model: openai/gpt-5.6-luna#medium
+model: openai/gpt-6-luna#medium
 steps: 8
 permissions:
   - action: edit

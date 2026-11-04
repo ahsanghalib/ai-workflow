@@ -1,7 +1,7 @@
 ---
 description: Implement scoped repository changes and automatically escalate only hard blockers
 mode: primary
-model: openai/gpt-5.6-luna#xhigh
+model: openai/gpt-6-luna#high
 permissions:
   - action: subagent
     resource: "*"

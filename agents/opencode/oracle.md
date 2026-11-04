@@ -1,7 +1,7 @@
 ---
 description: Independent read-only GPT escalation for unresolved hard problems and high-risk second opinions
 mode: all
-model: openai/gpt-5.6-sol#low
+model: openai/gpt-6-astra#medium
 steps: 12
 permissions:
   - action: edit

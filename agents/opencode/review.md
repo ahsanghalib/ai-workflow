@@ -1,7 +1,7 @@
 ---
 description: Read-only focused code review for proven correctness and regression issues
 mode: subagent
-model: openai/gpt-5.6-terra#high
+model: openai/gpt-6.1-sol#high
 steps: 15
 permissions:
   - action: edit
