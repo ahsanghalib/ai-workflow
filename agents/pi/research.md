@@ -2,7 +2,7 @@
 name: research
 description: Focused current research using authoritative sources without modifying the repository
 provider: openai
-model: gpt-5.6-luna
+model: gpt-6-luna
 thinkingLevel: medium
 tools:
   - read

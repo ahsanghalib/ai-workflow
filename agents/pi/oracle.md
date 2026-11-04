@@ -2,8 +2,8 @@
 name: oracle
 description: Independent read-only second opinion for unresolved hard problems and high-risk uncertainty
 provider: openai
-model: gpt-5.6-sol
-thinkingLevel: low
+model: gpt-6-astra
+thinkingLevel: medium
 tools:
   - read
   - grep

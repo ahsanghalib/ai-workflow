@@ -2,7 +2,7 @@
 name: advisor
 description: Analyze architecture and make technical decisions without modifying files
 provider: openai
-model: gpt-5.6-terra
+model: gpt-6.1-sol
 thinkingLevel: high
 tools:
   - read

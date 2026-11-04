@@ -2,7 +2,7 @@
 name: fixer
 description: Resolve a narrowly scoped hard implementation blocker delegated by engineer
 provider: openai
-model: gpt-5.6-terra
+model: gpt-6.1-sol
 thinkingLevel: high
 tools:
   - read

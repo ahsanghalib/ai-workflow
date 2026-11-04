@@ -2,7 +2,7 @@
 name: review
 description: Read-only focused code review for proven correctness and regression issues
 provider: openai
-model: gpt-5.6-terra
+model: gpt-6.1-sol
 thinkingLevel: high
 tools:
   - read

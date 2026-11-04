@@ -2,7 +2,7 @@
 name: explore
 description: Read-only repository exploration that returns only evidence needed by the parent
 provider: openai
-model: gpt-5.6-luna
+model: gpt-6-luna
 thinkingLevel: medium
 tools:
   - read

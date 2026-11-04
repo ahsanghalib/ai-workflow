@@ -2,8 +2,8 @@
 name: engineer
 description: Implement scoped repository changes and automatically escalate only hard blockers
 provider: openai
-model: gpt-5.6-luna
-thinkingLevel: xhigh
+model: gpt-6-luna
+thinkingLevel: high
 tools:
   - read
   - bash
