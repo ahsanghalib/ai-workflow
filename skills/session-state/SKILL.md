@@ -1,6 +1,6 @@
 ---
 name: session-state
-description: Update an existing active project's root SESSION_STATE.md and its AGENTS.md continuity section after meaningful work or before handoff. Record current focus, active SPEC/task, status, completed/in-progress work, blockers, findings, validation, and next steps. Use project-init for template-based creation; do not use for permanent architecture, changelogs, transcripts, or auditing this skill.
+description: Update an existing active project's root SESSION_STATE.md and its harness-recognized instruction file continuity section after meaningful work or before handoff. Record current focus, active SPEC/task, status, completed/in-progress work, blockers, findings, validation, and next steps. Use project-init for template-based creation; do not use for permanent architecture, changelogs, transcripts, or auditing this skill.
 license: MIT
 ---
 
@@ -8,7 +8,8 @@ license: MIT
 
 `SESSION_STATE.md` answers: **where did we stop?** This skill updates existing
 project-control documents. `project-init` owns template-based creation of
-`SESSION_STATE.md` and `AGENTS.md`; when either required document is missing,
+`SESSION_STATE.md` and the harness-recognized project instruction file; when
+either required document is missing,
 report that handoff instead of creating a new file shape. When this skill is
 invoked to update state, complete the file updates before reporting the result.
 If the active project root cannot be identified, report the blocker without
@@ -56,7 +57,7 @@ writing elsewhere.
   suggests another location.
 - Keep the document roughly 50–150 lines unless the project genuinely needs more.
 
-## Required AGENTS.md continuity
+## Required instruction-file continuity
 
 Ensure the resolved project-root instruction file contains exactly one `## Session continuity`
 section with these bullets:
