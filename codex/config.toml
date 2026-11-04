@@ -1,10 +1,11 @@
-model = "gpt-5.6-luna"
+model = "gpt-6-luna"
 model_reasoning_effort = "high"
 web_search = "live"
 
 approval_policy = "on-request"
 
 sandbox_mode = "workspace-write"
+service_tier = "default"
 
 [sandbox_workspace_write]
 writable_roots = []
@@ -144,6 +145,8 @@ status_line = [
   "task-progress",
 ]
 status_line_use_colors = true
+screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 gpt-6-astra = 4
+"gpt-6.1-sol" = 4
