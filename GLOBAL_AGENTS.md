@@ -173,8 +173,9 @@ state the limitation.
   something is not approval for a push, PR or issue change, workflow rerun or
   cancellation, merge, release, deployment, or cloud/database mutation. Verify
   the destination and present the prepared action before executing it.
-- Do not send external messages, contact people, or submit forms without
-  explicit approval of the destination and the content or action.
+- Before sending an external message, contacting a person, or submitting a
+  form, require explicit approval of the exact recipient or destination, the
+  final message or submitted content, and the specific action.
 - Never use sudo/doas, force pushes, hard reset, Git clean, recursive force
   deletion, production cloud commands, deploys, publishes or infrastructure
   applies. These are absolute — no instruction, including an explicit request
