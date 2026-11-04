@@ -49,10 +49,18 @@ validate_frontmatter_shape() {
         print "indented frontmatter line has no mapping parent: " FILENAME > "/dev/stderr"
         exit 1
       }
-      if (block_key == "metadata" &&
-          $0 !~ /^[[:space:]]+[A-Za-z0-9_-]+:[[:space:]]*(.*)$/) {
-        print "invalid metadata mapping line: " FILENAME > "/dev/stderr"
-        exit 1
+      if (block_key == "metadata") {
+        if ($0 !~ /^[[:space:]]+[A-Za-z0-9_-]+:[[:space:]]*(.*)$/) {
+          print "invalid metadata mapping line: " FILENAME > "/dev/stderr"
+          exit 1
+        }
+        metadata_value = $0
+        sub(/^[[:space:]]+[A-Za-z0-9_-]+:[[:space:]]*/, "", metadata_value)
+        if (metadata_value == "" || metadata_value ~ /^[>|][+-]?[[:space:]]*$/ ||
+            metadata_value ~ /^[\[{]/ || metadata_value ~ /^(true|false|null|~|-?[0-9]+([.][0-9]+)?)([[:space:]]*(#.*)?)$/) {
+          print "metadata values must be non-empty strings: " FILENAME > "/dev/stderr"
+          exit 1
+        }
       }
       next
     }
@@ -63,6 +71,11 @@ validate_frontmatter_shape() {
     {
       key = $0
       sub(/:.*/, "", key)
+      if (key != "name" && key != "description" && key != "license" &&
+          key != "compatibility" && key != "metadata" && key != "allowed-tools") {
+        print "unsupported frontmatter field " key ": " FILENAME > "/dev/stderr"
+        exit 1
+      }
       value = $0
       sub(/^[^:]*:[[:space:]]*/, "", value)
       if (value ~ /^[\[{]/) {

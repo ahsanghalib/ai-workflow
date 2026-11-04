@@ -24,7 +24,7 @@ run_case() {
 	cp "$validator" "$case_root/scripts/validate-skills.sh"
 	chmod 755 "$case_root/scripts/validate-skills.sh"
 	git init --quiet "$case_root"
-	printf '%s\n' "$skill_body" >"$case_root/skills/example/SKILL.md"
+	printf '%s\n\n[Guide](references/guide.md)\n' "$skill_body" >"$case_root/skills/example/SKILL.md"
 	printf 'reference\n' >"$case_root/skills/example/references/guide.md"
 
 	set +e
@@ -47,6 +47,11 @@ run_case() {
 run_case valid pass $'---\nname: example\ndescription: A valid skill.\nlicense: MIT\n---\n\n[Guide](references/guide.md "Read this")\n[Section](references/guide.md#section "Read the section")\n'
 
 run_case malformed-frontmatter fail $'---\nname: example\ndescription: A valid skill.\nmetadata: ["unterminated]\n---\n'
+run_case supported-spec-fields pass $'---\nname: example\ndescription: A valid skill.\ncompatibility: Requires an available browser adapter.\nallowed-tools: Read\nmetadata:\n  owner: example-team\n  version: "1.0"\n---\n\n[Guide](references/guide.md)\n'
+run_case unsupported-top-level-key fail $'---\nname: example\ndescription: A valid skill.\nunknown-field: value\n---\n'
+run_case numeric-metadata fail $'---\nname: example\ndescription: A valid skill.\nmetadata:\n  version: 2\n---\n'
+run_case boolean-metadata fail $'---\nname: example\ndescription: A valid skill.\nmetadata:\n  enabled: true\n---\n'
+run_case empty-metadata-value fail $'---\nname: example\ndescription: A valid skill.\nmetadata:\n  owner:\n---\n'
 
 orphan_case="$temp_root/orphan-reference"
 mkdir -p "$orphan_case/scripts" "$orphan_case/skills/example/references/nested"
@@ -155,5 +160,8 @@ chmod 755 "$find_failure_case/bin/find"
 if (cd "$find_failure_case" && REAL_FIND="$real_find" PATH="$find_failure_case/bin:$PATH" bash scripts/validate-skills.sh >/dev/null 2>&1); then
 	fail 'find failure unexpectedly passed'
 fi
+
+
+run_case metadata-prefix-strings pass $'---\nname: example\ndescription: A valid skill.\nmetadata:\n  summary: 2026 audit findings\n  label: true story\n---\n'
 
 printf 'ok: skill validator regressions\n'
