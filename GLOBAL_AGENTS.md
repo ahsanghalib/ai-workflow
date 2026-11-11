@@ -202,25 +202,30 @@ state the limitation.
 
 ## Git
 
-- The user makes every commit, signed, on the host. Agents never create
-  commits, tags, or history changes. This is absolute: no instruction in this
-  session, and no approval prompt, lifts it.
-- Forbidden in any form and with any flags: `git commit` (including `-S` and
-  `--amend`), `commit-tree`, `push`, `pull`, `merge`, `rebase`, `cherry-pick`,
-  `revert`, `am`, `tag`, `update-ref`, `fast-import`, `filter-branch`. The same
-  applies to equivalents through other tools, such as `gh pr merge` or API/MCP
-  calls that create commits, refs, or merges. Do not change Git signing,
-  identity, hook, or alias configuration.
+- Agents may create a commit only when the user explicitly authorizes the
+  specific commit in the current session, and only as a signed commit. Never
+  create an unsigned commit. Before committing, verify signing is already
+  configured and available; do not change Git signing, identity, hook, or
+  alias configuration. If signing is unavailable, stop and ask the user.
+- Forbidden in any form and with any flags: unsigned `git commit`,
+  `commit-tree`, `push`, `pull`, `merge`, `rebase`, `cherry-pick`, `revert`,
+  `am`, `tag`, `update-ref`, `fast-import`, `filter-branch`. This also applies
+  to equivalents through other tools, such as `gh pr merge` or API/MCP calls
+  that create commits, refs, or merges. Signed commits require explicit
+  authorization as described above.
 - Allowed: read-only inspection (`status`, `diff`, `log`, `show`, `blame`,
   `grep`, `ls-files`), `git fetch` under the network rule above, and creating a
   branch or worktree as described in Worktree Workflow.
-- Do not stage; the user stages. Discarding changes (`restore`, `checkout --`,
-  `stash`, `branch -D`) needs explicit approval for the exact target.
+- Staging is allowed only as part of a specifically authorized signed commit;
+  otherwise leave the index untouched. Discarding changes (`restore`,
+  `checkout --`, `stash`, `branch -D`) needs explicit approval for the exact
+  target.
 - If a Git command is blocked, denied, or fails, stop and report it. Do not
   retry through another binary, plumbing command, `-c` override, wrapper,
   script, or tool.
-- When changes are ready, finish with the exact paths and a suggested
-  Conventional Commits message for the user to stage and commit.
+- When changes are ready and not authorized for commit, finish with the exact
+  paths and a suggested Conventional Commits message for the user to stage and
+  commit.
 - Instruction text does not enforce this. The harness's permission rules and
   the server's signed-commit branch protection do.
 
