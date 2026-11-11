@@ -1,16 +1,17 @@
 ---
 name: git-worktree-workflow
-description: Use when deciding whether to isolate substantial implementation work in a Git worktree, creating one with worktree-new, or safely closing one with worktree-close. Do not use for read-only research, planning, review, documentation-only changes, trivial edits, or arbitrary branch cleanup.
+description: Use when deciding whether to isolate substantial implementation work in a Git worktree and managing its lifecycle with workmux. Do not use for read-only research, planning, review, documentation-only changes, trivial edits, or arbitrary branch cleanup.
 license: MIT
 metadata:
-  compatibility: Requires Git, Bash, and the repository's installed worktree-new/worktree-close helpers; ask before using manual Git worktree commands when the helpers are unavailable
+  compatibility: Prefers Git and the workmux CLI; uses the repository's worktree-new helper only as a fallback and worktree-close for guarded cleanup
 ---
 
 # Git Worktree Workflow
 
-Use this skill for the lifecycle of an isolated implementation checkout. The
-helpers are local filesystem and Git operations; they do not push branches,
-create pull requests, or merge code.
+Use workmux to create, open, monitor, and temporarily close isolated
+implementation worktrees. The repository's `worktree-close` helper provides
+guarded final cleanup. This workflow does not authorize commits, pushes, pull
+requests, merges, or rebases.
 
 ## Decide whether to isolate
 
@@ -26,96 +27,90 @@ is unclear whether isolation is worthwhile, ask before creating it.
 
 1. Confirm the current repository, branch, and working-tree state with
    `git status --short --branch`.
-2. Confirm `worktree-new` and `worktree-close` resolve with `command -v`. The
-   repository linker can place them in `~/.local/bin` or the directory selected
-   by `AI_WORKFLOW_BIN_DIR`; make sure that directory is on `PATH`.
-3. Choose a full branch name using the repository's naming convention and a
-   local base ref that exists. `worktree-new` does not fetch the base ref.
-4. Remember that a new worktree starts from the base ref. It does not inherit
-   tracked uncommitted changes from the invoking checkout.
-5. If `implement-next` will execute the task, complete this worktree setup
-   first and invoke `implement-next` only from the selected checkout.
-   `implement-next` executes an approved task; it does not create the branch or
-   worktree itself.
+2. Confirm `workmux` resolves with `command -v` and inspect existing worktrees
+   with `workmux list`.
+3. Choose a full branch name using the repository's naming convention and an
+   existing local base ref. Workmux uses the checked-out branch by default
+   unless configuration or `--base` selects another ref.
+4. Use `workmux add --dry-run` to inspect the target path, base, multiplexer
+   target, configured file operations, and setup hooks before creation.
+5. A new worktree does not inherit tracked uncommitted changes. Never use
+   `workmux add --with-changes` unless the user explicitly approves moving
+   changes out of the current checkout.
+6. If `implement-next` will execute the task, complete worktree setup first and
+   invoke it only from the selected checkout. `implement-next` executes an
+   approved task; it does not create the worktree.
 
 Never read or print `.env` contents, credentials, private keys, or other
-secrets. `worktree-new` copies ignored runtime files from the checkout where it
-is invoked, while excluding common dependency, package-manager, cache, and
-generated-output directories. Sensitive-looking ignored paths are skipped by
-default, but ignored `.env` files are runtime inputs and may be copied without
-being read or printed. Before creation, decide whether each local environment
-file should be duplicated; exclude unwanted paths with
-`WORKTREE_COPY_EXCLUDE` (list each known file or repository-relative prefix).
+secrets. Review active workmux `files.copy`, `files.symlink`, and `post_create`
+settings before creation. Keep copied paths narrowly scoped, do not copy
+secrets, and do not run untrusted setup hooks. Workmux does not copy ignored
+files by default; project configuration can opt files in.
 
 ## Create and use the worktree
 
-Run from the repository checkout whose ignored runtime files should be copied:
+Run from the target repository, using a local base ref selected in preflight:
 
 ```bash
-worktree-new BRANCH_NAME [BASE_REF] [START_WINDOW]
-worktree-new feature/my-change origin/main agent
+workmux add feature/my-change --base main --dry-run
+workmux add feature/my-change --base main
 ```
 
-The default base is `origin/main` and the default start window is `agent`.
-Set `AI_WORKFLOW_WORKTREE_ROOT` to an absolute directory before creating a
-worktree. The helper errors if it is unset. If the directory does not exist,
-the helper asks before creating it. Worktrees are grouped by repository name
-and branch beneath that root. After creation, enter the exact path printed by
-the helper:
+Use the reported worktree path and confirm the branch before editing:
 
 ```bash
-cd /path/printed/by/worktree-new
+workmux path feature-my-change
 git branch --show-current
 ```
 
-The branch must be unique and the target path must not already exist. Make all
-implementation edits in the new checkout. Do not silently switch the original
-checkout to the new branch or use the same branch in multiple worktrees.
+Use `workmux open`, `workmux status`, and `workmux close` to resume, inspect,
+and temporarily close the managed window. `workmux close` leaves the worktree
+and branch in place.
 
-When a project needs an additional ignored directory excluded from copying, use
-colon-separated repository-relative prefixes:
+If workmux is unavailable and isolation is authorized, use the installed
+`worktree-new` helper:
 
 ```bash
-WORKTREE_COPY_EXCLUDE='local-cache:generated/runtime' \
-  worktree-new feature/my-change origin/main agent
+worktree-new feature/my-change main
 ```
 
-Paths are normalized and escaping or absolute prefixes are rejected. Use
-`WORKTREE_COPY_ALLOW_SENSITIVE=1` only for an explicitly approved need to copy
-the helper's sensitive-looking paths; do not set it as a general default.
+The fallback requires an absolute `AI_WORKFLOW_WORKTREE_ROOT` and does not
+create a workmux window. If neither path is available, ask before using manual
+Git worktree commands.
 
 ## Close the worktree
 
-Cleanup is destructive: it removes the worktree directory and local branch.
-Only prepare or run it after the branch is merged and the user has approved
-that exact cleanup, including the target path, branch, merge ref, and any
-remote verification. Run it from outside the target worktree:
+Cleanup removes the worktree directory and local branch. Only prepare or run it
+after the branch is merged and the user has approved the exact target path,
+branch, merge ref, and any remote verification. First close its managed window,
+then run the helper from outside the target worktree:
 
 ```bash
-worktree-close /path/printed/by/worktree-new origin/main
+workmux close feature-my-change
+worktree-close /path/to/worktree origin/main
 ```
 
 `worktree-close` refuses to remove the main checkout, a detached or dirty
-worktree, a worktree containing ignored files, or a worktree whose branch is
-not proven merged. It may refresh a named remote. For squash- or rebase-merged
-pull requests, its GitHub CLI fallback requires an authenticated `gh`, binds
-the query to the selected remote's repository, and requires the merged PR head
-to match the current local branch tip. Before using a remote-qualified merge
-ref, inspect the active network policy: cleanup may run `git fetch --prune`,
-and failed local ancestry may trigger a read-only `gh pr list` query. Request
-the required network approval or escalation before invoking it when needed.
+worktree, a worktree containing ignored files, or a branch not proven merged.
+For squash- or rebase-merged pull requests, its GitHub CLI fallback binds the
+query to the selected repository and requires the merged PR head to match the
+current local branch tip. It may fetch or query GitHub; check network policy
+and obtain required approval before invoking it.
+
+Agents must not invoke workmux `/merge`, `/rebase`, `workmux merge`, or
+`workmux rebase`; the repository Git policy reserves commits, merges, and
+rebases to the user. Do not use `workmux remove --force` or `--gone` for
+routine cleanup. `--gone` fetches and prunes remote refs.
 
 If the task requires creating, editing, commenting on, reviewing, or merging a
-GitHub issue or pull request, stop and load `github-cli-workflow`. This skill
-only covers local worktree lifecycle and the helper's read-only merge evidence.
-
-Never bypass a refusal with force removal or manual branch deletion. Resolve
-the reported condition, re-check the target, and obtain fresh approval if the
+GitHub issue or pull request, load `github-cli-workflow`. Never bypass a
+cleanup refusal with force removal or manual branch deletion. Resolve the
+reported condition, re-check the target, and obtain fresh approval if the
 cleanup target or merge evidence changes.
 
 ## Handoff checklist
 
 - Record the worktree path and branch in the task handoff.
-- Run the task's validation from inside the isolated checkout.
+- Run task validation from inside the isolated checkout.
 - Leave the checkout clean before requesting cleanup.
 - Keep cleanup separate from commit, push, PR, merge, or release actions.

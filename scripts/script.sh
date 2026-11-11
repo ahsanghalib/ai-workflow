@@ -40,6 +40,7 @@ opencode_home=${XDG_CONFIG_HOME:-$home_dir/.config}/opencode
 claude_home=${CLAUDE_CONFIG_DIR:-$home_dir/.claude}
 pi_home=${PI_CONFIG_DIR:-$home_dir/.pi}/agent
 bin_home=${AI_WORKFLOW_BIN_DIR:-$home_dir/.local/bin}
+workmux_home=${WORKMUX_HOME:-$home_dir/.config/workmux}
 
 link_path() {
   local source_path=$1
@@ -72,18 +73,20 @@ link_agents() {
 
 link_skills() {
   local source_path
+  local skill_path
   local skill_name
 
   [[ -d $repository/skills ]] || die "Skills directory does not exist: $repository/skills"
 
   mkdir -p -- "$home_dir/.agents/skills"
 
-  shopt -s nullglob
-  for source_path in "$repository/skills"/*; do
-    [[ -d $source_path ]] || continue
-    skill_name=${source_path##*/}
-    link_path "$source_path" "$home_dir/.agents/skills/$skill_name"
-    link_path "$source_path" "$claude_home/skills/$skill_name"
+  shopt -s globstar nullglob
+  for source_path in "$repository/skills"/**/SKILL.md; do
+    [[ -f $source_path ]] || continue
+    skill_path=${source_path%/SKILL.md}
+    skill_name=${skill_path##*/}
+    link_path "$skill_path" "$home_dir/.agents/skills/$skill_name"
+    link_path "$skill_path" "$claude_home/skills/$skill_name"
   done
 }
 
@@ -95,5 +98,6 @@ link_worktree_helpers() {
 link_agents
 link_skills
 link_worktree_helpers
+link_path "$repository/workmux/config.yaml" "$workmux_home/config.yaml"
 
 printf 'Done. Existing %s/skills/.system was left untouched.\n' "$codex_home"

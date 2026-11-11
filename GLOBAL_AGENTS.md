@@ -101,24 +101,39 @@ state the limitation.
 ## Worktree Workflow
 
 - For substantial implementation work in a Git repository that should be
-  isolated from the main checkout, use the installed `worktree-new` helper
-  instead of constructing `git worktree` commands manually. Load the
-  `git-worktree-workflow` skill when the helper lifecycle, ignored-file copy
-  policy, or cleanup conditions need detailed guidance.
-- If `worktree-new` is unavailable and isolation is already authorized, use
-  plain `git worktree add` for that task. Otherwise, ask before creating an
-  isolated workspace.
-- Choose a full branch name for the task and pass it to `worktree-new`, or ask
-  when the choice materially affects the task. Follow the applicable project
-  instructions' branch naming and base branch conventions (`AGENTS.md` or
-  Claude Code's `CLAUDE.md`).
+  isolated from the main checkout, use `workmux add` to create and open it.
+  Load `git-worktree-workflow` for its preflight, ignored-file, and cleanup
+  rules. Use `workmux add --dry-run` to inspect the resolved worktree and
+  configured file operations before creation.
+- Do not use `workmux add --with-changes` unless the user explicitly approves
+  moving changes out of the current checkout. Review any configured
+  `files.copy`, `files.symlink`, and lifecycle hooks; do not copy secrets or
+  run untrusted setup commands.
+- Choose a full branch name and an existing local base ref. Follow the
+  applicable project instructions' naming and base-branch conventions
+  (`AGENTS.md` or Claude Code's `CLAUDE.md`). Workmux uses the checked-out
+  branch by default unless configured otherwise.
 - Create the worktree before implementation begins. Do not create one for
   read-only research, planning, review, documentation-only changes, or trivial
   edits unless explicitly requested. If it is materially unclear whether a
   task warrants one, ask.
-- After the work has been merged and the worktree is clean, use
-  `worktree-close` instead of manually removing the worktree or deleting the
-  branch. Never force-remove a worktree.
+- Use `workmux open`, `workmux status`, and `workmux close` to resume, inspect,
+  and temporarily close managed worktrees. `workmux close` closes only the
+  window; it does not remove the worktree.
+- If workmux is unavailable and isolation is authorized, use the installed
+  `worktree-new` helper. Otherwise ask before creating an isolated workspace.
+- Agents must not invoke workmux's `/merge`, `/rebase`, `workmux merge`, or
+  `workmux rebase`; the Git policy below reserves commits, merges, and rebases
+  to the user. Before removing a worktree, inspect tracked, untracked, and
+  ignored files and obtain approval for the exact worktree and branch. Use
+  `workmux close` to close its window, then `worktree-close` to remove a clean,
+  merged worktree. Never use `workmux remove --force` or `--gone` for routine
+  cleanup; `--gone` fetches and prunes remote refs and requires the network
+  approval described above.
+- `worktree-close` refuses the main checkout, dirty worktrees, ignored files,
+  and branches without merge evidence. It does not close a workmux window;
+  close the managed window first. It may fetch or query GitHub, so check the
+  network policy before use.
 
 ## Tooling & Operational Efficiency
 

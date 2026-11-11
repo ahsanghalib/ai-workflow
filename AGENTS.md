@@ -9,8 +9,11 @@ profiles. `codex/` stores Codex configuration. `opencode/` contains OpenCode
 JSON configuration, model metadata, quota/TUI settings, placeholder runtime
 directories, and the TypeScript notification plugin. The executable helper
 scripts live in `scripts/` and `bin/`, and `scripts/validate-skills.sh` is
-the skill validator. The root `evals/` holds repository-level model evaluation
-cases, runner scripts, runner tests, and Git-ignored generated reports.
+the skill validator. `workmux/config.yaml` contains the starter Workmux
+configuration linked by the repository linker; keep machine-specific paths and
+state out of shared configuration. The root `evals/` holds repository-level
+model evaluation cases, runner scripts, runner tests, and Git-ignored generated
+reports.
 The content and client-acquisition workflows are centered on `copywriting`,
 `social-content`, and the six supported `linkedin-*` skills. Keep personal paths,
 credentials, provider accounts, and machine-local overrides out of the

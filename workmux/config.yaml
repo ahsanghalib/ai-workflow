@@ -1,0 +1,22 @@
+nerdfont: true
+worktree_dir: /mnt/nvme0n1p3/repos/worktrees/{project}
+mode: session
+window_prefix: "{project}-"
+agent: codex
+default_session: main
+window_placement: after_current
+merge_strategy: merge
+merge_keep: true
+
+dashboard:
+  close_on_jump: false
+
+windows:
+  - name: dashboard
+    panes:
+      - command: workmux dashboard -t worktrees
+  - name: shell
+  - name: agent
+    panes:
+      - command: <agent>
+        focus: true

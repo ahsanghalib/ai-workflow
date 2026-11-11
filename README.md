@@ -102,17 +102,24 @@ paths, plugins, and commands before using them on another machine.
 ### Helper scripts and checks
 
 - [`scripts/script.sh`](scripts/script.sh) links shared skills, agent
-  profiles, global instructions, and the worktree helpers. It defaults the
-  helpers to `~/.local/bin`; set `AI_WORKFLOW_BIN_DIR` to choose another
-  location.
+  profiles, global instructions, and compatibility worktree helpers. It
+  defaults the helpers to `~/.local/bin`; set `AI_WORKFLOW_BIN_DIR` to choose
+  another location. Use workmux as the primary worktree manager.
 - [`scripts/validate-skills.sh`](scripts/validate-skills.sh) checks skill
   entrypoints, references, and repository boundaries.
 - [`scripts/package-skills.sh`](scripts/package-skills.sh) builds the curated
   web-compatible skill ZIPs under ignored `zip/`.
-- [`bin/worktree-new`](bin/worktree-new) creates a separate branch and
-  worktree, copying eligible ignored runtime files from the invoking checkout.
-- [`bin/worktree-close`](bin/worktree-close) removes a clean worktree after
-  confirming merge evidence and checking for ignored files.
+- Workmux `add`, `open`, `status`, and `close` manage worktrees and their
+  terminal windows. Install the [workmux CLI](https://github.com/raine/workmux)
+  separately; the linker exposes this repository's starter config at
+  `~/.config/workmux/config.yaml` (or `$WORKMUX_HOME/config.yaml`). Review its
+  paths, configured file operations, and hooks before use. Workmux does not
+  copy ignored files by default.
+- [`bin/worktree-new`](bin/worktree-new) is a fallback when workmux is
+  unavailable; it copies eligible ignored runtime files from the invoking
+  checkout.
+- [`bin/worktree-close`](bin/worktree-close) provides guarded final cleanup
+  after the workmux window is closed, checking merge evidence and ignored files.
 
 Tests and fixtures live in `tests/` and alongside some skills. The GitHub
 Actions workflow is in `.github/workflows/validate.yml`.
@@ -152,21 +159,22 @@ instructions, run the linker after reviewing its targets:
 ```
 
 The linker uses `CODEX_HOME`, `XDG_CONFIG_HOME`,
-`CLAUDE_CONFIG_DIR`, `PI_CONFIG_DIR`, and `AI_WORKFLOW_BIN_DIR` when set;
-otherwise it uses standard user-level locations. It refuses to replace existing
-ordinary files or directories, but replaces symlinks at its targets. Check
-existing links before running it. It does not copy Claude, Codex, OpenCode, or
-Pi runtime configuration.
+`CLAUDE_CONFIG_DIR`, `PI_CONFIG_DIR`, `AI_WORKFLOW_BIN_DIR`, and `WORKMUX_HOME`
+when set; otherwise it uses standard user-level locations. It refuses to
+replace existing ordinary files or directories, but replaces symlinks at its
+targets. Check existing links before running it. It does not copy Claude,
+Codex, OpenCode, or Pi runtime configuration.
 
 Read and adapt runtime configuration before installing it. In particular,
 check permission settings, model identifiers, paths, plugins, and MCP commands
 against your machine. Never add credentials or machine-local secrets to this
 repository.
 
-For larger changes, `git-worktree-workflow` documents how to isolate the work.
-The helpers use `AI_WORKFLOW_WORKTREE_ROOT` as the parent directory; review
-their help and the skill before running them. `worktree-close` only removes a
-clean non-main worktree after verifying that its branch is merged.
+For larger changes, `git-worktree-workflow` documents the workmux workflow and
+cleanup rules. Agents must leave commits, merges, and rebases to the user under
+the global Git policy. The `worktree-new` fallback uses
+`AI_WORKFLOW_WORKTREE_ROOT`; `worktree-close` removes only a clean non-main
+worktree after verifying that its branch is merged.
 
 ## Repository checks
 

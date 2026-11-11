@@ -21,7 +21,13 @@ HOME="$home_dir" \
 	XDG_CONFIG_HOME="$temp_root/config" \
 	CLAUDE_CONFIG_DIR="$temp_root/claude" \
 	AI_WORKFLOW_BIN_DIR="$bin_dir" \
+	WORKMUX_HOME="$temp_root/workmux" \
 	"$linker" >/dev/null
+
+workmux_config="$temp_root/workmux/config.yaml"
+[[ -L "$workmux_config" ]] || fail "missing Workmux config link: $workmux_config"
+[[ "$(readlink "$workmux_config")" == "$repo_root/workmux/config.yaml" ]] ||
+	fail "Workmux config link points to the wrong source: $workmux_config"
 
 for helper in worktree-new worktree-close; do
 	target="$bin_dir/$helper"
@@ -30,13 +36,15 @@ for helper in worktree-new worktree-close; do
 		fail "helper link points to the wrong source: $target"
 done
 
-for source in "$repo_root"/skills/*; do
-	[[ -d $source ]] || continue
+while IFS= read -r -d '' entrypoint; do
+	source=${entrypoint%/SKILL.md}
 	skill_name=${source##*/}
-	target="$temp_root/claude/skills/$skill_name"
-	[[ -L $target ]] || fail "missing Claude Code skill link: $target"
-	[[ "$(readlink "$target")" == "$source" ]] ||
-		fail "Claude Code skill link points to the wrong source: $target"
-done
+	for target_dir in "$home_dir/.agents/skills" "$temp_root/claude/skills"; do
+		target="$target_dir/$skill_name"
+		[[ -L $target ]] || fail "missing skill link: $target"
+		[[ "$(readlink "$target")" == "$source" ]] ||
+			fail "skill link points to the wrong source: $target"
+	done
+done < <(find "$repo_root/skills" -type f -name SKILL.md -print0)
 
-printf 'ok: script linker worktree helper and Claude Code skill links\n'
+printf 'ok: script linker Workmux config, helpers, and shared skill links\n'
